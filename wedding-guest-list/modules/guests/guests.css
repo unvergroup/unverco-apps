@@ -1,0 +1,341 @@
+/* Misafir modulu stilleri. Baski: adli sayfalar (CSS Paged Media). Satir ici stil yok (CSP). */
+@page sign-18x24 { size: 18in 24in; margin: 0; }
+@page sign-24x36 { size: 24in 36in; margin: 0; }
+@page cards-letter { size: 8.5in 11in; margin: 0; }
+@page cards-a4 { size: 210mm 297mm; margin: 0; }
+@page doc-letter { size: 8.5in 11in; margin: 0; }
+@page doc-a4 { size: 210mm 297mm; margin: 0; }
+/* core/print.css (iskelet) bos @page icin 16 mm / 14 mm kenar verir ve Chrome bunu adli sayfanin 0 kenarina tercih eder: sayfa
+   0,87 kat kuculur (olcek hatasi). Bu yuzden adli sayfalarin kenari !important ile yeniden yazilir. doc-* da 0: kenar 0 iken Chrome
+   "Headers and footers" acik olsa da ust / alt bilgi basmaz (yerel dosya yolu PDF'e sizmaz); 12,7 mm bosluk .doc'un icinde verilir. */
+@page sign-18x24 { margin: 0 !important; }
+@page sign-24x36 { margin: 0 !important; }
+@page cards-letter { margin: 0 !important; }
+@page cards-a4 { margin: 0 !important; }
+@page doc-letter { margin: 0 !important; }
+@page doc-a4 { margin: 0 !important; }
+/* Baski hedefi (#print-root): ekranda gorunmez; yazdirirken yalniz o gorunur. Olcum icin ekran disinda gorunmez ama yerlesimli. */
+.print-target { display: none; }
+.print-target.is-measuring { display: block; position: fixed; left: 0; top: 0; visibility: hidden; pointer-events: none; z-index: -1; }
+@media print {
+  body > *:not(.print-target) { display: none !important; }
+  html, body { margin: 0 !important; padding: 0 !important; background: #fff !important; min-height: 0 !important; }
+  .print-target { display: block !important; }
+  /* Ctrl+P outside the Print view prints one blank page with this single line (the page margin is 0 there: no file path in a header / footer). */
+  body > .print-fallback { display: block !important; margin: 0; padding: 16mm; font: 12pt/1.4 "Lora", Georgia, serif; color: #1a1a1a; }
+  body:has(> .print-target) > .print-fallback { display: none !important; }
+}
+.print-fallback { display: none; }
+
+/* Baski ciktilari (tasarim: onizleme/baski.css). Tek yazi tipi Lora, murekkep #1a1a1a, kagit #fff. */
+.out { box-sizing: border-box; font-family: "Lora", Georgia, serif; color: #1a1a1a; background: #fff; font-kerning: normal; font-variant-numeric: lining-nums; text-align: left; overflow-wrap: normal; }
+.out *, .out *::before, .out *::after { box-sizing: border-box; }
+.out bdi { unicode-bidi: isolate; }
+.out p { margin: 0; }
+.out svg { display: block; }
+
+/* (a) Tabela */
+.sign { --m: 1in; --t: 96pt; --c: 40pt; --d: 28pt; position: relative; width: 18in; height: 24in; padding: var(--m); display: flex; flex-direction: column; overflow: hidden; }
+.sign[data-size="24x36"] { --m: 1.5in; --t: 144pt; --c: 60pt; --d: 40pt; width: 24in; height: 36in; }
+.out[data-print="sign-18x24"] { page: sign-18x24; }
+.out[data-print="sign-24x36"] { page: sign-24x36; }
+.sign-head { flex: none; text-align: center; padding-bottom: calc(var(--t) * .35); margin-bottom: calc(var(--t) * .35); border-bottom: 1.5pt solid #1a1a1a; }
+.sign-title { font-size: var(--t); font-weight: 600; line-height: 1.1; margin: 0; letter-spacing: .01em; overflow-wrap: anywhere; }
+.sign-couple { font-size: var(--c); font-weight: 400; line-height: 1.2; margin: calc(var(--c) * .35) 0 0; overflow-wrap: anywhere; }
+.sign-date { font-size: var(--d); line-height: 1.2; margin: calc(var(--d) * .3) 0 0; letter-spacing: .08em; text-transform: uppercase; }
+.sign-body { flex: 1 1 auto; min-height: 0; column-count: var(--cols, 3); column-gap: max(18pt, calc(var(--body, 18pt) * 2)); column-fill: auto; font-size: var(--body, 18pt); line-height: 1.3; }
+.sign-letter { font-size: 1.5em; font-weight: 700; line-height: 1.2; margin: .5em 0 .15em; padding-bottom: .1em; border-bottom: .75pt solid #1a1a1a; break-after: avoid; break-inside: avoid; }
+.sign-letter:first-child { margin-top: 0; }
+.sign-row { display: flex; align-items: baseline; gap: .4em; break-inside: avoid; }
+.sign-name { flex: 0 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.sign-lead { flex: 1 1 1em; min-width: 1em; border-bottom: .75pt dotted #1a1a1a; transform: translateY(-.25em); }
+.sign-table { flex: none; white-space: nowrap; font-variant-numeric: tabular-nums lining-nums; }
+
+/* (b) Yer karti sayfasi + (d) deneme sayfasi */
+.sheet { position: relative; overflow: hidden; width: 8.5in; height: 11in; }
+.sheet[data-paper="a4"] { width: 210mm; height: 297mm; }
+.sheet[data-paper="letter"] { page: cards-letter; }
+.sheet[data-paper="a4"] { page: cards-a4; }
+.pcard { position: absolute; left: calc(var(--x) * 1mm); top: calc(var(--y) * 1mm); width: calc(var(--w) * 1mm); height: calc(var(--h) * 1mm); }
+.pcard-face { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--fh) * 1mm); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5mm 6mm; text-align: center; }
+.pcard-namebox { width: 100%; display: flex; align-items: flex-end; justify-content: center; }
+.pcard-name { font-size: var(--name, 26pt); font-weight: 500; line-height: 1.15; max-width: 100%; overflow-wrap: anywhere; }
+.pcard-table { margin-top: 2.5mm; font-size: 11pt; letter-spacing: .1em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 2mm; font-variant-numeric: lining-nums; }
+.pcard-table .mark { width: 4.5mm; height: 4.5mm; }
+.pcard-fold { position: absolute; left: 0; right: 0; top: 50%; border-top: .5pt dashed #8a8a8a; }
+.cut { position: absolute; left: calc(var(--x) * 1mm); top: calc(var(--y) * 1mm); } /* kesim isareti BORDER ile cizilir: Chrome'un varsayilan baskisinda "Background graphics" kapali, arka plan basilmaz */
+.cut-h { height: 0; width: calc(var(--l) * 1mm); border-top: .5pt solid #1a1a1a; }
+.cut-v { width: 0; height: calc(var(--l) * 1mm); border-left: .5pt solid #1a1a1a; }
+.test .pcard { outline: .25pt solid #1a1a1a; outline-offset: -.125pt; }
+.test .pcard-fold { border-top-color: #1a1a1a; }
+.test-band { position: absolute; font-size: 8.5pt; line-height: 1.3; }
+.test-title { font-size: 11pt; font-weight: 700; margin: 0 0 1mm; line-height: 1.25; }
+.sheet > .scalebar { position: absolute; } /* uzunluk (100 / 50 mm) ve yukseklik svg ozniteliginde; konum betikte */
+.test-top { position: absolute; top: 7mm; right: 12.7mm; font-size: 8pt; font-weight: 700; letter-spacing: .1em; }
+.test-legend { position: absolute; font-size: 8.5pt; line-height: 1.3; }
+.test-legend .legend { display: flex; flex-wrap: wrap; gap: 1.5mm 5mm; margin: 0 0 1.5mm; }
+.test-legend .legend span { display: inline-flex; gap: 1.5mm; align-items: center; }
+.test-legend .legend .mark { width: 3.5mm; height: 3.5mm; }
+.test-page2 { position: absolute; font-size: 7pt; }
+.demo-foot { position: absolute; bottom: 3mm; left: 0; right: 0; text-align: center; font-size: 7pt; color: #666; }
+.sign .demo-foot { bottom: 4mm; }
+.mark { display: inline-block; flex: none; }
+
+/* (c) Yemek firmasi sayfasi (tasarim: baski.css (c)). Kenar 12,7 mm (@page); dipnot kutusu her sayfada (position: fixed), tablonun
+   tfoot'unda dipnot kutusundan yuksek bos satir her sayfada yinelenir: hicbir satir dipnotun altina girmez. */
+.out[data-print="doc-letter"] { page: doc-letter; }
+.out[data-print="doc-a4"] { page: doc-a4; }
+/* Sayfa kenari 0 oldugundan 12,7 mm icerde: ust ve yanlar .doc padding'i, sonraki sayfalarin ustu thead'in yinelenen bos satiri, alt kisim tfoot'un
+   yinelenen bos satiri + dipnot kutusu (position: fixed her sayfada). */
+.doc { font-size: 10pt; line-height: 1.35; padding: 12.7mm 12.7mm 0; }
+.doc-title { font-size: 18pt; font-weight: 700; line-height: 1.25; margin: 0 0 1mm; }
+.doc .doc-meta { font-size: 10pt; margin: 0 0 4mm; }
+.doc .doc-total { font-size: 13pt; font-weight: 700; margin: 0 0 3mm; }
+.doc .legend { display: flex; flex-wrap: wrap; gap: 1.5mm 5mm; font-size: 10pt; margin: 0; } /* tablonun ustundeki 12,7 mm bosluk thead'in yinelenen satirindan gelir */
+.doc .legend span { display: inline-flex; gap: 1.5mm; align-items: center; }
+.doc .legend .mark { width: 3.5mm; height: 3.5mm; }
+.doc table { width: 100%; border-collapse: collapse; }
+.doc tbody td:not(:first-child) { font-variant-numeric: tabular-nums lining-nums; } /* tabular-nums yalniz RAKAM hucrelerinde: basliklarda ve etiketlerde Lora'nin kalin yazisinda kelime arasini acar ("No  meal" 5,4 pt) */
+.doc thead { display: table-header-group; }
+.doc .head-gap td { height: 12.7mm; padding: 0; border: 0; }
+.doc th, .doc td { border-bottom: .5pt solid #1a1a1a; padding: 1.4mm 1.6mm; text-align: right; vertical-align: bottom; }
+.doc th:first-child, .doc td:first-child { text-align: left; }
+.doc thead th { border-bottom: 1.5pt solid #1a1a1a; font-size: 9pt; font-weight: 700; overflow-wrap: break-word; }
+.doc thead .mark { width: 3.5mm; height: 3.5mm; display: block; margin: 0 0 .8mm auto; }
+.doc tr { break-inside: avoid; }
+.doc .row-unseated td { font-style: italic; }
+.doc .row-unseated, .doc .row-total { break-after: avoid; } /* toplam ve "Seated, RSVP pending" satiri ayni sayfada kalir */
+.doc .row-total td { border-top: 1.5pt solid #1a1a1a; border-bottom: 1.5pt solid #1a1a1a; font-weight: 700; }
+.doc .row-pending td { text-align: left; border-bottom: 0; padding-top: 3mm; }
+.doc tfoot { display: table-footer-group; }
+.doc tfoot td { height: 27mm; border: 0; padding: 0; } /* 12,7 mm alt kenar + 12,5 mm dipnot kutusu + pay */
+.doc-foot { position: fixed; left: 12.7mm; right: 12.7mm; bottom: 12.7mm; height: 12.5mm; overflow: hidden; font-size: 7.5pt; line-height: 1.3; color: #444; }
+.doc-foot .demo-line { display: block; color: #666; font-size: 7pt; } /* demo: dipnot kutusunun ilk satiri */
+/* Olcekli onizleme: kutu yuksekligi sayfa kadar; kenar bosluklari .doc'un kendi padding'i (yazdirmayla ayni) */
+.preview-sheet > .doc { width: 100%; height: 100%; padding: 12.7mm; overflow: hidden; }
+
+/* Tasarim: ek.css bolum B */
+/* ===== B. Modul bilesenleri (guests.css) ===== */
+
+/* B1. Ic sekmeler (Planner: Guests / Tables / Check / Print): alt cizgili, iki temada --primary */
+.planner-tabs { border-bottom: 1px solid var(--border); margin-bottom: var(--space-4); }
+
+/* B2. Eylem cubugu: gorunumun ust satiri */
+.view-head { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
+.view-head h2 { margin: 0; }
+
+/* B3. Sayim seridi */
+.stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr)); gap: var(--space-2); margin: 0 0 var(--space-4); padding: 0; list-style: none; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space-2) var(--space-3); }
+.stat-value { display: block; font-size: var(--fs-xl); font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.stat-label { display: block; color: var(--muted); font-size: var(--fs-s); }
+
+/* B4. Segmentli secici (radyo grubu): suzgec, cikti secici */
+.segmented { display: flex; flex-wrap: wrap; gap: var(--space-1); border: 0; margin: 0 0 var(--space-3); padding: 0; min-width: 0; }
+.segmented legend { font-weight: 600; margin-bottom: var(--space-1); padding: 0; }
+.segmented label { position: relative; display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 var(--space-4); border: 1px solid var(--border-strong); border-radius: 999px; background: var(--surface); cursor: pointer; white-space: nowrap; }
+.segmented input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.segmented label:has(input:checked) { background: var(--primary); border-color: var(--primary); color: var(--primary-text); font-weight: 600; }
+.segmented label:has(input:checked)::before { content: "\2713"; margin-inline-end: var(--space-1); }
+.segmented label:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* B5. Durum satiri: sekil + metin (yalniz renge dayanmaz) */
+.status { display: flex; gap: var(--space-2); align-items: flex-start; padding: var(--space-2) var(--space-3); border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); }
+.status::before { flex: none; display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; font-weight: 700; font-size: var(--fs-s); line-height: 1; }
+.status-ok { background: var(--success-bg); border-color: var(--success); }
+.status-ok::before { content: "\2713"; background: var(--success); color: var(--surface); }
+.status-warn { background: var(--warn-bg); border-color: var(--warn); }
+.status-warn::before { content: "!"; background: var(--warn); color: var(--surface); border-radius: .25rem; }
+.status-danger { background: var(--danger-bg); border-color: var(--danger); }
+.status-danger::before { content: "\00D7"; background: var(--danger); color: var(--surface); border-radius: .25rem; }
+.status-info::before { content: "i"; border: 2px solid var(--muted); color: var(--muted); }
+.status > div { min-width: 0; flex: 1; }
+.status p:last-child { margin-bottom: 0; }
+
+/* B6. Yemek isareti: uygulamada her zaman beyaz kagit yongasinda (koyu temada da #222 cizgi gorunsun) */
+.meal-mark { display: inline-grid; place-items: center; flex: none; width: 1.5rem; height: 1.5rem; background: var(--paper); border: 1px solid var(--border-strong); border-radius: .25rem; vertical-align: middle; }
+.meal-mark svg { width: 1rem; height: 1rem; display: block; }
+.meal { display: inline-flex; gap: var(--space-2); align-items: center; }
+.meal-none { color: var(--muted); font-style: italic; }
+
+/* B7. Rozet (sayi) */
+.badge { display: inline-block; white-space: nowrap; min-width: 1.5rem; padding: 0 var(--space-2); border-radius: 999px; background: var(--sel-bg); color: var(--text); font-size: var(--fs-s); font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+.badge-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn); }
+.badge-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger); }
+
+/* B8. Sihirbaz adim gostergesi */
+.steps { display: flex; gap: var(--space-2); margin: 0 0 var(--space-4); padding: 0; list-style: none; counter-reset: step; flex-wrap: wrap; }
+.steps li { counter-increment: step; display: flex; align-items: center; gap: var(--space-2); color: var(--muted); font-size: var(--fs-s); }
+.steps li::before { content: counter(step); display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 50%; border: 2px solid var(--border-strong); font-weight: 700; }
+.steps li[aria-current="step"] { color: var(--text); font-weight: 600; }
+.steps li[aria-current="step"]::before { background: var(--primary); border-color: var(--primary); color: var(--primary-text); }
+.steps li.done::before { content: "\2713"; border-color: var(--success); color: var(--success); }
+.steps li + li::after { content: none; }
+.step-head:focus { outline: none; }
+
+/* B9. Eslestirme: 1280'de tablo, 560 alti kart */
+.map-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: var(--space-3); }
+.map-col { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space-3); background: var(--surface); min-width: 0; }
+.map-col.is-ignored { border-style: dashed; }
+.map-col.is-ignored .map-samples { color: var(--muted); text-decoration: line-through; }
+.map-samples { margin: var(--space-2) 0 0; padding: 0; list-style: none; font-size: var(--fs-s); }
+.map-samples li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* B10. Rapor listesi */
+.report { margin: 0; padding: 0; list-style: none; }
+.report > li { padding: var(--space-2) 0; border-bottom: 1px solid var(--border); }
+.report details summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; gap: var(--space-2); }
+.report details ul { margin: 0 0 var(--space-2); padding-inline-start: var(--space-5); font-size: var(--fs-s); max-height: 16rem; overflow: auto; }
+
+/* B11. Masa kartlari ve havuz */
+.tables-layout { display: grid; gap: var(--space-4); }
+@media (min-width: 960px) { .tables-layout { grid-template-columns: 20rem 1fr; align-items: start; } .pool { position: sticky; top: var(--space-4); max-height: calc(100vh - 2rem); overflow: auto; } }
+.table-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: var(--space-3); }
+.table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space-3); min-width: 0; }
+.table-card.is-over { border: 2px solid var(--danger); }
+.table-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); margin-bottom: var(--space-2); }
+.table-card-head h3 { margin: 0; }
+.seat-count { font-variant-numeric: tabular-nums; color: var(--muted); font-size: var(--fs-s); }
+.is-over .seat-count { color: var(--danger); font-weight: 700; }
+.meter { height: .375rem; background: var(--sel-bg); border-radius: 999px; overflow: hidden; margin-bottom: var(--space-2); }
+.meter > span { display: block; height: 100%; width: var(--fill, 0%); background: var(--primary); }
+.is-over .meter > span { background: var(--danger); }
+.chips { list-style: none; margin: 0; padding: 0; }
+.chip { display: flex; align-items: center; gap: var(--space-2); min-height: var(--tap); border-top: 1px solid var(--border); }
+.chip:first-child { border-top: 0; }
+.chip-name { flex: 1; min-width: 0; }
+.chip-party { display: block; color: var(--muted); font-size: var(--fs-xs); }
+.chip .btn { flex: none; }
+.is-target { outline: 3px solid var(--focus); outline-offset: 2px; background: var(--sel-bg); }
+
+/* B12. Kontrol listesi */
+.checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); }
+.checklist h3 { display: flex; gap: var(--space-2); align-items: center; margin: 0; font-size: var(--fs-m); }
+.checklist .records { list-style: none; margin: var(--space-2) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+/* B13. Print yerlesimi: 960 ustunde iki sutun (denetimler | onizleme) */
+.print-layout { display: grid; gap: var(--space-4); }
+.print-layout > *, .tables-layout > * { min-width: 0; } /* izgara ogesi icerik genisligine zorlanmasin (320 px tasmasi) */
+@media (min-width: 960px) { .print-layout { grid-template-columns: minmax(20rem, 24rem) 1fr; align-items: start; } .print-preview-col { position: sticky; top: var(--space-4); } }
+.print-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.print-actions .btn-primary { flex: 1 1 100%; }
+/* The main print buttons stick to the bottom of the screen while the options above them are longer than the screen (B19), and rise above a
+   notification (--toast-space, core/ui.js) so that the two never overlap. Screen only: nothing of the app is printed. */
+.print-actions-bar { position: sticky; bottom: var(--toast-space, 0px); z-index: 5; background: var(--bg); padding: var(--space-2) 0; border-top: 1px solid var(--border); }
+/* On a screen shorter than 600 px the bar would take a third of the view: it stays in the page flow there (Y10). */
+@media (max-height: 599.98px) { .print-actions-bar { position: static; } }
+
+/* B14. Olcekli onizleme: kagit her temada beyaz. Betik --pw-px, --ph-px (sayfa piksel olcusu, 96 dpi) ve --k (olcek) verir. */
+.preview { background: var(--sel-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space-3); overflow: hidden; }
+.preview-frame { width: 100%; aspect-ratio: var(--pw-px, 816) / var(--ph-px, 1056); position: relative; }
+.preview-sheet { position: absolute; top: 0; left: 0; width: calc(var(--pw-px, 816) * 1px); height: calc(var(--ph-px, 1056) * 1px); transform: scale(var(--k, .5)); transform-origin: 0 0; background: var(--paper); color: var(--ink); box-shadow: 0 1px 4px rgba(0, 0, 0, .25); }
+.preview-caption { margin: var(--space-2) 0 0; font-size: var(--fs-s); color: var(--muted); text-align: center; }
+
+/* B15. Changes since printed paneli */
+.changes { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); padding: var(--space-3); }
+.changes.is-stale { border: 2px solid var(--warn); }
+.changes h3 { margin-bottom: var(--space-2); }
+.change-group { margin-top: var(--space-3); }
+.change-group h4 { margin: 0 0 var(--space-1); font-size: var(--fs-s); display: flex; gap: var(--space-2); align-items: center; }
+.change-group ul { margin: 0; padding: 0; list-style: none; font-size: var(--fs-s); }
+.change-group li { padding: var(--space-1) 0; border-top: 1px solid var(--border); }
+.change-diff del { color: var(--muted); }
+.change-diff ins { text-decoration: none; font-weight: 600; }
+
+/* B16. Kaydirma (nudge) alani: - [ deger ] + */
+.nudge { display: grid; grid-template-columns: var(--tap) 5.5rem var(--tap); gap: var(--space-1); align-items: center; justify-content: start; }
+.nudge input { -moz-appearance: textfield; appearance: textfield; padding: 0 var(--space-1); text-align: center; font-variant-numeric: tabular-nums; min-height: var(--tap); border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--bg); color: var(--text); font: inherit; width: 100%; }
+.nudge .btn { padding: 0; font-size: var(--fs-l); }
+.nudge input::-webkit-inner-spin-button, .nudge input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.nudge-pair { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); }
+
+/* B17. Hizalama akisi (Line up with your blank cards) */
+.align-steps { list-style: none; margin: 0; padding: 0; counter-reset: a; }
+.align-step { counter-increment: a; position: relative; padding: 0 0 var(--space-4) 1.75rem; border-inline-start: 2px solid var(--border); margin-inline-start: .875rem; }
+.align-step:last-child { border-color: transparent; }
+.align-step::before { content: counter(a); position: absolute; left: -.9375rem; top: 0; width: 1.75rem; height: 1.75rem; border-radius: 50%; display: grid; place-items: center; font-weight: 700; background: var(--surface); border: 2px solid var(--border-strong); }
+.align-step[aria-current="step"]::before { background: var(--primary); border-color: var(--primary); color: var(--primary-text); }
+.align-step.done::before { content: "\2713"; border-color: var(--success); color: var(--success); }
+.align-step h4 { margin: 0 0 var(--space-1); font-size: var(--fs-m); padding-top: .125rem; }
+.align-step:not([aria-current="step"]) .align-body { display: none; }
+.align-step.done .align-summary { display: block; }
+.align-summary { display: none; color: var(--muted); font-size: var(--fs-s); }
+.nudge-diagram { width: 100%; max-width: 18rem; height: auto; display: block; margin: var(--space-2) 0; }
+
+@media (max-width: 560px) {
+  /* Misafir tablosu dar ekranda: Party, Age ve Delete gizlenir (Edit penceresinde durur) */
+  .data-table .narrow-hide-btn { display: none; }
+  .guest-table td[data-col="rsvp"], .guest-table td[data-col="meal"], .guest-table td[data-col="table"] { display: inline-flex; width: auto; flex-direction: row; gap: var(--space-1); }
+  .guest-table td[data-col="rsvp"]::before, .guest-table td[data-col="meal"]::before, .guest-table td[data-col="table"]::before { content: none; }
+  .guest-table td:first-child::before { content: none; } /* B16: ad hucresinde "Name" etiketi her satirda yinelenmez; ad zaten satirin basligi */
+  .segmented label { flex: 1 1 auto; justify-content: center; }
+  .view-head .row { width: 100%; }
+  .chip .btn { flex: none; }
+  .nudge .btn { flex: none; }
+}
+
+
+/* Ek (U1, U2): kutuphane disi kucuk siniflar */
+.grow { flex: 1 1 12rem; min-width: 0; }
+.row-end { justify-content: flex-end; }
+.between { justify-content: space-between; }
+.card-warn { background: var(--warn-bg); border-color: var(--warn); }
+.grid-2.top { align-items: start; }
+.grid-wide { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+.guest-note { max-width: 18rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dialog-form { width: min(32rem, calc(100vw - 2rem)); max-height: calc(100vh - 2rem); overflow: auto; }
+.dialog-form .field + .field, .dialog-form .grid-2 + .field { margin-top: var(--space-3); }
+.dialog-actions .spacer { margin-inline-end: auto; }
+.wizard-head { align-items: center; }
+.report .check { min-height: var(--tap); }
+.report-reason { display: block; color: var(--muted); }
+.stack-top { margin-top: var(--space-3); }
+.empty .row { justify-content: center; }
+/* Dar ekranda satirdaki dugmeler alta iner; kisa sozcukler harf harf bolunmez (320 px) */
+.chip { flex-wrap: wrap; }
+.chip-name { flex: 1 1 0; min-width: min-content; overflow-wrap: break-word; }
+.dialog-form .grid-2 { align-items: start; }
+.dialog-form .grid-2 .field { margin-top: 0; }
+.dialog-form .grid-2 { margin-top: var(--space-3); }
+.dialog-form h2 + .grid-2 { margin-top: 0; }
+
+/* U3 / U4: Tables ve Check (ek.css B11, B12 uzerine ince ayar) */
+.add-tables { margin-bottom: var(--space-4); }
+.add-tables summary { cursor: pointer; }
+.add-tables .row { align-items: flex-start; margin-top: var(--space-2); }
+.add-tables .field { flex: 1 1 9rem; min-width: 0; }
+.add-tables .field-hint { margin: var(--space-2) 0 0; min-height: 1.25rem; }
+.hint-warn { color: var(--warn); font-weight: 600; }
+.meal-slot { flex: none; display: inline-grid; place-items: center; width: 1.5rem; }
+.table-card-actions { margin-top: var(--space-2); }
+.pool .status { margin-top: var(--space-2); }
+.stack-bottom { margin-bottom: var(--space-4); }
+.records > li { min-width: 0; max-width: 100%; }
+.record-group { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.records .btn { max-width: 100%; height: auto; white-space: normal; overflow-wrap: anywhere; text-align: start; padding-block: var(--space-1); }
+.checklist > li { min-width: 0; }
+.checklist h3 { flex-wrap: nowrap; align-items: baseline; } /* K3 tur 3: no wrap, the badge is a flex item beside the title and never drops to its own line */
+.checklist .check-title { flex: 0 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.checklist h3 .badge { flex: none; }
+.repair-notice .btn { margin-inline-start: auto; }
+.dialog-form .check { margin-top: var(--space-2); }
+
+/* U6 / U7: Print gorunumu ince ayar */
+.align-choice { border: 0; margin: 0; padding: 0; min-width: 0; }
+.align-summary { text-align: start; height: auto; white-space: normal; padding-inline: 0; }
+.preview-one + .preview-one { margin-top: var(--space-3); }
+.preview-one .preview-frame { box-shadow: 0 1px 4px rgba(0, 0, 0, .25); }
+.preview-sheet { box-shadow: none; }
+.print-controls { min-width: 0; }
+
+/* U8 / U9 / U5 */
+.changes .status + .change-group, .changes .status + .change-list { margin-top: var(--space-3); }
+.change-list { margin: var(--space-3) 0 0; padding: 0; list-style: none; font-size: var(--fs-s); }
+.change-list li { padding: var(--space-1) 0; border-top: 1px solid var(--border); overflow-wrap: anywhere; }
+.change-group li { overflow-wrap: anywhere; }
+.changes .print-actions { margin-top: var(--space-3); }
+.changes .btn-ghost { margin-top: var(--space-2); }
+.license-text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--fs-s); max-height: 28rem; overflow: auto; margin: 0; padding: var(--space-3); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.fixed-screen { margin-top: var(--space-3); }
+.fixed-screen h3 { margin-bottom: var(--space-1); }
+.fixed-screen ul { margin: 0; padding-inline-start: var(--space-5); }

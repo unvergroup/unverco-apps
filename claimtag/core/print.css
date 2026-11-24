@@ -1,0 +1,96 @@
+/* Yazdirma ciktisi: Letter, A4 ve 80 mm termal fis. Belge #print-root icinde kurulur; yazdirirken uygulamanin geri kalani gizlenir.
+   Kagit boyutu Ayarlar'dan secilir ve body[data-paper] olarak gelir; adli sayfalar (p-letter / p-a4 / p-thermal) boyutu belirler.
+   Sayfa kenari 0: tarayicinin ust / alt bilgisi (yerel dosya yolu) basilmasin; kenar bosluklari belgenin icinde (.page-frame) verilir.
+   Renk: murekkep siyahi; yalniz dukkan vurgu cizgisi renkli. */
+@page { size: auto; margin: 0; }
+@page p-letter { size: 8.5in 11in; margin: 0 !important; }
+@page p-a4 { size: A4; margin: 0 !important; }
+@page p-thermal { size: 80mm 297mm; margin: 0 !important; } /* "80mm auto" gecersiz CSS: Chrome kurali yok sayip Letter basiyordu */
+
+@media print {
+  :root { --bg: #fff; --text: #000; --muted: #444; --border: #bbb; --surface: #fff; --surface-2: #f2f2f2; }
+  html, body { background: #fff !important; color: #000 !important; }
+  body { font-size: 9.5pt; line-height: 1.35; }
+  .no-print, nav, .tabs, button, dialog, #toast-region, .banner, .form-card, .actions-col, .preview-strip, #notice-bar, #pwa-bar, .app-header, .skip-link { display: none !important; }
+  body.printing > :not(#print-root) { display: none !important; }
+  body.printing #print-root { display: block !important; }
+  .app-main { padding: 0 !important; max-inline-size: none !important; }
+
+  /* sayfa cercevesi: 12,7 mm kenar (yinelenen thead / tfoot bosluk satirlari + yan padding) */
+  .page-frame { --pg: 12.7mm; inline-size: 100%; border-collapse: collapse; }
+  body[data-paper="letter"] .page-frame { page: p-letter; }
+  body[data-paper="a4"] .page-frame { page: p-a4; }
+  body[data-paper="thermal80"] .page-frame { page: p-thermal; --pg: 3mm; }
+  .page-frame > thead > tr > td, .page-frame > tfoot > tr > td, .page-frame > tbody > tr > td { border: 0 !important; padding: 0; }
+  .page-frame > tbody > tr > td.page-cell { padding-inline: var(--pg); }
+  .page-frame .page-gap { block-size: var(--pg); }
+  .page-frame > tbody > tr { break-inside: auto; page-break-inside: auto; }
+  .page-frame > thead { display: table-header-group; }
+  .page-frame > tfoot { display: table-footer-group; }
+  table { inline-size: 100%; border-collapse: collapse; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  th, td { padding: 2pt 4pt; text-align: start; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  a { color: inherit; text-decoration: none; }
+
+  .doc { color: #000; }
+  .doc-head { border-block-end: 2.5pt solid var(--accent, #1f4e79); padding-block-end: 4pt; margin-block-end: 8pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .doc-business { font-size: 15pt; margin: 0 0 2pt; }
+  .doc-contact p { color: #444; font-size: 8.5pt; margin: 0; }
+
+  /* fis govdesi */
+  .rc-copy { break-inside: auto; }
+  .rc-copy + .rc-copy { break-before: page; page-break-before: always; }
+  .rc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8pt; margin-block-end: 6pt; }
+  .rc-title { font-size: 12pt; font-weight: 700; margin: 0; letter-spacing: .02em; }
+  .rc-copyname { font-size: 8.5pt; font-weight: 700; border: 1pt solid #000; padding: 1pt 5pt; white-space: nowrap; }
+  .rc-ticket { font-size: 20pt; font-weight: 700; margin: 2pt 0 0; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .rc-date { font-size: 9pt; margin: 0; }
+  .rc-sec { margin-block-start: 7pt; break-inside: avoid; }
+  .rc-sec > h3 { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .04em; margin: 0 0 2pt; color: #333; border-block-end: .75pt solid #888; padding-block-end: 1pt; }
+  .rc-kv { display: grid; grid-template-columns: max-content 1fr; gap: 1pt 8pt; margin: 0; }
+  .rc-kv dt { color: #444; }
+  .rc-kv dd { margin: 0; overflow-wrap: anywhere; }
+  .rc-text { margin: 0; white-space: pre-line; overflow-wrap: anywhere; }
+  .rc-table th { font-size: 8pt; border-block-end: 1pt solid #000; }
+  .rc-table td { border-block-end: .5pt solid #bbb; }
+  .rc-two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14pt; }
+  .rc-note { font-size: 8.5pt; color: #333; margin: 2pt 0 0; }
+  .rc-terms { font-size: 8.5pt; white-space: pre-line; margin: 0; overflow-wrap: anywhere; }
+  .rc-sign { display: grid; grid-template-columns: 1fr 1fr; gap: 18pt; margin-block-start: 22pt; break-inside: avoid; }
+  .rc-sign > div { border-block-start: .75pt solid #000; padding-block-start: 2pt; font-size: 8.5pt; }
+  .rc-totals { margin-inline-start: auto; inline-size: 55%; }
+  .rc-totals td { border: 0; padding: 1pt 4pt; }
+  .rc-totals tr.is-total td { border-block-start: 1pt solid #000; font-weight: 700; }
+  .rc-line { display: inline-block; min-inline-size: 28mm; border-block-end: .75pt solid #000; }
+  .rc-box { display: inline-block; inline-size: 7pt; block-size: 7pt; border: .75pt solid #000; margin-inline-end: 3pt; vertical-align: -1pt; }
+
+  /* cihaz etiketi seridi: yalniz dukkan nushasinin sonunda, 45 mm */
+  .rc-strip { margin-block-start: 10pt; padding-block-start: 5pt; border-block-start: 1pt dashed #000; block-size: 45mm; break-inside: avoid; overflow: hidden; }
+  .rc-strip-cut { font-size: 8pt; margin: 0 0 3pt; color: #333; }
+  .rc-strip-ticket { font-size: 20pt; font-weight: 700; margin: 0; line-height: 1.1; }
+  .rc-strip p { margin: 1pt 0; }
+  .rc-strip-name { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-weight: 600; }
+
+  /* 80 mm termal: tek sutun, kucuk puntolu */
+  body[data-paper="thermal80"] { font-size: 8.5pt; }
+  body[data-paper="thermal80"] .rc-two, body[data-paper="thermal80"] .rc-sign { grid-template-columns: 1fr; }
+  body[data-paper="thermal80"] .rc-ticket, body[data-paper="thermal80"] .rc-strip-ticket { font-size: 16pt; }
+  body[data-paper="thermal80"] .rc-totals { inline-size: 100%; }
+  body[data-paper="thermal80"] .rc-strip { block-size: auto; min-block-size: 30mm; }
+  body[data-paper="thermal80"] .doc-business { font-size: 12pt; }
+}
+
+@media print {
+  .rc-right { text-align: end; }
+  .rc-row { margin: 1pt 0; }
+  .rc-opt { display: inline-block; margin-inline-end: 8pt; white-space: nowrap; }
+  .rc-writeline { block-size: 15pt; border-block-end: .75pt solid #000; }
+  .rc-line { inline-size: 100%; min-inline-size: 40mm; }
+  dd .rc-line { display: block; min-inline-size: 0; block-size: 12pt; }
+}
+
+@media print {
+  .rc-list { margin: 0; padding-inline-start: 14pt; }
+  .rc-total-line { font-weight: 700; margin: 4pt 0 0; text-align: end; }
+}

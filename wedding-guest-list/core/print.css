@@ -1,0 +1,17 @@
+/* Yazdirma ciktisi: gezinme ve dugmeler gizli, tablo basligi her sayfada. */
+@page { margin: 0; } /* kenar 0: tarayici ust / alt bilgi (dosya yolu) basmaz; her cikti kendi sayfa kenarini guests.css'te verir */
+
+@media print {
+  :root { --bg: #fff; --text: #000; --muted: #333; --border: #999; --surface: #fff; }
+  html, body { background: #fff !important; color: #000 !important; }
+  .no-print, nav, .tabs, button, dialog, #toast-region, .banner, .form-card, .actions-col { display: none !important; }
+  .print-only { display: block !important; }
+  .app-main { padding: 0 !important; max-width: none !important; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { display: table-header-group; }
+  tfoot { display: table-footer-group; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  th, td { border-bottom: 1px solid #999; padding: 4px 6px; text-align: left; }
+  td.num, th.num { text-align: right; }
+  a { color: inherit; text-decoration: none; }
+}

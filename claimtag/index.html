@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1f4e79">
+  <meta name="color-scheme" content="light dark">
+  <title>Claimtag</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="modules/repairs/repairs.css">
+  <link rel="stylesheet" href="core/print.css" media="print">
+</head>
+<body>
+  <a class="skip-link" href="#panel">Skip to content</a>
+  <header class="app-header no-print">
+    <div class="header-row">
+      <h1 id="app-title"><img class="brand-icon" src="icons/icon.svg" alt="" width="34" height="34"><span id="app-title-text">Claimtag</span></h1>
+      <div class="header-actions">
+        <div id="top-actions" class="top-actions"></div>
+        <select id="lang-select" class="btn btn-secondary lang-select" aria-label="Language"></select>
+        <button type="button" id="settings-btn" class="btn btn-secondary">Settings</button>
+      </div>
+    </div>
+    <nav id="main-nav" class="main-nav" aria-label="Claimtag"></nav>
+  </header>
+  <div id="notice-bar" class="no-print"><p id="volatile-note" class="banner banner-warn" role="status" hidden></p></div>
+  <div id="backup-bar" class="no-print"></div>
+  <div id="pwa-bar" class="no-print"></div>
+  <main id="panel" class="app-main" tabindex="-1"></main>
+  <div id="print-root" aria-hidden="true"></div>
+  <div id="toast-region" role="status" aria-live="polite"></div>
+  <noscript><p class="banner">This app needs JavaScript. / Bu uygulama JavaScript gerektirir.</p></noscript>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
