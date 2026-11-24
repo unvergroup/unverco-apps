@@ -105,6 +105,19 @@ export function printDocument({ title, node, business, paper = "letter", mark = 
   }
 }
 
+// TEK KAPI: uygulamadaki her yazdirma (fis, musteri karti, yedi ekran belgesi) buradan gecer. Teslim yontemi (tarayici yazdirma penceresi,
+// iPhone ana ekran uygulamasi icin baska bir yol vb.) ileride YALNIZ burada degisir. ctx.print (app.js) isletme basligini + markayi ekler.
+// node: hazir belge govdesi; build(paper): kagit turune gore govde kuran islev (80 mm icin ayri duzen). Kagit turu Ayarlar'dan okunur.
+// doc: ayni belgenin saf MODELI (print/docs.js bicimi). iPhone ana ekran uygulamasinda window.print() calismadigi icin
+// kabuk (app.js ctx.print) bu modelden PDF uretip paylasim sayfasina verir (core/canvas-doc.js). doc yoksa her yerde tarayici yazdirmasi.
+export async function requestPrint(ctx, { title, node, build, doc }) {
+  const paper = (await ctx.pet.get()).paper;
+  await ctx.print({ title, node: typeof build === "function" ? build(paper) : node, paper, doc });
+}
+
+/** iPhone / iPad ana ekran uygulamasi mi? (navigator.standalone yalniz iOS'ta vardir.) Orada yazdirma DOSYA ile yapilir. */
+export const needsFileDelivery = (win = globalThis.window) => win?.navigator?.standalone === true;
+
 // ---- Belge govdeleri (kullanici verisi yalniz metin dugumu) ----------------------------------------------------------
 // Saf veri: bos alanlar atilir; testler DOM'suz bunu dener. appointment: { serial, date, time, durationMin, services[], priceMinor, paidMinor, notes }
 export function receiptData({ appointment, client, pet } = {}) {
