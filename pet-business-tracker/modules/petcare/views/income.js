@@ -11,7 +11,7 @@ import { button, createTabs, emptyState, h, table } from "../../../core/ui.js";
 import { revenueByService, revenueForRange } from "../logic/calc.js";
 import { PAYMENT_METHODS } from "../logic/schema.js";
 import { csvFileName, csvText, transactionRows } from "../logic/report.js";
-import { printIncomeReport } from "../print/report.js";
+import { printCash, printExpenses, printIncomeReport } from "../print/screens.js";
 import { loadAll, openAppointmentDetail, serviceName } from "./common.js";
 import { buildCashView, buildExpensesView, exportExpensesCsv, openExpenseForm } from "./expenses.js";
 
@@ -52,15 +52,17 @@ export async function mountIncome(ctx, root) {
     });
     if (downloadText(csvFileName(range.from, range.to, ctx.config.fileSlug), text, "text/csv")) ctx.notify(t("income.csvDone"), "success");
   }
-  const printReport = () => printIncomeReport(ctx, { data, range: periodRange(state.period), periodLabel: t(`income.period.${state.period}`) });
+  const printReport = () => printIncomeReport(ctx, printArgs());
   const reportBtn = () => button({ id: "income-report", glyph: "print", label: t("income.printReport"), exportAction: true, onClick: printReport });
+  const printArgs = () => ({ data, range: periodRange(state.period), periodLabel: t(`income.period.${state.period}`) });
   const actions = h("div", { class: "row income-actions" });
   function paintActions() {
     if (state.view === "expenses") {
       actions.replaceChildren(
         button({ id: "expense-add", variant: "primary", label: t("exp.add"), onClick: addExpense }),
+        button({ id: "expense-print", glyph: "print", label: t("pl.btn.expenses"), exportAction: true, onClick: () => printExpenses(ctx, printArgs()) }),
         button({ id: "expense-csv", label: `⬇ ${t("exp.exportCsv")}`, exportAction: true, onClick: () => exportExpensesCsv(ctx, { data, range: periodRange(state.period) }) }));
-    } else if (state.view === "cash") actions.replaceChildren(reportBtn());
+    } else if (state.view === "cash") actions.replaceChildren(button({ id: "cash-print", glyph: "print", label: t("pl.btn.cash"), exportAction: true, onClick: () => printCash(ctx, printArgs()) }), reportBtn());
     else actions.replaceChildren(button({ id: "income-csv", label: `⬇ ${t("income.exportCsv")}`, exportAction: true, onClick: exportCsv }), reportBtn());
   }
   async function addExpense() {

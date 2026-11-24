@@ -5,6 +5,7 @@ import { todayIso } from "../../../core/dates.js";
 import { guardWrite } from "../../../core/safe.js";
 import { button, emptyState, field, h } from "../../../core/ui.js";
 import { REMINDER_DAYS, filterReminders, getReminders, isReminderSent, mailtoUrl, reminderCounts } from "../logic/reminders.js";
+import { printReminders } from "../print/screens.js";
 import { fmtTime, linkButton, loadAll, messageFor, openAppointmentDetail, openModal, petAvatar, serviceName, smsUrl, statusChip, toInternational, vaccineBadge, waUrl } from "./common.js";
 
 const FILTERS = ["pending", "sent", "all"];
@@ -144,6 +145,7 @@ export async function mountReminders(ctx, root) {
     if (refocus) body.querySelector(".rem-card button, .rem-card a")?.focus({ preventScroll: true });
   }
   ctx.onExternalChange(reload);
-  root.replaceChildren(head, chips, body);
+  const printBtn = button({ id: "rem-print", glyph: "print", label: t("pl.btn.reminders"), exportAction: true, onClick: () => printReminders(ctx, { data, filter: state.filter }) });
+  root.replaceChildren(head, chips, h("div", { class: "row print-row" }, printBtn), body);
   paint();
 }

@@ -4,6 +4,7 @@ import { addDays, daysInMonth, isIsoDate, startOfWeek, toIso, todayIso, weekday,
 import { button, h } from "../../../core/ui.js";
 import { getAppointmentsForDate } from "../logic/appointments.js";
 import { appointmentCard, loadAll, openAppointmentDetail, openAppointmentForm } from "./common.js";
+import { printCalendar } from "../print/screens.js";
 import { openReminderSheet } from "./reminders.js";
 
 const MAX_DOTS = 3;
@@ -89,7 +90,8 @@ export async function mountCalendar(ctx, root, param) {
     };
     dayBox.replaceChildren(
       ...days.map(section),
-      h("div", { class: "row" }, button({ id: "cal-new", label: t("cal.newOnDay"), variant: "primary", onClick: create })));
+      h("div", { class: "row" }, button({ id: "cal-new", label: t("cal.newOnDay"), variant: "primary", onClick: create }),
+        button({ id: "cal-print", glyph: "print", label: t("pl.btn.calendar"), exportAction: true, onClick: () => printCalendar(ctx, { data, sel: state.sel, mode: state.mode }) })));
   }
 
   function paint() { paintBar(); paintGrid(); paintDay(); }

@@ -12,6 +12,7 @@ import { searchClients, searchPets, MIN_QUERY } from "../logic/search.js";
 import { GENDERS, LIMITS, SPECIES, TEMPERAMENTS, cleanRecord, validateClient, validatePet } from "../logic/schema.js";
 import { resizePhoto } from "./photo.js";
 import { printClientCard } from "../print/client-card.js";
+import { printClients } from "../print/screens.js";
 import { icon as iconSvg } from "../../../core/icons.js";
 import {
   ageText, appointmentCard, errText, kv, linkButton, loadAll, mailUrl, openAppointmentDetail, openAppointmentForm, openForm, openModal,
@@ -231,7 +232,8 @@ async function mountList(ctx, root) {
   search.input.addEventListener("input", () => { query = search.input.value; paint(); });
   async function reload() { data = await loadAll(ctx); paint(); }
   ctx.onExternalChange(reload);
-  root.replaceChildren(h("h2", { text: t("client.title") }), search.element, list, h("button", { type: "button", class: "fab", id: "fab-new", "aria-label": t("client.new"), text: "+", on: { click: create } }));
+  const printBtn = button({ id: "clients-print", glyph: "print", label: t("pl.btn.clients"), exportAction: true, onClick: () => printClients(ctx, { data, clients: visible(), query }) });
+  root.replaceChildren(h("h2", { text: t("client.title") }), search.element, h("div", { class: "row print-row" }, printBtn), list, h("button", { type: "button", class: "fab", id: "fab-new", "aria-label": t("client.new"), text: "+", on: { click: create } }));
   paint();
 }
 

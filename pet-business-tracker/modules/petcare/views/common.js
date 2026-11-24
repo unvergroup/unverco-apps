@@ -15,7 +15,7 @@ import { vaccineStatus } from "../logic/pets.js";
 import { MAX_OCCURRENCES, RECURRENCE_RULES, generateRecurring } from "../logic/recurrence.js";
 import { REMINDER_STATUSES, isReminderSent, mailtoUrl } from "../logic/reminders.js";
 import { LIMITS, PAYMENT_METHODS, SERVICES, cleanRecord, isPhotoDataUrl, validateAppointment } from "../logic/schema.js";
-import { isActive, isClosed, nextStatuses } from "../logic/status.js";
+import { isActive, isClosed, nextStatuses, pathToCompleted } from "../logic/status.js";
 import { printReceipt } from "../print/receipt.js";
 import { icon as iconSvg } from "../../../core/icons.js";
 
@@ -330,11 +330,26 @@ export async function openAppointmentDetail(ctx, id, onChange) {
       }, `move-${to}`),
     }));
 
+    // Tek dokunusla "Tamamla": scheduled / confirmed durumunda da gorunur, zinciri (confirmed -> in_progress -> completed)
+    // kendi icinde yurutur. Durum gecis kurali (TRANSITIONS) degismedi; yalniz kullaniciyi 3 dokunustan kurtarir.
+    if (isActive(a.status) && a.status !== "in_progress") {
+      moves.unshift(button({
+        id: "move-completed", label: t("appt.action.completed"), variant: "primary",
+        onClick: mutate(async () => { for (const step of pathToCompleted(a.status)) await ctx.store.update("appointments", a.id, { status: step }); }, "move-completed"),
+      }));
+    }
+
     // odeme: odendi <-> odenmedi ve tutar SONRADAN duzeltilebilir (gelir her seferinde randevulardan yeniden hesaplanir)
     const payRow = [];
     if (!a.paid && a.status !== "cancelled" && a.status !== "no_show") {
       const method = selectField({ id: `pay-method-${a.id}`, label: t("appt.paymentMethod"), value: "cash", options: PAYMENT_METHODS.map((p) => ({ value: p, label: t(`payment.${p}`) })) });
-      payRow.push(h("div", { class: "row pay-row" }, method.element, button({ id: "mark-paid", label: t("btn.markPaid"), onClick: mutate(() => ctx.store.update("appointments", a.id, { paid: true, paymentMethod: method.input.value }), "mark-paid") })));
+      payRow.push(h("div", { class: "row pay-row" }, method.element, button({ id: "mark-paid", label: t("btn.markPaid"), onClick: mutate(async () => {
+        await ctx.store.update("appointments", a.id, { paid: true, paymentMethod: method.input.value });
+        // Para alindi ve randevu gunu bugun ya da gecmis ise is bitmistir: durumu Tamamlandi'ya tasi.
+        // Boylece tutar tek dokunusta "Tahsil edilen gelir"e girer (gelir = tamamlandi VE odendi).
+        // Ileri tarihli (pesin odemeli) randevuya DOKUNULMAZ: isi yapilmadan gelir yazilmaz.
+        if (isActive(a.status) && a.date <= todayIso()) for (const step of pathToCompleted(a.status)) await ctx.store.update("appointments", a.id, { status: step });
+      }, "mark-paid") })));
     }
     if (a.paid) {
       payRow.push(h("div", { class: "row pay-row" }, button({ id: "mark-unpaid", label: t("btn.markUnpaid"), onClick: mutate(() => ctx.store.update("appointments", a.id, { paid: false, paymentMethod: "" }), "mark-unpaid") })));
@@ -476,17 +491,20 @@ export async function openAppointmentForm(ctx, opts = {}) {
         recCount.setError("");
         recs = generateRecurring({ ...clean, id: newRecordId() }, recRule.input.value, n);
       }
+      // "Odendi" isaretli + randevu gunu bugun ya da gecmis -> durum Tamamlandi.
+      // Yinelenen seride YALNIZ gunu gelmis olanlar tamamlanir; ileri tarihliler planli kalir.
+      recs = recs.map((r) => (r.paid && isActive(r.status) && r.date <= todayIso() ? { ...r, status: "completed" } : r));
       const total = (await ctx.store.count("appointments")) + (appt ? 0 : recs.length);
       if (total > LIMITS.appointments) { ctx.notify(t("msg.limitReached", { max: LIMITS.appointments }), "error"); return false; }
 
       // cakisma: ayni gun, takvimde yer tutan baska randevuyla saat kesisimi -> onay iste
-      if (isActive(clean.status)) {
+      if (isActive(recs[0].status)) {
         const clash = recs.filter((r) => hasConflict(fresh, r.date, r.time, r.duration, appt?.id));
         if (clash.length && !(await ctx.confirm({ title: t("appt.conflictTitle"), message: t("appt.conflictText", { n: clash.length }), confirmLabel: t("appt.conflictKeep"), danger: false }))) return false;
       }
 
-      if (appt) await ctx.store.update("appointments", appt.id, clean);
-      else if (recs.length === 1) await ctx.store.add("appointments", clean);
+      if (appt) await ctx.store.update("appointments", appt.id, recs[0]);
+      else if (recs.length === 1) await ctx.store.add("appointments", recs[0]);
       else {
         await ctx.store.transact("appointments", (list) => {
           const ts = new Date().toISOString();

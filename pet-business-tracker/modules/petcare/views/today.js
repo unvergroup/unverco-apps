@@ -6,6 +6,7 @@ import { button, emptyState, h } from "../../../core/ui.js";
 import { getAppointmentsForDate } from "../logic/appointments.js";
 import { vaccinesDue } from "../logic/pets.js";
 import { appointmentCard, fmtTime, loadAll, openAppointmentDetail, openAppointmentForm, petAvatar, vaccineBadge } from "./common.js";
+import { printToday } from "../print/screens.js";
 import { openReminderSheet } from "./reminders.js";
 
 const DAY_START = 8;
@@ -67,6 +68,7 @@ export async function mountToday(ctx, root) {
 
   async function reload() { data = await loadAll(ctx); paint(); }
   ctx.onExternalChange(reload);
-  root.replaceChildren(head, vax, body, h("button", { type: "button", class: "fab", id: "fab-new", "aria-label": t("today.new"), text: "+", on: { click: create } }));
+  const printBtn = button({ id: "today-print", glyph: "print", label: t("pl.btn.today"), exportAction: true, onClick: () => printToday(ctx, { data, today }) });
+  root.replaceChildren(head, h("div", { class: "row print-row" }, printBtn), vax, body, h("button", { type: "button", class: "fab", id: "fab-new", "aria-label": t("today.new"), text: "+", on: { click: create } }));
   paint();
 }
