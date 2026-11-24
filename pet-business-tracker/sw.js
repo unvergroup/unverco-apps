@@ -2,7 +2,7 @@
 // Strateji: once onbellek; yoksa ag; yalniz ayni kaynak (origin) GET istekleri. Uygulama hicbir yere veri gondermez.
 // Onbellege tum JS / CSS dosyalari, 5 dil dosyasi, manifest VE simge dosyalari girer (asagidaki PRECACHE listesi).
 const PRODUCT = "unvercopbt";
-const VERSION = "1.3.0";
+const VERSION = "1.3.1";
 const CACHE = PRODUCT + "-v" + VERSION;
 const PRECACHE = [
   "./",
@@ -28,6 +28,8 @@ const PRECACHE = [
   "core/logo.js",
   "core/money.js",
   "core/number-input.js",
+  "core/pdf.js",
+  "core/canvas-doc.js",
   "core/print.css",
   "core/print.js",
   "core/pwa.js",
@@ -55,7 +57,9 @@ const PRECACHE = [
   "modules/petcare/logic/templates.js",
   "modules/petcare/print/client-card.js",
   "modules/petcare/print/receipt.js",
-  "modules/petcare/print/report.js",
+  "modules/petcare/print/docs.js",
+  "modules/petcare/print/render.js",
+  "modules/petcare/print/screens.js",
   "modules/petcare/views/calendar.js",
   "modules/petcare/views/clients.js",
   "modules/petcare/views/common.js",

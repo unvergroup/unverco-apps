@@ -12,7 +12,8 @@ import { backupNow, rescaleStoreForCurrency, restoreNow } from "./core/data-acti
 import { renderSettings } from "./core/settings-screen.js";
 import { createBusinessProfile } from "./core/business.js";
 import { isLogoDataUrl } from "./core/logo.js";
-import { printDocument } from "./core/print.js";
+import { needsFileDelivery, printDocument, printHeaderData } from "./core/print.js";
+import { deliverPdf, docToPdf } from "./core/canvas-doc.js";
 import { initPwa } from "./core/pwa.js";
 import { errorKey } from "./core/safe.js";
 import { createSync } from "./core/sync.js";
@@ -94,10 +95,17 @@ async function main() {
       },
       // Yazdir: { title, node, paper } -> isletme basligi (musteri logosu dahil) eklenir, yazdirma penceresi acilir.
       // UNVERCO markasi yalniz Ayarlar'daki anahtar ACIKSA ve yalniz altbilgide TEK SATIR METIN olarak gider (varsayilan KAPALI).
-      print: async ({ title, node, business, paper }) => {
+      // iPhone ana ekran uygulamasinda (window.print() orada calismaz) ayni belge PDF olarak uretilir ve paylasim sayfasina verilir.
+      print: async ({ title, node, business, paper, doc }) => {
         try {
-          const brandMark = (await ctx.pet.get()).brandMark === true;
-          printDocument({ title, node, business: business ?? (await ctx.business.get()), paper, mark: brandMark ? ctx.i18n.t("print.brandMark") : "" });
+          const mark = (await ctx.pet.get()).brandMark === true ? ctx.i18n.t("print.brandMark") : "";
+          const biz = business ?? (await ctx.business.get());
+          if (doc && needsFileDelivery(window)) {
+            const bytes = await docToPdf({ doc, header: printHeaderData(biz), mark, paper, title });
+            await deliverPdf({ bytes, filename: `${config.fileSlug}-${doc.id || "document"}`, title });
+            return;
+          }
+          printDocument({ title, node, business: biz, paper, mark });
         } catch (e) {
           console.error(e);
           ctx.notify(ctx.i18n.t("print.error"), "error");
