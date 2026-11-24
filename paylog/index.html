@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-3el0/mi2fAPV2xFsvY4JWcJE8rhI87KbPWu0E+YBYew='; style-src 'sha256-7SiHpza0EnX1YUQQXtR9yYQhzkrNjPY6RN1nBfgbM34='; font-src data:; img-src 'self' data: blob:; connect-src 'none'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-uI/WBvVJlxcSPJzQtEXx7+m4yy/UDWHoAUKTaiWHrBw='; style-src 'sha256-7SiHpza0EnX1YUQQXtR9yYQhzkrNjPY6RN1nBfgbM34='; font-src data:; img-src 'self' data: blob:; connect-src 'none'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1a5c3a">
   <meta name="color-scheme" content="light dark">
@@ -700,7 +700,7 @@ const __default = {
   "paylog.backup.tooManyRecords": "Diese Sicherung enthält mehr Einträge, als die App erlaubt (Grenze: {max} pro Liste). Es wurde nichts geändert.",
   "paylog.repaired": "{n} beschädigte Einträge der Sicherung wurden repariert oder übersprungen.",
   "paylog.common.plainTextFile": "Diese Datei enthält deine Rechnungen, Abos und Kontodaten als Klartext. Bewahre sie sicher auf.",
-  "paylog.privacy.text": "Deine Rechnungen, Abos und Zahlungen bleiben auf diesem Gerät. PayLog hat kein Konto, keinen Server und kein Tracking und sendet deine Daten nirgendwohin. Die WhatsApp-Schaltflächen öffnen nur deine eigene App, wenn du sie antippst.",
+  "paylog.privacy.text": "Deine Rechnungen, Abos und Zahlungen bleiben auf diesem Gerät. PayLog hat kein Konto, keinen Server und kein Tracking und sendet deine Daten nirgendwohin. Die WhatsApp- und SMS-Schaltflächen öffnen nur deine eigene App, wenn du sie antippst.",
   "paylog.license.product": "PayLog verwendet nur die Systemschriften deines Geräts und enthält keinen Code von Dritten.",
   "app.name": "PayLog",
   "app.title": "PayLog",
@@ -740,6 +740,7 @@ const __default = {
   "common.actions": "Aktionen",
   "common.details": "Details",
   "common.shareWhatsApp": "Per WhatsApp teilen",
+  "common.shareSms": "Per SMS teilen",
   "common.today": "Heute",
   "common.tomorrow": "Morgen",
   "common.inDays": "in {n} Tagen",
@@ -898,6 +899,7 @@ const __default = {
   "reports.noSubs": "Keine aktiven Abos zur Auswahl.",
   "reports.print": "Zusammenfassung drucken",
   "reports.share": "Per WhatsApp teilen",
+  "reports.shareSms": "Per SMS teilen",
   "reports.noData": "Noch keine Daten zum Anzeigen.",
   "reports.noDataHint": "Füge eine Rechnung oder ein Abo hinzu und erfasse Zahlungen, um Berichte zu sehen.",
   "reports.shareTemplate": "PayLog {year}: Monatssumme {burn}, Jahreshochrechnung {yearly}, bisher bezahlt {paid}. Aktive Abos: {n}.",
@@ -963,7 +965,9 @@ const __default = {
   "errors.dueDay": "Gib einen Tag von 1 bis 31 ein.",
   "errors.customDays": "Gib eine Anzahl Tage von 1 bis 3650 ein.",
   "whatsapp.reminderTemplate": "Zahlungserinnerung: {name} ({amount}). Fällig: {when}.",
-  "whatsapp.trialAlertTemplate": "Warnung Testphase: Die Testphase von {name} endet: {when}. Kündigen unter: {cancelUrl}",
+  "whatsapp.trialAlertTemplate": "Warnung Testphase: Die Testphase von {name} endet: {when}.",
+  "whatsapp.trialEndedTemplate": "Warnung Testphase: Die Testphase von {name} ist am {date} abgelaufen.",
+  "whatsapp.cancelAt": "Kündigen unter: {cancelUrl}",
   "billtrack.print.summaryTitle": "Zahlungsübersicht",
   "billtrack.print.subscriptionsTitle": "Abos",
   "billtrack.print.monthly": "Monatssumme",
@@ -1111,7 +1115,7 @@ const __default = {
   "paylog.backup.tooManyRecords": "This backup has more records than the app allows (limit {max} per list). Nothing was changed.",
   "paylog.repaired": "{n} damaged entries in the backup were repaired or skipped.",
   "paylog.common.plainTextFile": "This file contains your bills, subscriptions and account details as plain text. Keep it somewhere safe.",
-  "paylog.privacy.text": "Your bills, subscriptions and payments stay on this device. PayLog has no account, no server and no tracking, and it never sends your data anywhere. The WhatsApp buttons only open your own app when you tap them.",
+  "paylog.privacy.text": "Your bills, subscriptions and payments stay on this device. PayLog has no account, no server and no tracking, and it never sends your data anywhere. The WhatsApp and SMS buttons only open your own app when you tap them.",
   "paylog.license.product": "PayLog uses only your device's system fonts and contains no third-party code.",
   "app.name": "PayLog",
   "app.title": "PayLog",
@@ -1151,6 +1155,7 @@ const __default = {
   "common.actions": "Actions",
   "common.details": "Details",
   "common.shareWhatsApp": "Share on WhatsApp",
+  "common.shareSms": "Share by SMS",
   "common.today": "Today",
   "common.tomorrow": "Tomorrow",
   "common.inDays": "in {n} days",
@@ -1309,6 +1314,7 @@ const __default = {
   "reports.noSubs": "No active subscriptions to choose from.",
   "reports.print": "Print summary",
   "reports.share": "Share on WhatsApp",
+  "reports.shareSms": "Share by SMS",
   "reports.noData": "No data to show yet.",
   "reports.noDataHint": "Add a bill or subscription and record payments to see reports.",
   "reports.shareTemplate": "PayLog {year}: monthly total {burn}, yearly projection {yearly}, paid so far {paid}. Active subscriptions: {n}.",
@@ -1374,7 +1380,9 @@ const __default = {
   "errors.dueDay": "Enter a day from 1 to 31.",
   "errors.customDays": "Enter a number of days from 1 to 3650.",
   "whatsapp.reminderTemplate": "Payment reminder: {name} ({amount}). Due: {when}.",
-  "whatsapp.trialAlertTemplate": "Free trial alert: {name} trial ends: {when}. Cancel at: {cancelUrl}",
+  "whatsapp.trialAlertTemplate": "Free trial alert: {name} trial ends: {when}.",
+  "whatsapp.trialEndedTemplate": "Free trial alert: the {name} trial ended on {date}.",
+  "whatsapp.cancelAt": "Cancel at: {cancelUrl}",
   "billtrack.print.summaryTitle": "Payment summary",
   "billtrack.print.subscriptionsTitle": "Subscriptions",
   "billtrack.print.monthly": "Monthly total",
@@ -1522,7 +1530,7 @@ const __default = {
   "paylog.backup.tooManyRecords": "Esta copia tiene más registros de los que permite la app (límite de {max} por lista). No se cambió nada.",
   "paylog.repaired": "{n} entradas dañadas de la copia se repararon o se omitieron.",
   "paylog.common.plainTextFile": "Este archivo contiene tus facturas, suscripciones y datos de cuenta en texto plano. Guárdalo en un lugar seguro.",
-  "paylog.privacy.text": "Tus facturas, suscripciones y pagos se quedan en este dispositivo. PayLog no tiene cuenta, ni servidor, ni rastreo, y nunca envía tus datos a ningún sitio. Los botones de WhatsApp solo abren tu propia app cuando los tocas.",
+  "paylog.privacy.text": "Tus facturas, suscripciones y pagos se quedan en este dispositivo. PayLog no tiene cuenta, ni servidor, ni rastreo, y nunca envía tus datos a ningún sitio. Los botones de WhatsApp y SMS solo abren tu propia app cuando los tocas.",
   "paylog.license.product": "PayLog usa solo las fuentes del sistema de tu dispositivo y no contiene código de terceros.",
   "app.name": "PayLog",
   "app.title": "PayLog",
@@ -1562,6 +1570,7 @@ const __default = {
   "common.actions": "Acciones",
   "common.details": "Detalles",
   "common.shareWhatsApp": "Compartir por WhatsApp",
+  "common.shareSms": "Compartir por SMS",
   "common.today": "Hoy",
   "common.tomorrow": "Mañana",
   "common.inDays": "en {n} días",
@@ -1720,6 +1729,7 @@ const __default = {
   "reports.noSubs": "No hay suscripciones activas para elegir.",
   "reports.print": "Imprimir resumen",
   "reports.share": "Compartir por WhatsApp",
+  "reports.shareSms": "Compartir por SMS",
   "reports.noData": "Aún no hay datos que mostrar.",
   "reports.noDataHint": "Añade una factura o suscripción y registra pagos para ver informes.",
   "reports.shareTemplate": "PayLog {year}: total mensual {burn}, proyección anual {yearly}, pagado hasta ahora {paid}. Suscripciones activas: {n}.",
@@ -1785,7 +1795,9 @@ const __default = {
   "errors.dueDay": "Escribe un día de 1 a 31.",
   "errors.customDays": "Escribe un número de días de 1 a 3650.",
   "whatsapp.reminderTemplate": "Recordatorio de pago: {name} ({amount}). Vence: {when}.",
-  "whatsapp.trialAlertTemplate": "Aviso de prueba gratuita: la prueba de {name} termina: {when}. Cancela en: {cancelUrl}",
+  "whatsapp.trialAlertTemplate": "Aviso de prueba gratuita: la prueba de {name} termina: {when}.",
+  "whatsapp.trialEndedTemplate": "Aviso de prueba gratuita: la prueba de {name} terminó el {date}.",
+  "whatsapp.cancelAt": "Cancela en: {cancelUrl}",
   "billtrack.print.summaryTitle": "Resumen de pagos",
   "billtrack.print.subscriptionsTitle": "Suscripciones",
   "billtrack.print.monthly": "Total mensual",
@@ -1933,7 +1945,7 @@ const __default = {
   "paylog.backup.tooManyRecords": "Cette sauvegarde contient plus d’enregistrements que l’application n’en autorise (limite de {max} par liste). Rien n’a été modifié.",
   "paylog.repaired": "{n} entrées endommagées de la sauvegarde ont été réparées ou ignorées.",
   "paylog.common.plainTextFile": "Ce fichier contient vos factures, abonnements et coordonnées de compte en texte clair. Conservez-le en lieu sûr.",
-  "paylog.privacy.text": "Vos factures, abonnements et paiements restent sur cet appareil. PayLog n’a ni compte, ni serveur, ni suivi, et n’envoie jamais vos données nulle part. Les boutons WhatsApp n’ouvrent votre propre application que lorsque vous les touchez.",
+  "paylog.privacy.text": "Vos factures, abonnements et paiements restent sur cet appareil. PayLog n’a ni compte, ni serveur, ni suivi, et n’envoie jamais vos données nulle part. Les boutons WhatsApp et SMS n’ouvrent votre propre application que lorsque vous les touchez.",
   "paylog.license.product": "PayLog utilise uniquement les polices système de votre appareil et ne contient aucun code tiers.",
   "app.name": "PayLog",
   "app.title": "PayLog",
@@ -1973,6 +1985,7 @@ const __default = {
   "common.actions": "Actions",
   "common.details": "Détails",
   "common.shareWhatsApp": "Partager sur WhatsApp",
+  "common.shareSms": "Partager par SMS",
   "common.today": "Aujourd’hui",
   "common.tomorrow": "Demain",
   "common.inDays": "dans {n} jours",
@@ -2131,6 +2144,7 @@ const __default = {
   "reports.noSubs": "Aucun abonnement actif à choisir.",
   "reports.print": "Imprimer le récapitulatif",
   "reports.share": "Partager sur WhatsApp",
+  "reports.shareSms": "Partager par SMS",
   "reports.noData": "Pas encore de données à afficher.",
   "reports.noDataHint": "Ajoutez une facture ou un abonnement et enregistrez des paiements pour voir les rapports.",
   "reports.shareTemplate": "PayLog {year} : total mensuel {burn}, projection annuelle {yearly}, payé à ce jour {paid}. Abonnements actifs : {n}.",
@@ -2196,7 +2210,9 @@ const __default = {
   "errors.dueDay": "Saisissez un jour de 1 à 31.",
   "errors.customDays": "Saisissez un nombre de jours de 1 à 3650.",
   "whatsapp.reminderTemplate": "Rappel de paiement : {name} ({amount}). Échéance : {when}.",
-  "whatsapp.trialAlertTemplate": "Alerte essai gratuit : l’essai de {name} se termine : {when}. Résiliez ici : {cancelUrl}",
+  "whatsapp.trialAlertTemplate": "Alerte essai gratuit : l’essai de {name} se termine : {when}.",
+  "whatsapp.trialEndedTemplate": "Alerte essai gratuit : l’essai de {name} s’est terminé le {date}.",
+  "whatsapp.cancelAt": "Résiliez ici : {cancelUrl}",
   "billtrack.print.summaryTitle": "Récapitulatif des paiements",
   "billtrack.print.subscriptionsTitle": "Abonnements",
   "billtrack.print.monthly": "Total mensuel",
@@ -2344,7 +2360,7 @@ const __default = {
   "paylog.backup.tooManyRecords": "Bu yedekte uygulamanın izin verdiğinden fazla kayıt var (liste başına sınır {max}). Hiçbir şey değiştirilmedi.",
   "paylog.repaired": "Yedekteki {n} bozuk kayıt onarıldı ya da atlandı.",
   "paylog.common.plainTextFile": "Bu dosya faturalarınızı, aboneliklerinizi ve hesap bilgilerinizi düz metin olarak içerir. Güvenli bir yerde saklayın.",
-  "paylog.privacy.text": "Faturalarınız, abonelikleriniz ve ödemeleriniz bu cihazda kalır. PayLog’un hesabı, sunucusu ve izleme kodu yoktur; verilerinizi hiçbir yere göndermez. WhatsApp düğmeleri yalnızca dokunduğunuzda kendi uygulamanızı açar.",
+  "paylog.privacy.text": "Faturalarınız, abonelikleriniz ve ödemeleriniz bu cihazda kalır. PayLog’un hesabı, sunucusu ve izleme kodu yoktur; verilerinizi hiçbir yere göndermez. WhatsApp ve SMS düğmeleri yalnızca dokunduğunuzda kendi uygulamanızı açar.",
   "paylog.license.product": "PayLog yalnızca cihazınızın sistem yazı tiplerini kullanır ve üçüncü taraf kod içermez.",
   "app.name": "PayLog",
   "app.title": "PayLog",
@@ -2384,6 +2400,7 @@ const __default = {
   "common.actions": "İşlemler",
   "common.details": "Ayrıntılar",
   "common.shareWhatsApp": "WhatsApp’ta paylaş",
+  "common.shareSms": "SMS ile paylaş",
   "common.today": "Bugün",
   "common.tomorrow": "Yarın",
   "common.inDays": "{n} gün sonra",
@@ -2542,6 +2559,7 @@ const __default = {
   "reports.noSubs": "Seçilecek aktif abonelik yok.",
   "reports.print": "Özeti yazdır",
   "reports.share": "WhatsApp’ta paylaş",
+  "reports.shareSms": "SMS ile paylaş",
   "reports.noData": "Gösterilecek veri henüz yok.",
   "reports.noDataHint": "Rapor görmek için bir fatura ya da abonelik ekleyin ve ödemeleri kaydedin.",
   "reports.shareTemplate": "PayLog {year}: aylık toplam {burn}, yıllık projeksiyon {yearly}, şimdiye kadar ödenen {paid}. Aktif abonelik: {n}.",
@@ -2607,7 +2625,9 @@ const __default = {
   "errors.dueDay": "1 ile 31 arasında bir gün girin.",
   "errors.customDays": "1 ile 3650 arasında bir gün sayısı girin.",
   "whatsapp.reminderTemplate": "Ödeme hatırlatması: {name} ({amount}). Vade: {when}.",
-  "whatsapp.trialAlertTemplate": "Ücretsiz deneme uyarısı: {name} denemesinin bitişi: {when}. İptal için: {cancelUrl}",
+  "whatsapp.trialAlertTemplate": "Ücretsiz deneme uyarısı: {name} denemesinin bitişi: {when}.",
+  "whatsapp.trialEndedTemplate": "Ücretsiz deneme uyarısı: {name} denemesi {date} tarihinde bitti.",
+  "whatsapp.cancelAt": "İptal için: {cancelUrl}",
   "billtrack.print.summaryTitle": "Ödeme özeti",
   "billtrack.print.subscriptionsTitle": "Abonelikler",
   "billtrack.print.monthly": "Aylık toplam",
@@ -2677,7 +2697,7 @@ const __default = Object.freeze({
   mode: "full",
   demoLimits: Object.freeze({}),
   storagePrefix: "paylog",
-  version: "1.0.0",
+  version: "1.0.1",
   schemaVersion: 1,
   preview: false,
 });
@@ -4376,7 +4396,7 @@ return { isSafeUrl, h, nextId, button, createTabs, focusFirstInvalid, revealFirs
 __m["core/data-actions.js"] = (function () {
 const { BackupError, BACKUP_COLLECTIONS, MAX_BACKUP_BYTES, backupFileName, byteLength, exportBackupText, prepareBackup, restoreBackup } = __m["core/backup.js"];
 const { downloadText, pickTextFile } = __m["core/files.js"];
-const { currencyDigits } = __m["core/money.js"];
+const { currencyDigits, roundDiv } = __m["core/money.js"];
 const { PAY_COLLECTION, PAY_ID, LIMITS, MAX_MINOR, sanitizePay } = __m["core/settings.js"];
 const { SEQUENCES, purgeCorruptCopies } = __m["core/store.js"];
 const { confirmDialog } = __m["core/ui.js"];
@@ -4416,17 +4436,20 @@ function sanitizeAppData(data, { lang = "en", migrate } = {}) {
   return { data: out, report: { repaired, dropped } };
 }
 
+const AMOUNT_CAP = 999_999_999;
+const isMoneyKey = (k) => k === "amount" || /Minor$/.test(k);
 function rescaleDataset(data, from, to) {
+  if (from === to) return { data, changed: false };
   const df = currencyDigits(to) - currencyDigits(from);
-  if (df === 0) return { data, changed: false };
   const f = 10 ** Math.abs(df);
-  const sc = (v) => (Number.isSafeInteger(v) ? Math.min(MAX_MINOR, df > 0 ? v * f : Math.round(v / f)) : v);
+  const sc = (v) => (df === 0 || !Number.isSafeInteger(v) ? v : Math.min(MAX_MINOR, AMOUNT_CAP, df > 0 ? v * f : roundDiv(v, f)));
   const walk = (v) => {
     if (Array.isArray(v)) return v.map(walk);
-    if (v && typeof v === "object") return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, /Minor$/.test(k) ? sc(x) : walk(x)]));
+    if (v && typeof v === "object") return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, isMoneyKey(k) ? sc(x) : walk(x)]));
     return v;
   };
-  return { data: { ...data, bills: walk(data.bills ?? []), subscriptions: walk(data.subscriptions ?? []), payments: walk(data.payments ?? []) }, changed: true };
+  const rec = (list) => walk(list ?? []).map((r) => (r && typeof r === "object" && typeof r.currency === "string" ? { ...r, currency: to } : r));
+  return { data: { ...data, bills: rec(data.bills), subscriptions: rec(data.subscriptions), payments: rec(data.payments) }, changed: true };
 }
 
 async function rescaleStoreForCurrency(store, from, to) {
@@ -4710,7 +4733,392 @@ function printDocument({ title, node, paper = "letter", win = globalThis.window,
 
 const kv = (rows) => h("dl", { class: "rc-kv" }, rows.filter(([, v]) => v !== "" && v !== null && v !== undefined).flatMap(([k, v]) => [h("dt", { text: k }), h("dd", { text: String(v) })]));
 
-return { wrapPageFrame, PAPER_IDS, printDocument, kv };
+const needsFileDelivery = (win = globalThis.window) => win?.navigator?.standalone === true;
+
+return { wrapPageFrame, PAPER_IDS, printDocument, kv, needsFileDelivery };
+})();
+__m["core/pdf.js"] = (function () {
+
+const enc = new TextEncoder();
+const bytesOf = (s) => enc.encode(s);
+
+function base64ToBytes(input) {
+  if (typeof input !== "string" || input === "") return null;
+  const b64 = input.startsWith("data:") ? input.slice(input.indexOf(",") + 1) : input;
+  if (!/^[A-Za-z0-9+/\r\n]*={0,2}$/.test(b64)) return null;
+  const clean = b64.replace(/[\r\n]/g, "");
+  let bin;
+  try {
+    bin = typeof atob === "function" ? atob(clean) : Buffer.from(clean, "base64").toString("binary");
+  } catch { return null; }
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i) & 0xff;
+  return out;
+}
+
+function jpegSize(bytes) {
+  if (!(bytes instanceof Uint8Array) || bytes.length < 4) return null;
+  if (bytes[0] !== 0xff || bytes[1] !== 0xd8) return null;
+  let i = 2;
+  while (i + 9 < bytes.length) {
+    if (bytes[i] !== 0xff) { i += 1; continue; }
+    const marker = bytes[i + 1];
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) { i += 2; continue; }
+    const len = (bytes[i + 2] << 8) | bytes[i + 3];
+    if (len < 2) return null;
+    if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
+      const h = (bytes[i + 5] << 8) | bytes[i + 6];
+      const w = (bytes[i + 7] << 8) | bytes[i + 8];
+      return w > 0 && h > 0 ? { width: w, height: h } : null;
+    }
+    i += 2 + len;
+  }
+  return null;
+}
+
+const pdfText = (s) => String(s ?? "").replace(/([\\()])/g, "\\$1").replace(/[\r\n]+/g, " ");
+
+function buildPdf(pages, { dpi = 200, title = "" } = {}) {
+  if (!Array.isArray(pages) || pages.length === 0) throw new Error("buildPdf: sayfa yok");
+  const sized = pages.map((p, i) => {
+    if (!(p?.jpeg instanceof Uint8Array) || p.jpeg.length === 0) throw new Error(`buildPdf: sayfa ${i + 1} jpeg baytlari gecersiz`);
+    const size = jpegSize(p.jpeg);
+    if (!size) throw new Error(`buildPdf: sayfa ${i + 1} JPEG olcusu okunamadi (bozuk ya da JPEG degil)`);
+    return { jpeg: p.jpeg, ...size };
+  });
+  const d = dpi > 0 ? dpi : 200;
+  const pt = (px) => Math.round((px / d) * 72 * 1000) / 1000;
+
+  const chunks = [];
+  let len = 0;
+  const push = (u8) => { chunks.push(u8); len += u8.length; };
+  const offsets = [];
+  const obj = (n, body, stream) => {
+    offsets[n] = len;
+    push(bytesOf(`${n} 0 obj\n${body}\n`));
+    if (stream) { push(bytesOf("stream\n")); push(stream); push(bytesOf("\nendstream\n")); }
+    push(bytesOf("endobj\n"));
+  };
+
+  push(bytesOf("%PDF-1.4\n"));
+  push(new Uint8Array([0x25, 0xe2, 0xe3, 0xcf, 0xd3, 0x0a]));
+
+  const firstPageObj = 4;
+  const pageIds = sized.map((_, i) => firstPageObj + i * 3);
+  obj(1, `<< /Type /Catalog /Pages 2 0 R >>`);
+  obj(2, `<< /Type /Pages /Kids [${pageIds.map((n) => `${n} 0 R`).join(" ")}] /Count ${sized.length} >>`);
+  obj(3, `<< /Producer (UNVERCO Pet Business Tracker)${title ? ` /Title (${pdfText(title)})` : ""} >>`);
+
+  sized.forEach((p, i) => {
+    const pageN = pageIds[i], contN = pageN + 1, imgN = pageN + 2;
+    const w = pt(p.width), h = pt(p.height);
+    obj(pageN, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${w} ${h}] /Resources << /XObject << /Im0 ${imgN} 0 R >> >> /Contents ${contN} 0 R >>`);
+    const content = bytesOf(`q\n${w} 0 0 ${h} 0 0 cm\n/Im0 Do\nQ\n`);
+    obj(contN, `<< /Length ${content.length} >>`, content);
+    obj(imgN, `<< /Type /XObject /Subtype /Image /Width ${p.width} /Height ${p.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.jpeg.length} >>`, p.jpeg);
+  });
+
+  const total = 3 + sized.length * 3;
+  const xrefAt = len;
+  let xref = `xref\n0 ${total + 1}\n0000000000 65535 f \n`;
+  for (let n = 1; n <= total; n += 1) xref += `${String(offsets[n]).padStart(10, "0")} 00000 n \n`;
+  push(bytesOf(xref));
+  push(bytesOf(`trailer\n<< /Size ${total + 1} /Root 1 0 R /Info 3 0 R >>\nstartxref\n${xrefAt}\n%%EOF\n`));
+
+  const out = new Uint8Array(len);
+  let at = 0;
+  for (const c of chunks) { out.set(c, at); at += c.length; }
+  return out;
+}
+
+return { base64ToBytes, jpegSize, buildPdf };
+})();
+__m["core/canvas-doc.js"] = (function () {
+const { base64ToBytes, buildPdf } = __m["core/pdf.js"];
+
+const DPI = 200;
+const FAMILY = "-apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif";
+const PAPERS = Object.freeze({
+  letter: { w: 1700, h: 2200, m: 130 },
+  a4: { w: 1654, h: 2339, m: 130 },
+  thermal80: { w: 630, h: 0, m: 28 },
+});
+const MAX_ROLL = 9000;
+const INK = "#111111";
+const MUTED = "#555555";
+const RULE = "#bbbbbb";
+const BAND = "#eeeeee";
+
+const font = (size, bold = false) => `${bold ? "700" : "400"} ${size}px ${FAMILY}`;
+const str = (v) => (v === null || v === undefined ? "" : String(v));
+
+function wrapText(text, fnt, maxW, measure) {
+  const out = [];
+  for (const para of str(text).split("\n")) {
+    let line = "";
+    for (const word of para.split(/\s+/).filter(Boolean)) {
+      const tryLine = line ? `${line} ${word}` : word;
+      if (measure(tryLine, fnt) <= maxW) { line = tryLine; continue; }
+      if (line) out.push(line);
+      line = "";
+      let rest = word;
+      while (measure(rest, fnt) > maxW && rest.length > 1) {
+        let n = rest.length - 1;
+        while (n > 1 && measure(rest.slice(0, n), fnt) > maxW) n -= 1;
+        out.push(rest.slice(0, n));
+        rest = rest.slice(n);
+      }
+      line = rest;
+    }
+    out.push(line);
+  }
+  return out.length ? out : [""];
+}
+
+function layoutDoc({ doc, header = {}, mark = "", paper = "letter" }, measure) {
+  const P = PAPERS[paper] ?? PAPERS.letter;
+  const roll = P.h === 0;
+  const S = roll
+    ? { body: 23, small: 20, h3: 26, title: 34, biz: 30, lh: 1.32, pad: 6 }
+    : { body: 27, small: 23, h3: 32, title: 46, biz: 40, lh: 1.34, pad: 9 };
+  const W = P.w;
+  const left = P.m;
+  const right = W - P.m;
+  const cw = right - left;
+  const footH = mark ? Math.round(S.small * 2.4) : 0;
+  const limit = (roll ? MAX_ROLL : P.h) - P.m - footH - S.pad * 8;
+
+  const pages = [];
+  let ops;
+  let y;
+  const newPage = () => { ops = []; pages.push({ height: 0, ops }); y = P.m; };
+  const closePage = () => {
+    const page = pages[pages.length - 1];
+    const h = roll ? Math.ceil(y + footH + P.m) : P.h;
+    if (mark) ops.push({ t: "text", x: W / 2, y: h - P.m + (roll ? 0 : Math.round(S.small * 0.2)), text: mark, font: font(S.small), color: MUTED, align: "center" });
+    page.height = h;
+  };
+  const ensure = (need, onBreak) => {
+    if (y + need <= limit) return false;
+    closePage(); newPage();
+    if (onBreak) onBreak();
+    return true;
+  };
+  const text = (x, yy, t, fnt, { color = INK, align = "left" } = {}) => ops.push({ t: "text", x, y: yy, text: t, font: fnt, color, align });
+  const rule = (yy, color = RULE, w = 2) => ops.push({ t: "line", x1: left, y1: yy, x2: right, y2: yy, color, w });
+  const para = (t, size, { bold = false, color = INK, x = left, maxW = cw, align = "left", gapAfter = 0 } = {}) => {
+    const fnt = font(size, bold);
+    const lh = Math.round(size * S.lh);
+    for (const ln of wrapText(t, fnt, maxW, measure)) {
+      ensure(lh);
+      text(align === "right" ? x + maxW : align === "center" ? x + maxW / 2 : x, y + size, ln, fnt, { color, align });
+      y += lh;
+    }
+    y += gapAfter;
+  };
+
+  newPage();
+
+  const hName = str(header.name);
+  const hLines = (Array.isArray(header.lines) ? header.lines : []).map(str).filter(Boolean);
+  const accent = /^#[0-9a-f]{6}$/i.test(str(header.accent)) ? header.accent : INK;
+  if (header.logo && header.logo.w > 0 && header.logo.h > 0) {
+    const maxH = roll ? 120 : 170;
+    const maxW = roll ? cw : 520;
+    const k = Math.min(maxH / header.logo.h, maxW / header.logo.w, 1.5);
+    const lw = Math.round(header.logo.w * k);
+    const lh = Math.round(header.logo.h * k);
+    ops.push({ t: "image", x: roll ? Math.round(left + (cw - lw) / 2) : left, y, w: lw, h: lh });
+    y += lh + S.pad * 2;
+  }
+  if (hName) para(hName, S.biz, { bold: true, align: roll ? "center" : "left" });
+  for (const l of hLines) para(l, S.small, { color: MUTED, align: roll ? "center" : "left" });
+  if (hName || hLines.length || header.logo) {
+    y += S.pad;
+    ops.push({ t: "rect", x: left, y, w: cw, h: roll ? 4 : 6, color: accent });
+    y += S.pad * 3;
+  }
+
+  para(str(doc?.title), S.title, { bold: true });
+  if (doc?.period) para(str(doc.period), S.body, { color: MUTED });
+  y += S.pad * 2;
+
+  const heading = (t) => {
+    if (!t) return;
+    ensure(Math.round(S.h3 * S.lh) * 2 + S.pad * 4);
+    y += S.pad;
+    para(t, S.h3, { bold: true, gapAfter: S.pad });
+  };
+
+  const kvRows = (rows) => {
+    const labelW = Math.round(cw * (roll ? 0.46 : 0.42));
+    const valW = cw - labelW - S.pad * 2;
+    for (const [k, v, strong] of rows) {
+      const fl = font(S.body, !!strong);
+      const kl = wrapText(k, fl, labelW, measure);
+      const vl = wrapText(v, fl, valW, measure);
+      const lh = Math.round(S.body * S.lh);
+      const h = Math.max(kl.length, vl.length) * lh + S.pad;
+      ensure(h + (strong ? S.pad : 0));
+      if (strong) { rule(y, INK, 2); y += S.pad; }
+      kl.forEach((ln, i) => text(left, y + S.body + i * lh, ln, fl));
+      vl.forEach((ln, i) => text(right, y + S.body + i * lh, ln, fl, { align: "right" }));
+      y += h;
+    }
+  };
+
+  const tableWide = (sec) => {
+    const cols = sec.columns;
+    const cp = S.pad * 1.6;
+    const fb = font(S.small, true);
+    const fc = font(S.body);
+    const lh = Math.round(S.body * S.lh);
+    const nat = cols.map((c) => Math.min(cw * 0.5, Math.max(measure(str(c.label), fb), ...sec.rows.map((r) => measure(str(r[c.key]), fc)), 40) + cp * 2));
+    const sum = nat.reduce((a, b) => a + b, 0);
+    let widths;
+    if (sum <= cw) {
+      const any = cols.some((c) => !c.num);
+      const flexes = cols.map((c) => (any ? !c.num : true));
+      const fs = nat.reduce((a, n, i) => a + (flexes[i] ? n : 0), 0) || 1;
+      widths = nat.map((n, i) => n + (flexes[i] ? ((cw - sum) * n) / fs : 0));
+    } else {
+      const fixed = cols.reduce((a, c, i) => a + (c.num ? nat[i] : 0), 0);
+      const flexSum = sum - fixed;
+      const room = Math.max(cw - fixed, cw * 0.4);
+      const k = room / (flexSum || 1);
+      widths = nat.map((n, i) => (cols[i].num ? n : Math.max(90, n * k)));
+      const s2 = widths.reduce((a, b) => a + b, 0);
+      widths = widths.map((w) => (w * cw) / s2);
+    }
+    const xs = [];
+    widths.reduce((x, w) => { xs.push(x); return x + w; }, left);
+
+    const headRow = () => {
+      const lines = cols.map((c, i) => wrapText(c.label, fb, widths[i] - cp * 2, measure));
+      const hlh = Math.round(S.small * S.lh);
+      const h = Math.max(...lines.map((l) => l.length)) * hlh + S.pad * 2;
+      ops.push({ t: "rect", x: left, y, w: cw, h, color: BAND });
+      lines.forEach((ls, i) => ls.forEach((ln, j) => text(cols[i].num ? xs[i] + widths[i] - cp : xs[i] + cp, y + S.pad + S.small + j * hlh, ln, fb, { align: cols[i].num ? "right" : "left" })));
+      y += h;
+      rule(y, INK, 2);
+    };
+    ensure(lh * 3 + S.pad * 6);
+    headRow();
+    for (const r of sec.rows) {
+      const lines = cols.map((c, i) => wrapText(r[c.key], fc, widths[i] - cp * 2, measure));
+      const h = Math.max(...lines.map((l) => l.length)) * lh + S.pad * 2;
+      ensure(h, headRow);
+      lines.forEach((ls, i) => ls.forEach((ln, j) => text(cols[i].num ? xs[i] + widths[i] - cp : xs[i] + cp, y + S.pad + S.body + j * lh, ln, fc, { align: cols[i].num ? "right" : "left" })));
+      y += h;
+      rule(y, RULE, 1);
+    }
+    if (sec.total) {
+      const ft = font(S.body, true);
+      const vW = Math.max(measure(str(sec.total.value), ft) + cp * 2, widths[widths.length - 1]);
+      const ll = wrapText(sec.total.label, ft, cw - vW - cp * 2, measure);
+      const h = ll.length * lh + S.pad * 2;
+      ensure(h);
+      rule(y, INK, 2);
+      ll.forEach((ln, j) => text(left + cp, y + S.pad + S.body + j * lh, ln, ft));
+      text(right - cp, y + S.pad + S.body, str(sec.total.value), ft, { align: "right" });
+      y += h;
+    }
+  };
+
+  const tableRoll = (sec) => {
+    const cols = sec.columns;
+    const amt = cols.find((c) => c.amount);
+    const fh = font(S.body, true);
+    const lh = Math.round(S.body * S.lh);
+    for (const r of sec.rows) {
+      const head = cols.filter((c) => c.primary).map((c) => str(r[c.key])).filter(Boolean).join(" · ") || (amt ? "" : str(r[cols[0].key]));
+      const a = amt ? str(r[amt.key]) : "";
+      const aW = a ? measure(a, fh) + S.pad * 2 : 0;
+      const hl = wrapText(head, fh, cw - aW, measure);
+      ensure(hl.length * lh + S.pad);
+      hl.forEach((ln, j) => text(left, y + S.body + j * lh, ln, fh));
+      if (a) text(right, y + S.body, a, fh, { align: "right" });
+      y += hl.length * lh;
+      for (const c of cols.filter((c) => !c.primary && !c.amount && r[c.key])) para(`${c.label}: ${str(r[c.key])}`, S.small, { color: MUTED });
+      y += S.pad;
+      rule(y, RULE, 1);
+      y += S.pad;
+    }
+    if (sec.total) para([sec.total.label, sec.total.value].filter(Boolean).join(": "), S.body, { bold: true, align: "right", gapAfter: S.pad });
+  };
+
+  for (const sec of Array.isArray(doc?.sections) ? doc.sections : []) {
+    heading(sec.heading);
+    if (sec.kind === "table") (roll ? tableRoll : tableWide)(sec);
+    else if (sec.kind === "kv") kvRows(sec.rows ?? []);
+    else para(str(sec.text), S.body, { color: sec.kind === "empty" ? MUTED : INK });
+    y += S.pad * 3;
+  }
+  for (const n of Array.isArray(doc?.notes) ? doc.notes : []) para(str(n), S.small, { color: MUTED });
+  closePage();
+  return { width: W, pages };
+}
+
+function paintPage(c2d, page, width, image = null) {
+  c2d.fillStyle = "#ffffff";
+  c2d.fillRect(0, 0, width, page.height);
+  c2d.textBaseline = "alphabetic";
+  for (const op of page.ops) {
+    if (op.t === "text") { c2d.font = op.font; c2d.fillStyle = op.color; c2d.textAlign = op.align; c2d.fillText(op.text, op.x, op.y); }
+    else if (op.t === "rect") { c2d.fillStyle = op.color; c2d.fillRect(op.x, op.y, op.w, op.h); }
+    else if (op.t === "line") { c2d.strokeStyle = op.color; c2d.lineWidth = op.w; c2d.beginPath(); c2d.moveTo(op.x1, op.y1); c2d.lineTo(op.x2, op.y2); c2d.stroke(); }
+    else if (op.t === "image" && image) c2d.drawImage(image, op.x, op.y, op.w, op.h);
+  }
+}
+
+function loadImage(src, doc) {
+  return new Promise((resolve) => {
+    if (!src) return resolve(null);
+    const img = doc.createElement("img");
+    img.onload = () => resolve(img.naturalWidth > 0 ? img : null);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+async function docToPdf({ doc, header = {}, mark = "", paper = "letter", title = "" }, { document: d = globalThis.document } = {}) {
+  const img = await loadImage(header.logo, d);
+  const canvas = d.createElement("canvas");
+  const c2d = canvas.getContext("2d");
+  const measure = (t, fnt) => { c2d.font = fnt; return c2d.measureText(t).width; };
+  const lay = layoutDoc({ doc, header: { ...header, logo: img ? { w: img.naturalWidth, h: img.naturalHeight } : null }, mark, paper }, measure);
+  const pages = [];
+  for (const page of lay.pages) {
+    canvas.width = lay.width;
+    canvas.height = page.height;
+    paintPage(canvas.getContext("2d"), page, lay.width, img);
+    const jpeg = base64ToBytes(canvas.toDataURL("image/jpeg", 0.9));
+    if (!jpeg) throw new Error("page_render_failed");
+    pages.push({ jpeg });
+  }
+  canvas.width = 1; canvas.height = 1;
+  return buildPdf(pages, { dpi: DPI, title });
+}
+
+async function deliverPdf({ bytes, filename, title = "" }, { win = globalThis.window } = {}) {
+  const name = /\.pdf$/i.test(filename) ? filename : `${filename}.pdf`;
+  const nav = win.navigator;
+  if (typeof win.File === "function" && typeof nav.share === "function") {
+    const file = new win.File([bytes], name, { type: "application/pdf" });
+    if (typeof nav.canShare !== "function" || nav.canShare({ files: [file] })) {
+      try { await nav.share({ files: [file], title }); return "shared"; }
+      catch (e) { if (e && e.name === "AbortError") return "cancelled"; }
+    }
+  }
+  const url = win.URL.createObjectURL(new win.Blob([bytes], { type: "application/pdf" }));
+  const a = win.document.createElement("a");
+  a.href = url; a.download = name; a.rel = "noopener";
+  win.document.body.append(a); a.click(); a.remove();
+  win.setTimeout(() => win.URL.revokeObjectURL(url), 60000);
+  return "downloaded";
+}
+
+return { DPI, wrapText, layoutDoc, paintPage, docToPdf, deliverPdf };
 })();
 __m["core/pwa.js"] = (function () {
 
@@ -5272,29 +5680,33 @@ return { sortSubscriptions, getSubscription, liveSubscriptions, cancelSubscripti
 __m["modules/billtrack/logic/calc.js"] = (function () {
 
 const { addDays, diffDays, todayIso } = __m["core/dates.js"];
+const { roundDiv } = __m["core/money.js"];
 const { billDueInfo, activeBills, paymentsFor, upcomingBillDates } = __m["modules/billtrack/logic/bills.js"];
 const { CATEGORIES } = __m["modules/billtrack/logic/schema.js"];
 const { advanceBilling, liveSubscriptions, nextBilling } = __m["modules/billtrack/logic/subscriptions.js"];
 
 const list = (v) => (Array.isArray(v) ? v.filter((a) => a && typeof a === "object") : []);
-const FACTOR = Object.freeze({ weekly: 52 / 12, biweekly: 26 / 12, monthly: 1, quarterly: 1 / 3, semi_annual: 1 / 6, annual: 1 / 12, lifetime: 0 });
+const RATIO = Object.freeze({ weekly: [52, 12], biweekly: [26, 12], monthly: [1, 1], quarterly: [1, 3], semi_annual: [1, 6], annual: [1, 12], lifetime: [0, 1] });
 const cur = (items, currency) => (currency ? items.filter((i) => i.currency === currency) : items);
 const amountOf = (i) => (Number.isSafeInteger(i?.amount) && i.amount > 0 ? i.amount : 0);
+const ratioOf = (item) => (item?.frequency === "custom" ? (item.customDays > 0 ? [365, item.customDays * 12] : [0, 1]) : RATIO[item?.frequency] ?? [0, 1]);
+const scaled = (item, times) => {
+  const [num, den] = ratioOf(item);
+  const out = roundDiv(amountOf(item) * num * times, den);
+  return Number.isNaN(out) ? 0 : out;
+};
 
-function monthlyExact(item) {
-  const f = item?.frequency === "custom" ? (item.customDays > 0 ? 365 / item.customDays / 12 : 0) : FACTOR[item?.frequency] ?? 0;
-  return amountOf(item) * f;
-}
-const monthlyAmount = (item) => Math.round(monthlyExact(item));
+const monthlyAmount = (item) => scaled(item, 1);
+const yearlyAmount = (item) => scaled(item, 12);
 
 const liveItems = (bills, subs, currency) => [
   ...cur(activeBills(bills), currency).map((item) => ({ item, kind: "bill" })),
   ...cur(liveSubscriptions(subs), currency).map((item) => ({ item, kind: "subscription" })),
 ];
-const sumMonthly = (rows) => rows.reduce((s, r) => s + monthlyExact(r.item), 0);
+const sumOf = (rows, fn) => rows.reduce((s, r) => s + fn(r.item), 0);
 
-const monthlyBurn = (bills, subs, opts) => Math.round(sumMonthly(liveItems(bills, subs, opts?.currency)));
-const yearlyBurn = (bills, subs, opts) => Math.round(sumMonthly(liveItems(bills, subs, opts?.currency)) * 12);
+const monthlyBurn = (bills, subs, opts) => sumOf(liveItems(bills, subs, opts?.currency), monthlyAmount);
+const yearlyBurn = (bills, subs, opts) => sumOf(liveItems(bills, subs, opts?.currency), yearlyAmount);
 
 function monthlyCosts(payments, year, currency, sourceType) {
   const out = new Array(12).fill(0);
@@ -5310,13 +5722,13 @@ function costByCategory(bills, subs, opts) {
   const map = new Map();
   for (const { item } of liveItems(bills, subs, opts?.currency)) {
     const c = CATEGORIES.includes(item.category) ? item.category : "other";
-    const e = map.get(c) ?? { category: c, count: 0, exact: 0 };
+    const e = map.get(c) ?? { category: c, count: 0, minor: 0 };
     e.count += 1;
-    e.exact += monthlyExact(item);
+    e.minor += monthlyAmount(item);
     map.set(c, e);
   }
-  const total = [...map.values()].reduce((s, r) => s + r.exact, 0);
-  return [...map.values()].map((e) => ({ category: e.category, count: e.count, monthlyMinor: Math.round(e.exact), share: total > 0 ? e.exact / total : 0 }))
+  const total = [...map.values()].reduce((s, r) => s + r.minor, 0);
+  return [...map.values()].map((e) => ({ category: e.category, count: e.count, monthlyMinor: e.minor, share: total > 0 ? e.minor / total : 0 }))
     .sort((a, b) => b.monthlyMinor - a.monthlyMinor || a.category.localeCompare(b.category));
 }
 
@@ -5352,8 +5764,7 @@ function zombieHunt(subs, payments, inactiveDays = 90, today = todayIso()) {
 function savingsIfCancelled(subs, selectedIds, currency) {
   const ids = new Set(Array.isArray(selectedIds) ? selectedIds : []);
   const picked = cur(liveSubscriptions(subs), currency).filter((s) => ids.has(s.id));
-  const exact = picked.reduce((t, s) => t + monthlyExact(s), 0);
-  return { count: picked.length, monthlyMinor: Math.round(exact), yearlyMinor: Math.round(exact * 12) };
+  return { count: picked.length, monthlyMinor: picked.reduce((t, s) => t + monthlyAmount(s), 0), yearlyMinor: picked.reduce((t, s) => t + yearlyAmount(s), 0) };
 }
 
 function upcomingPayments(bills, subs, days, opts = {}) {
@@ -5372,7 +5783,7 @@ function upcomingPayments(bills, subs, days, opts = {}) {
   return rows.sort((a, b) => a.date.localeCompare(b.date) || String(a.item.name).localeCompare(String(b.item.name)));
 }
 
-return { monthlyExact, monthlyAmount, monthlyBurn, yearlyBurn, monthlyCosts, costByCategory, categoryTotals, trialAlerts, zombieHunt, savingsIfCancelled, upcomingPayments };
+return { monthlyAmount, yearlyAmount, monthlyBurn, yearlyBurn, monthlyCosts, costByCategory, categoryTotals, trialAlerts, zombieHunt, savingsIfCancelled, upcomingPayments };
 })();
 __m["modules/billtrack/logic/status.js"] = (function () {
 
@@ -5461,7 +5872,8 @@ function formatMoney(minor, currency = "USD", locale = "en-US") {
 const fill = (tpl, vars) => tpl.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
 const MESSAGE_TEMPLATES = Object.freeze({
   reminder: "Payment reminder: {name} ({amount}) is due in {days} days",
-  trial: "Free trial alert: {name} trial ends in {days} days. Cancel at: {cancelUrl}",
+  trial: "Free trial alert: {name} trial ends in {days} days.",
+  cancelAt: "Cancel at: {cancelUrl}",
 });
 
 function reminderMessage({ item, days }, opts = {}) {
@@ -5470,12 +5882,14 @@ function reminderMessage({ item, days }, opts = {}) {
 }
 
 function trialMessage({ subscription, days }, opts = {}) {
-  return fill(opts.template ?? MESSAGE_TEMPLATES.trial, { name: subscription?.name ?? "", days: Number.isFinite(days) ? days : "", cancelUrl: subscription?.cancelUrl || subscription?.website || "-" });
+  const base = fill(opts.template ?? MESSAGE_TEMPLATES.trial, { name: subscription?.name ?? "", days: Number.isFinite(days) ? days : "" });
+  const url = subscription?.cancelUrl || subscription?.website || "";
+  return url ? `${base} ${fill(MESSAGE_TEMPLATES.cancelAt, { cancelUrl: url })}` : base;
 }
 
 const digits = (p) => (typeof p === "string" ? p.replace(/[^0-9]/g, "") : "");
-const whatsappLink = (text, phone) => `https://wa.me/${digits(phone)}?text=${encodeURIComponent(text)}`;
-const smsLink = (text, phone) => `sms:${typeof phone === "string" ? phone.replace(/[^0-9+]/g, "") : ""}?&body=${encodeURIComponent(text)}`;
+const whatsappLink = (text, phone) => `https://wa.me/${digits(phone)}?text=${encodeURIComponent(text ?? "")}`;
+const smsLink = (text, phone) => `sms:${typeof phone === "string" ? phone.replace(/[^0-9+]/g, "") : ""}?&body=${encodeURIComponent(text ?? "")}`;
 
 return { SUBSCRIPTION_TEMPLATES, getTemplate, subscriptionFromTemplate, formatMoney, MESSAGE_TEMPLATES, reminderMessage, trialMessage, whatsappLink, smsLink };
 })();
@@ -5489,8 +5903,8 @@ const { button, field, focusFirstInvalid, h, nextId, select } = __m["core/ui.js"
 const { CATEGORIES, PAYMENT_METHODS, cleanRecord } = __m["modules/billtrack/logic/schema.js"];
 const { paymentForBill, sortBills } = __m["modules/billtrack/logic/bills.js"];
 const { advanceBilling, nextBilling, paymentForSubscription, sortSubscriptions } = __m["modules/billtrack/logic/subscriptions.js"];
-const { monthlyExact } = __m["modules/billtrack/logic/calc.js"];
-const { whatsappLink } = __m["modules/billtrack/logic/templates.js"];
+const { monthlyAmount, yearlyAmount } = __m["modules/billtrack/logic/calc.js"];
+const { smsLink, whatsappLink } = __m["modules/billtrack/logic/templates.js"];
 
 const CATEGORY_ICONS = Object.freeze({
   housing: "🏠", utilities: "⚡", insurance: "🛡️", transportation: "🚗", phone_internet: "📱", entertainment: "🎬", software_tools: "💻",
@@ -5551,6 +5965,8 @@ const pctChange = (now, before) => (before > 0 ? Math.round(((now - before) / be
 
 const shareUrl = (text) => whatsappLink(String(text ?? ""));
 
+const smsUrl = (text) => smsLink(String(text ?? ""));
+
 const fillTemplate = (tpl, vars) => String(tpl ?? "").replace(/\{(\w+)\}/g, (_, k) => (vars[k] === undefined || vars[k] === null ? "" : String(vars[k])));
 
 const fmtMoney = (ctx, minor) => ctx.i18n.formatCurrency(Number.isFinite(minor) ? minor : 0);
@@ -5569,8 +5985,7 @@ function frequencyLabel(ctx, item) {
 function equivalentText(ctx, item) {
   if (!item || item.frequency === "lifetime" || !(item.amount > 0)) return "";
   const { t } = ctx.i18n;
-  const exact = monthlyExact(item);
-  return `${fmtMoney(ctx, Math.round(exact))}${t("common.perMonth")} → ${fmtMoney(ctx, Math.round(exact * 12))}${t("common.perYear")}`;
+  return `${fmtMoney(ctx, monthlyAmount(item))}${t("common.perMonth")} → ${fmtMoney(ctx, yearlyAmount(item))}${t("common.perYear")}`;
 }
 
 function dueText(ctx, date, today = todayIso()) {
@@ -5737,8 +6152,14 @@ const money = (ctx) => (minor) => fmtMoney(ctx, minor);
 function reminderText(ctx, item, when) {
   return fillTemplate(ctx.i18n.t("whatsapp.reminderTemplate"), { name: item.name, amount: money(ctx)(item.amount), when });
 }
-function trialText(ctx, sub, when) {
-  return fillTemplate(ctx.i18n.t("whatsapp.trialAlertTemplate"), { name: sub.name, when, cancelUrl: sub.cancelUrl || sub.website || "-" });
+function trialText(ctx, sub, when, today = todayIso()) {
+  const { t, formatDate } = ctx.i18n;
+  const ended = Boolean(sub.trialEndDate) && sub.trialEndDate < today;
+  const base = ended
+    ? fillTemplate(t("whatsapp.trialEndedTemplate"), { name: sub.name, date: formatDate(sub.trialEndDate) })
+    : fillTemplate(t("whatsapp.trialAlertTemplate"), { name: sub.name, when });
+  const url = sub.cancelUrl || sub.website || "";
+  return url ? `${base} ${fillTemplate(t("whatsapp.cancelAt"), { cancelUrl: url })}` : base;
 }
 
 const stamp = (ctx, record) => ({ ...record, currency: ctx.settings.currency });
@@ -5821,7 +6242,7 @@ function openPayForm(ctx, { kind, item }) {
   });
 }
 
-return { CATEGORY_ICONS, categoryIcon, METHOD_ICONS, methodIcon, PIE_COLORS, barPercents, pieGradient, yearOptions, monthGrid, shiftMonth, pctChange, shareUrl, fillTemplate, fmtMoney, fmtDate, categoryName, methodName, kv, frequencyLabel, equivalentText, dueText, statusBadge, methodBadge, autopayBadge, trialBadge, barChart, pieChart, CELL_STATES, cellState, weekStartFor, calendarGrid, loadAll, sourceOf, openModal, openForm, selectField, checkField, errText, readMoney, readInt, moneyValue, intValue, categoryOptions, methodOptions, linkButton, reminderText, trialText, saveBill, deleteBill, saveSubscription, deleteSubscription, payBill, dateAfterPayment, paySubscription, deletePayment, openPayForm };
+return { CATEGORY_ICONS, categoryIcon, METHOD_ICONS, methodIcon, PIE_COLORS, barPercents, pieGradient, yearOptions, monthGrid, shiftMonth, pctChange, shareUrl, smsUrl, fillTemplate, fmtMoney, fmtDate, categoryName, methodName, kv, frequencyLabel, equivalentText, dueText, statusBadge, methodBadge, autopayBadge, trialBadge, barChart, pieChart, CELL_STATES, cellState, weekStartFor, calendarGrid, loadAll, sourceOf, openModal, openForm, selectField, checkField, errText, readMoney, readInt, moneyValue, intValue, categoryOptions, methodOptions, linkButton, reminderText, trialText, saveBill, deleteBill, saveSubscription, deleteSubscription, payBill, dateAfterPayment, paySubscription, deletePayment, openPayForm };
 })();
 __m["modules/billtrack/views/bills.js"] = (function () {
 const { addDays } = __m["core/dates.js"];
@@ -6037,10 +6458,10 @@ const { button, emptyState, field, h, table } = __m["core/ui.js"];
 const { SUBSCRIPTION_FREQUENCIES, LIMITS, validateSubscription } = __m["modules/billtrack/logic/schema.js"];
 const { paymentsFor } = __m["modules/billtrack/logic/bills.js"];
 const { subscriptionStatus } = __m["modules/billtrack/logic/status.js"];
-const { monthlyBurn, monthlyExact } = __m["modules/billtrack/logic/calc.js"];
+const { monthlyBurn, yearlyAmount } = __m["modules/billtrack/logic/calc.js"];
 const { cancelSubscription, liveSubscriptions, nextBilling, resumeSubscription, trialDaysLeft } = __m["modules/billtrack/logic/subscriptions.js"];
 const { SUBSCRIPTION_TEMPLATES } = __m["modules/billtrack/logic/templates.js"];
-const { categoryIcon, categoryName, categoryOptions, checkField, deletePayment, deleteSubscription, dueText, equivalentText, errText, fmtDate, fmtMoney, frequencyLabel, intValue, kv, linkButton, loadAll, methodBadge, moneyValue, openForm, openPayForm, readInt, readMoney, saveSubscription, selectField, shareUrl, statusBadge, trialBadge, trialText } = __m["modules/billtrack/views/common.js"];
+const { categoryIcon, categoryName, categoryOptions, checkField, deletePayment, deleteSubscription, dueText, equivalentText, errText, fmtDate, fmtMoney, frequencyLabel, intValue, kv, linkButton, loadAll, methodBadge, moneyValue, openForm, openPayForm, readInt, readMoney, saveSubscription, selectField, shareUrl, statusBadge, trialBadge, trialText, smsUrl } = __m["modules/billtrack/views/common.js"];
 
 
 
@@ -6201,7 +6622,7 @@ async function mountDetail(ctx, root, id) {
     ctx.navigate("subscriptions");
   }
   async function cancel(s) {
-    const yearly = Math.round(monthlyExact(s) * 12);
+    const yearly = yearlyAmount(s);
     const ok = await ctx.confirm({ title: t("subscriptions.cancel"), message: t("subscriptions.cancelConfirm", { name: s.name, yearly: fmtMoney(ctx, yearly) }), confirmLabel: t("subscriptions.cancel") });
     if (!ok) return;
     try { await setCancelled(ctx, s, true); } catch (e) { ctx.fail(e); return; }
@@ -6251,7 +6672,8 @@ async function mountDetail(ctx, root, id) {
           h("p", { text: left >= 0 ? t("subscriptions.trialLeft", { date: fmtDate(ctx, s.trialEndDate), when: dueText(ctx, s.trialEndDate, data.today) }) : t("subscriptions.trialOver", { date: fmtDate(ctx, s.trialEndDate) }) }),
           h("div", { class: "row" },
             s.cancelUrl ? linkButton({ href: s.cancelUrl, label: t("subscriptions.cancelLink"), icon: "↗", external: true, cls: "btn-primary" }) : null,
-            linkButton({ href: shareUrl(trialText(ctx, s, dueText(ctx, s.trialEndDate, data.today))), label: t("common.shareWhatsApp"), icon: "💬", cls: "btn-wa", external: true })))
+            linkButton({ href: shareUrl(trialText(ctx, s, dueText(ctx, s.trialEndDate, data.today), data.today)), label: t("common.shareWhatsApp"), icon: "💬", cls: "btn-wa", external: true }),
+            linkButton({ href: smsUrl(trialText(ctx, s, dueText(ctx, s.trialEndDate, data.today), data.today)), label: t("common.shareSms"), icon: "✉️", cls: "btn-sms" })))
       : null;
 
     const link = (url) => (url ? h("a", { href: url, target: "_blank", rel: "noopener noreferrer", text: url }) : "");
@@ -6277,7 +6699,7 @@ async function mountDetail(ctx, root, id) {
           })
         : h("p", { class: "muted", text: t("bills.noPayments") }));
 
-    body.replaceChildren(top, trialCard, h("div", { class: "detail-grid" }, info, history));
+    body.replaceChildren(...[top, trialCard, h("div", { class: "detail-grid" }, info, history)].filter(Boolean));
   }
   ctx.onExternalChange(reload);
   root.replaceChildren(back, body);
@@ -6293,7 +6715,7 @@ const { monthlyBurn, trialAlerts, upcomingPayments, yearlyBurn, zombieHunt } = _
 const { liveSubscriptions } = __m["modules/billtrack/logic/subscriptions.js"];
 const { openBillForm } = __m["modules/billtrack/views/bills.js"];
 const { openSubscriptionForm } = __m["modules/billtrack/views/subscriptions.js"];
-const { categoryIcon, dueText, fmtDate, fmtMoney, linkButton, loadAll, methodBadge, openPayForm, reminderText, shareUrl, sourceOf, statusBadge, trialText } = __m["modules/billtrack/views/common.js"];
+const { categoryIcon, dueText, fmtDate, fmtMoney, linkButton, loadAll, methodBadge, openPayForm, reminderText, shareUrl, smsUrl, sourceOf, statusBadge, trialText } = __m["modules/billtrack/views/common.js"];
 
 
 
@@ -6336,7 +6758,8 @@ async function mountDashboard(ctx, root) {
         s.amount > 0 ? h("span", { class: "row-amount", text: t("dashboard.thenCharge", { amount: fmtMoney(ctx, s.amount) }) }) : null,
         h("div", { class: "row-actions" },
           s.cancelUrl ? linkButton({ href: s.cancelUrl, label: t("subscriptions.cancelLink"), icon: "↗", external: true }) : null,
-          linkButton({ href: shareUrl(trialText(ctx, s, dueText(ctx, s.trialEndDate, data.today))), icon: "💬", cls: "btn-wa btn-icon", ariaLabel: `${t("common.shareWhatsApp")}: ${s.name}`, external: true }))))));
+          linkButton({ href: shareUrl(trialText(ctx, s, dueText(ctx, s.trialEndDate, data.today), data.today)), icon: "💬", cls: "btn-wa btn-icon", ariaLabel: `${t("common.shareWhatsApp")}: ${s.name}`, external: true }),
+          linkButton({ href: smsUrl(trialText(ctx, s, dueText(ctx, s.trialEndDate, data.today), data.today)), icon: "✉️", cls: "btn-sms btn-icon", ariaLabel: `${t("common.shareSms")}: ${s.name}` }))))));
   }
 
   function upcoming() {
@@ -6354,7 +6777,8 @@ async function mountDashboard(ctx, root) {
             h("span", { class: "row-amount", text: r.amount > 0 ? fmtMoney(ctx, r.amount) : "" }),
             h("div", { class: "row-actions" },
               button({ label: `✓ ${t("bills.markPaid")}`, ariaLabel: `${t("bills.markPaid")}: ${r.item.name}`, onClick: async () => { if (await openPayForm(ctx, { kind: r.kind, item: r.item })) await reload(); } }),
-              linkButton({ href: shareUrl(reminderText(ctx, r.item, dueText(ctx, r.date, data.today))), icon: "💬", cls: "btn-wa btn-icon", ariaLabel: `${t("common.shareWhatsApp")}: ${r.item.name}`, external: true })));
+              linkButton({ href: shareUrl(reminderText(ctx, r.item, dueText(ctx, r.date, data.today))), icon: "💬", cls: "btn-wa btn-icon", ariaLabel: `${t("common.shareWhatsApp")}: ${r.item.name}`, external: true }),
+              linkButton({ href: smsUrl(reminderText(ctx, r.item, dueText(ctx, r.date, data.today))), icon: "✉️", cls: "btn-sms btn-icon", ariaLabel: `${t("common.shareSms")}: ${r.item.name}` })));
         }))
       : h("p", { class: "muted", text: tn("dashboard.noUpcoming", UPCOMING_DAYS) });
     return h("section", { class: "dash-section card", id: "dash-upcoming", "aria-labelledby": "dash-up-h" },
@@ -6512,31 +6936,67 @@ const { costByCategory, monthlyBurn, monthlyCosts, yearlyBurn } = __m["modules/b
 const tr = (t, key, fallback) => { const v = typeof t === "function" ? t(key) : key; return v && v !== key ? v : fallback; };
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-function buildPaymentSummary(ctx, { bills, subscriptions, payments, year, currency }) {
+function summaryData(ctx, { bills, subscriptions, payments, year, currency }) {
   const { t, formatCurrency } = ctx.i18n;
   const L = (k, d) => tr(t, `billtrack.${k}`, d);
   const cur = currency ?? "USD";
   const opts = { currency: cur };
   const money = (minor) => formatCurrency(minor, cur);
   const paid = monthlyCosts(payments, year, cur);
+  return {
+    L, year,
+    title: L("print.summaryTitle", "Payment summary"),
+    monthly: money(monthlyBurn(bills, subscriptions, opts)),
+    yearly: money(yearlyBurn(bills, subscriptions, opts)),
+    categories: costByCategory(bills, subscriptions, opts).map((r) => ({ name: tr(t, `billtrack.category.${r.category}`, categoryLabel(r.category)), count: String(r.count), money: money(r.monthlyMinor) })),
+    months: paid.map((m, i) => ({ name: tr(t, `billtrack.month.${i + 1}`, MONTHS[i]), money: m > 0 ? money(m) : "" })),
+    total: money(paid.reduce((a, b) => a + b, 0)),
+  };
+}
+
+function buildPaymentSummary(ctx, data) {
+  const d = summaryData(ctx, data);
+  const { L } = d;
   return h("div", { class: "rc-doc" },
-    h("h2", { text: `${L("print.summaryTitle", "Payment summary")} ${year}` }),
-    h("p", { text: `${L("print.monthly", "Monthly total")}: ${money(monthlyBurn(bills, subscriptions, opts))} · ${L("print.yearly", "Yearly total")}: ${money(yearlyBurn(bills, subscriptions, opts))}` }),
+    h("h2", { text: `${d.title} ${d.year}` }),
+    h("p", { text: `${L("print.monthly", "Monthly total")}: ${d.monthly} · ${L("print.yearly", "Yearly total")}: ${d.yearly}` }),
     h("table", { class: "rc-table" },
       h("thead", {}, h("tr", {}, h("th", { text: L("print.col.category", "Category") }), h("th", { text: L("print.col.count", "Items") }), h("th", { text: L("print.col.monthly", "Per month") }))),
-      h("tbody", {}, costByCategory(bills, subscriptions, opts).map((r) => h("tr", {},
-        h("td", { text: tr(t, `billtrack.category.${r.category}`, categoryLabel(r.category)) }), h("td", { text: String(r.count) }), h("td", { text: money(r.monthlyMinor) }))))),
+      h("tbody", {}, d.categories.map((r) => h("tr", {}, h("td", { text: r.name }), h("td", { text: r.count }), h("td", { text: r.money }))))),
     h("table", { class: "rc-table" },
       h("thead", {}, h("tr", {}, h("th", { text: L("print.col.month", "Month") }), h("th", { text: L("print.col.paid", "Paid") }))),
-      h("tbody", {}, paid.map((m, i) => h("tr", {}, h("td", { text: tr(t, `billtrack.month.${i + 1}`, MONTHS[i]) }), h("td", { text: m > 0 ? money(m) : "" }))))),
-    h("p", { class: "rc-total-line", text: `${L("print.total", "Total")}: ${money(paid.reduce((a, b) => a + b, 0))}` }));
+      h("tbody", {}, d.months.map((m) => h("tr", {}, h("td", { text: m.name }), h("td", { text: m.money }))))),
+    h("p", { class: "rc-total-line", text: `${L("print.total", "Total")}: ${d.total}` }));
+}
+
+function paymentSummaryDoc(ctx, data) {
+  const d = summaryData(ctx, data);
+  const { L } = d;
+  return {
+    id: `payment-summary-${d.year}`,
+    title: `${d.title} ${d.year}`,
+    period: "",
+    sections: [
+      { kind: "kv", rows: [[L("print.monthly", "Monthly total"), d.monthly], [L("print.yearly", "Yearly total"), d.yearly]] },
+      { kind: "table", columns: [
+          { key: "name", label: L("print.col.category", "Category"), primary: true },
+          { key: "count", label: L("print.col.count", "Items"), num: true },
+          { key: "money", label: L("print.col.monthly", "Per month"), num: true, amount: true }],
+        rows: d.categories },
+      { kind: "table", columns: [
+          { key: "name", label: L("print.col.month", "Month"), primary: true },
+          { key: "money", label: L("print.col.paid", "Paid"), num: true, amount: true }],
+        rows: d.months, total: { label: L("print.total", "Total"), value: d.total } },
+    ],
+    notes: [],
+  };
 }
 
 async function printPaymentSummary(ctx, data) {
-  await ctx.print({ title: tr(ctx.i18n.t, "billtrack.print.summaryTitle", "Payment summary"), node: buildPaymentSummary(ctx, data), paper: data.paper });
+  await ctx.print({ title: tr(ctx.i18n.t, "billtrack.print.summaryTitle", "Payment summary"), node: buildPaymentSummary(ctx, data), paper: data.paper, doc: paymentSummaryDoc(ctx, data) });
 }
 
-return { buildPaymentSummary, printPaymentSummary };
+return { summaryData, buildPaymentSummary, paymentSummaryDoc, printPaymentSummary };
 })();
 __m["modules/billtrack/views/reports.js"] = (function () {
 const { toIso } = __m["core/dates.js"];
@@ -6544,7 +7004,7 @@ const { button, emptyState, h } = __m["core/ui.js"];
 const { costByCategory, monthlyBurn, monthlyCosts, monthlyAmount, savingsIfCancelled, yearlyBurn } = __m["modules/billtrack/logic/calc.js"];
 const { liveSubscriptions } = __m["modules/billtrack/logic/subscriptions.js"];
 const { printPaymentSummary } = __m["modules/billtrack/print/payment-summary.js"];
-const { barChart, categoryIcon, categoryName, fillTemplate, fmtMoney, linkButton, loadAll, pctChange, pieChart, selectField, shareUrl, shiftMonth, yearOptions } = __m["modules/billtrack/views/common.js"];
+const { barChart, categoryIcon, categoryName, fillTemplate, fmtMoney, linkButton, loadAll, pctChange, pieChart, selectField, shareUrl, shiftMonth, smsUrl, yearOptions } = __m["modules/billtrack/views/common.js"];
 
 
 
@@ -6630,7 +7090,8 @@ async function mountReports(ctx, root) {
     });
     const actions = h("div", { class: "row report-actions" },
       button({ id: "rep-print", label: `🖨 ${t("reports.print")}`, exportAction: true, onClick: () => printPaymentSummary(ctx, { bills: data.bills, subscriptions: data.subs, payments: data.payments, year, currency: ctx.settings.currency, paper: data.paper }) }),
-      linkButton({ href: shareUrl(text), label: t("reports.share"), icon: "💬", cls: "btn-wa", external: true }));
+      linkButton({ href: shareUrl(text), label: t("reports.share"), icon: "💬", cls: "btn-wa", external: true }),
+      linkButton({ href: smsUrl(text), label: t("reports.shareSms"), icon: "✉️", cls: "btn-sms" }));
     body.replaceChildren(summary(paidYear), actions, h("div", { class: "report-grid" }, costs(values), categories()), savings());
   }
 
@@ -6651,7 +7112,8 @@ const money = __m["core/money.js"];
 const { applyLanguage, createPaySettings, loadSettings, sanitizeSettings, saveSettings } = __m["core/settings.js"];
 const { backupNow, rescaleStoreForCurrency, restoreNow } = __m["core/data-actions.js"];
 const { renderSettings } = __m["core/settings-screen.js"];
-const { printDocument } = __m["core/print.js"];
+const { needsFileDelivery, printDocument } = __m["core/print.js"];
+const { deliverPdf, docToPdf } = __m["core/canvas-doc.js"];
 const { initPwa } = __m["core/pwa.js"];
 const { errorKey } = __m["core/safe.js"];
 const { createSync } = __m["core/sync.js"];
@@ -6723,9 +7185,15 @@ async function main() {
         const { confirmed } = await confirmDialog({ title, message, confirmLabel: confirmLabel ?? ctx.i18n.t("common.delete"), cancelLabel: ctx.i18n.t("common.cancel"), danger });
         return confirmed;
       },
-      print: async ({ title, node, paper }) => {
+      print: async ({ title, node, paper, doc }) => {
         try {
-          printDocument({ title, node, paper: paper ?? (await ctx.pay.get()).paper });
+          const sheet = paper ?? (await ctx.pay.get()).paper;
+          if (doc && needsFileDelivery(window)) {
+            const bytes = await docToPdf({ doc, header: {}, mark: "", paper: sheet, title });
+            await deliverPdf({ bytes, filename: `${config.appId}-${doc.id || "document"}`, title });
+            return;
+          }
+          printDocument({ title, node, paper: sheet });
         } catch (e) {
           console.error(e);
           ctx.notify(ctx.i18n.t("print.error"), "error");
