@@ -44,3 +44,15 @@ export function canTransition(from, to) {
 export function nextStatuses(from) {
   return isStatus(from) ? STATUSES.filter((to) => TRANSITIONS[from].includes(to)) : [];
 }
+
+/**
+ * Bir aktif durumdan "completed"a giden izinli adim zinciri (TRANSITIONS'i BOZMADAN).
+ * scheduled -> ["confirmed","in_progress","completed"], confirmed -> ["in_progress","completed"],
+ * in_progress -> ["completed"]. Kapali durum ya da bilinmeyen durum -> [].
+ * Amac: kullanici "Tamamla"yi tek dokunusla yapabilsin; ileri akis kurali degismez.
+ */
+export function pathToCompleted(from) {
+  const chain = ["scheduled", "confirmed", "in_progress", "completed"];
+  const i = chain.indexOf(from);
+  return i < 0 ? [] : chain.slice(i + 1);
+}
