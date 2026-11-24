@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-pNe5Ufnn1KK0gcEGf5TLoGX7Rx5Lcwxl1GKzTlAxlzU='; style-src 'sha256-tLj3FWXZT7Dw+bC6pM+mXfyCd+ArMxTLtHQj5MepjSM='; font-src data:; img-src 'self' data: blob:; connect-src 'none'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ykNU/wsSv4spE3E/4JWMx5FG2izGNCKZE7RGHkg4uzM='; style-src 'sha256-0retNlahfACyzD0TlTQWM+A0zYP6GCP7+FMPHXb/6fQ='; font-src data:; img-src 'self' data: blob:; connect-src 'none'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1a5c3a">
   <meta name="color-scheme" content="light dark">
@@ -345,11 +345,12 @@ html { scroll-padding-bottom: var(--toast-space, 0px); }
 .page-head h2 { margin: 0; display: flex; align-items: center; gap: var(--space-3); font-size: clamp(1.375rem, 1.1rem + 1vw, 1.75rem); }
 .app-main > h2:first-child::before { background: var(--accent); }
 .page-head h2::before { content: ""; flex: none; inline-size: .375rem; block-size: 1.1em; border-radius: 3px; background: var(--accent); }
-.link-btn { display: inline-flex; align-items: center; background: none; border: 0; padding: var(--space-1) 0; color: var(--primary); font-weight: 650; text-align: start; cursor: pointer; text-decoration: underline; min-block-size: 2.25rem; }
+.link-btn { display: inline-flex; align-items: center; background: none; border: 0; padding: var(--space-1) 0; color: var(--primary); font-weight: 650; text-align: start; cursor: pointer; text-decoration: underline; min-block-size: var(--tap); }
 .btn-icon { min-inline-size: var(--tap); padding-inline: var(--space-2); }
 .btn-wa { background: var(--wa); border-color: var(--wa); color: #fff; }
 :root[data-theme="dark"] .btn-wa { color: #06210f; }
 .btn-wa:hover:not(:disabled) { background: var(--wa); filter: brightness(.92); }
+.btn-sms { background: var(--surface); border-color: var(--border-strong); color: var(--text); }
 .kv { display: grid; grid-template-columns: minmax(6rem, max-content) 1fr; gap: var(--space-1) var(--space-4); margin: 0; }
 .kv dt { color: var(--muted); font-size: var(--fs-s); font-weight: 600; }
 .kv dd { margin: 0; overflow-wrap: anywhere; white-space: pre-line; }
@@ -932,7 +933,7 @@ const __default = {
   "reports.other": "Weitere",
   "reports.print": "Servicehistorie drucken",
   "reports.share": "Per WhatsApp teilen",
-  "reports.shareTemplate": "{vehicle} – Service-Zusammenfassung {year}: {count} Services, Gesamtkosten {total}, Kosten pro {unit}: {perUnit}.",
+  "reports.shareTemplate": "{vehicle} – Service-Zusammenfassung {year}: {count}, Gesamtkosten {total}, Kosten pro {unit}: {perUnit}.",
   "reports.noData": "Für dieses Jahr gibt es keine Daten.",
   "reports.noVehicles": "Fügen Sie ein Fahrzeug hinzu, um Berichte zu sehen.",
   "messages.vehicleSaved": "Fahrzeug gespeichert.",
@@ -954,8 +955,14 @@ const __default = {
   "errors.interval": "Geben Sie eine Entfernung oder Monate ein (oder beides).",
   "errors.amount": "Geben Sie einen gültigen Betrag ein, z. B. 45,50.",
   "errors.number": "Geben Sie eine ganze Zahl ab null ein.",
-  "whatsapp.reminderTemplate": "Erinnerung: Bei Ihrem {vehicle} ist {serviceType} bei {mileage} fällig. Vereinbaren Sie bald einen Termin!",
-  "whatsapp.completedTemplate": "Service an {vehicle} erledigt: {serviceType} bei {mileage}. Nächste Fälligkeit: {nextDue}.",
+  "whatsapp.reminderTemplate": "Erinnerung: Bei Ihrem {vehicle} ist {serviceType}[ bei {mileage}] fällig. Vereinbaren Sie bald einen Termin!",
+  "whatsapp.completedTemplate": "Service an {vehicle} erledigt: {serviceType}[ bei {mileage}].[ Nächste Fälligkeit: {nextDue}.]",
+  "reports.serviceCount.one": "{n} Service",
+  "reports.serviceCount": "{n} Services",
+  "reports.shareSms": "Per SMS teilen",
+  "expenses.shareSms": "Per SMS teilen",
+  "maintenance.sendReminderSms": "Erinnerung per SMS senden",
+  "dashboard.noRecordsYet": "Noch keine Service-Einträge",
   "autocare.print.historyTitle": "Servicehistorie",
   "autocare.print.col.date": "Datum",
   "autocare.print.col.mileage": "Kilometerstand",
@@ -970,7 +977,6 @@ const __default = {
   "autolog.set.leadDays": "So viele Tage vorher erinnern",
   "autolog.set.leadDaysHint": "Ganze Tage, von {min} bis {max}. Gilt für datumsbasierte Wartung und Dokumentenablauf.",
   "autolog.set.distanceUnit": "Standard-Entfernungseinheit für neue Fahrzeuge",
-  "autolog.set.volumeUnit": "Volumeneinheit",
   "autolog.set.unitsNote": "Jedes Fahrzeug behält seine eigene Entfernungseinheit; eine Änderung rechnet gespeicherte Zahlen nicht um.",
   "autolog.set.usage": "Fahrzeuge: {vehicles} von {maxVehicles} · Services: {services} von {maxServices} · Planpunkte: {schedules} · Sicherungsgröße: {mb} von {maxMb} MB",
   "autolog.set.resetDefaults": "Einstellungen auf {language}-Standard zurücksetzen",
@@ -1359,7 +1365,7 @@ const __default = {
   "reports.other": "Other",
   "reports.print": "Print service history",
   "reports.share": "Share on WhatsApp",
-  "reports.shareTemplate": "{vehicle} – {year} service summary: {count} services, total cost {total}, cost per {unit}: {perUnit}.",
+  "reports.shareTemplate": "{vehicle} – {year} service summary: {count}, total cost {total}, cost per {unit}: {perUnit}.",
   "reports.noData": "No data to show for this year.",
   "reports.noVehicles": "Add a vehicle to see reports.",
   "messages.vehicleSaved": "Vehicle saved.",
@@ -1381,8 +1387,14 @@ const __default = {
   "errors.interval": "Enter a distance or a number of months (or both).",
   "errors.amount": "Enter a valid amount, for example 45.50.",
   "errors.number": "Enter a whole number, zero or more.",
-  "whatsapp.reminderTemplate": "Reminder: your {vehicle} is due for {serviceType} at {mileage}. Book your service soon!",
-  "whatsapp.completedTemplate": "Service done on {vehicle}: {serviceType} at {mileage}. Next due: {nextDue}.",
+  "whatsapp.reminderTemplate": "Reminder: your {vehicle} is due for {serviceType}[ at {mileage}]. Book your service soon!",
+  "whatsapp.completedTemplate": "Service done on {vehicle}: {serviceType}[ at {mileage}].[ Next due: {nextDue}.]",
+  "reports.serviceCount.one": "{n} service",
+  "reports.serviceCount": "{n} services",
+  "reports.shareSms": "Share by SMS",
+  "expenses.shareSms": "Share by SMS",
+  "maintenance.sendReminderSms": "Send reminder by SMS",
+  "dashboard.noRecordsYet": "No service records yet",
   "autocare.print.historyTitle": "Service history",
   "autocare.print.col.date": "Date",
   "autocare.print.col.mileage": "Mileage",
@@ -1397,7 +1409,6 @@ const __default = {
   "autolog.set.leadDays": "Remind me this many days ahead",
   "autolog.set.leadDaysHint": "Whole days, from {min} to {max}. Used for date-based maintenance and document expiry.",
   "autolog.set.distanceUnit": "Default distance unit for new vehicles",
-  "autolog.set.volumeUnit": "Volume unit",
   "autolog.set.unitsNote": "Each vehicle keeps its own distance unit; changing this does not convert saved numbers.",
   "autolog.set.usage": "Vehicles: {vehicles} of {maxVehicles} · Services: {services} of {maxServices} · Schedule items: {schedules} · Backup size: {mb} of {maxMb} MB",
   "autolog.set.resetDefaults": "Reset settings to {language} defaults",
@@ -1786,7 +1797,7 @@ const __default = {
   "reports.other": "Otros",
   "reports.print": "Imprimir historial de servicio",
   "reports.share": "Compartir por WhatsApp",
-  "reports.shareTemplate": "{vehicle} – resumen de servicios de {year}: {count} servicios, coste total {total}, coste por {unit}: {perUnit}.",
+  "reports.shareTemplate": "{vehicle} – resumen de servicios de {year}: {count}, coste total {total}, coste por {unit}: {perUnit}.",
   "reports.noData": "No hay datos que mostrar este año.",
   "reports.noVehicles": "Añade un vehículo para ver informes.",
   "messages.vehicleSaved": "Vehículo guardado.",
@@ -1808,8 +1819,14 @@ const __default = {
   "errors.interval": "Introduce una distancia o un número de meses (o ambos).",
   "errors.amount": "Introduce un importe válido, por ejemplo 45,50.",
   "errors.number": "Introduce un número entero, cero o más.",
-  "whatsapp.reminderTemplate": "Recordatorio: a tu {vehicle} le toca {serviceType} a {mileage}. ¡Reserva tu servicio pronto!",
-  "whatsapp.completedTemplate": "Servicio realizado en {vehicle}: {serviceType} a {mileage}. Próximo: {nextDue}.",
+  "whatsapp.reminderTemplate": "Recordatorio: a tu {vehicle} le toca {serviceType}[ a {mileage}]. ¡Reserva tu servicio pronto!",
+  "whatsapp.completedTemplate": "Servicio realizado en {vehicle}: {serviceType}[ a {mileage}].[ Próximo: {nextDue}.]",
+  "reports.serviceCount.one": "{n} servicio",
+  "reports.serviceCount": "{n} servicios",
+  "reports.shareSms": "Compartir por SMS",
+  "expenses.shareSms": "Compartir por SMS",
+  "maintenance.sendReminderSms": "Enviar recordatorio por SMS",
+  "dashboard.noRecordsYet": "Aún no hay registros de servicio",
   "autocare.print.historyTitle": "Historial de servicio",
   "autocare.print.col.date": "Fecha",
   "autocare.print.col.mileage": "Kilometraje",
@@ -1824,7 +1841,6 @@ const __default = {
   "autolog.set.leadDays": "Avisarme con tantos días de antelación",
   "autolog.set.leadDaysHint": "Días enteros, de {min} a {max}. Se usa para el mantenimiento por fecha y los vencimientos de documentos.",
   "autolog.set.distanceUnit": "Unidad de distancia predeterminada para vehículos nuevos",
-  "autolog.set.volumeUnit": "Unidad de volumen",
   "autolog.set.unitsNote": "Cada vehículo conserva su propia unidad de distancia; cambiar esto no convierte los números guardados.",
   "autolog.set.usage": "Vehículos: {vehicles} de {maxVehicles} · Servicios: {services} de {maxServices} · Elementos del calendario: {schedules} · Tamaño de la copia: {mb} de {maxMb} MB",
   "autolog.set.resetDefaults": "Restablecer ajustes a los valores de {language}",
@@ -2213,7 +2229,7 @@ const __default = {
   "reports.other": "Autres",
   "reports.print": "Imprimer l'historique d'entretien",
   "reports.share": "Partager par WhatsApp",
-  "reports.shareTemplate": "{vehicle} – bilan d'entretien {year} : {count} interventions, coût total {total}, coût par {unit} : {perUnit}.",
+  "reports.shareTemplate": "{vehicle} – bilan d'entretien {year} : {count}, coût total {total}, coût par {unit} : {perUnit}.",
   "reports.noData": "Aucune donnée à afficher pour cette année.",
   "reports.noVehicles": "Ajoutez un véhicule pour voir des rapports.",
   "messages.vehicleSaved": "Véhicule enregistré.",
@@ -2235,8 +2251,14 @@ const __default = {
   "errors.interval": "Saisissez une distance ou un nombre de mois (ou les deux).",
   "errors.amount": "Saisissez un montant valide, par exemple 45,50.",
   "errors.number": "Saisissez un nombre entier, zéro ou plus.",
-  "whatsapp.reminderTemplate": "Rappel : votre {vehicle} doit faire l'entretien « {serviceType} » à {mileage}. Prenez rendez-vous bientôt !",
-  "whatsapp.completedTemplate": "Intervention effectuée sur {vehicle} : {serviceType} à {mileage}. Prochaine échéance : {nextDue}.",
+  "whatsapp.reminderTemplate": "Rappel : votre {vehicle} doit faire l'entretien « {serviceType} »[ à {mileage}]. Prenez rendez-vous bientôt !",
+  "whatsapp.completedTemplate": "Intervention effectuée sur {vehicle} : {serviceType}[ à {mileage}].[ Prochaine échéance : {nextDue}.]",
+  "reports.serviceCount.one": "{n} intervention",
+  "reports.serviceCount": "{n} interventions",
+  "reports.shareSms": "Partager par SMS",
+  "expenses.shareSms": "Partager par SMS",
+  "maintenance.sendReminderSms": "Envoyer un rappel par SMS",
+  "dashboard.noRecordsYet": "Aucune intervention enregistrée",
   "autocare.print.historyTitle": "Historique d'entretien",
   "autocare.print.col.date": "Date",
   "autocare.print.col.mileage": "Kilométrage",
@@ -2251,7 +2273,6 @@ const __default = {
   "autolog.set.leadDays": "Me prévenir ce nombre de jours à l'avance",
   "autolog.set.leadDaysHint": "Jours entiers, de {min} à {max}. Utilisé pour l'entretien à date fixe et les échéances de documents.",
   "autolog.set.distanceUnit": "Unité de distance par défaut pour les nouveaux véhicules",
-  "autolog.set.volumeUnit": "Unité de volume",
   "autolog.set.unitsNote": "Chaque véhicule garde sa propre unité de distance ; la changer ne convertit pas les nombres enregistrés.",
   "autolog.set.usage": "Véhicules : {vehicles} sur {maxVehicles} · Interventions : {services} sur {maxServices} · Lignes du calendrier : {schedules} · Taille de la sauvegarde : {mb} sur {maxMb} Mo",
   "autolog.set.resetDefaults": "Rétablir les réglages par défaut ({language})",
@@ -2640,7 +2661,7 @@ const __default = {
   "reports.other": "Diğer",
   "reports.print": "Servis geçmişini yazdır",
   "reports.share": "WhatsApp'ta paylaş",
-  "reports.shareTemplate": "{vehicle} – {year} servis özeti: {count} servis, toplam maliyet {total}, {unit} başına maliyet: {perUnit}.",
+  "reports.shareTemplate": "{vehicle} – {year} servis özeti: {count}, toplam maliyet {total}, {unit} başına maliyet: {perUnit}.",
   "reports.noData": "Bu yıl için gösterilecek veri yok.",
   "reports.noVehicles": "Rapor görmek için bir araç ekleyin.",
   "messages.vehicleSaved": "Araç kaydedildi.",
@@ -2662,8 +2683,14 @@ const __default = {
   "errors.interval": "Bir mesafe ya da ay sayısı girin (ya da ikisini birden).",
   "errors.amount": "Geçerli bir tutar girin, örneğin 45,50.",
   "errors.number": "Sıfır ya da daha büyük bir tam sayı girin.",
-  "whatsapp.reminderTemplate": "Hatırlatma: {vehicle} aracınızın {serviceType} bakımı {mileage} için geliyor. Servisinizi yakında planlayın!",
-  "whatsapp.completedTemplate": "{vehicle} aracında servis yapıldı: {serviceType}, {mileage}. Sonraki bakım: {nextDue}.",
+  "whatsapp.reminderTemplate": "Hatırlatma: {vehicle} aracınızın {serviceType} bakımı[ {mileage} için] geliyor. Servisinizi yakında planlayın!",
+  "whatsapp.completedTemplate": "{vehicle} aracında servis yapıldı: {serviceType}[, {mileage}].[ Sonraki bakım: {nextDue}.]",
+  "reports.serviceCount.one": "{n} servis",
+  "reports.serviceCount": "{n} servis",
+  "reports.shareSms": "SMS ile paylaş",
+  "expenses.shareSms": "SMS ile paylaş",
+  "maintenance.sendReminderSms": "SMS ile hatırlatma gönder",
+  "dashboard.noRecordsYet": "Henüz servis kaydı yok",
   "autocare.print.historyTitle": "Servis geçmişi",
   "autocare.print.col.date": "Tarih",
   "autocare.print.col.mileage": "Kilometre",
@@ -2678,7 +2705,6 @@ const __default = {
   "autolog.set.leadDays": "Kaç gün önceden hatırlatılsın",
   "autolog.set.leadDaysHint": "Tam gün, {min} ile {max} arasında. Tarihe bağlı bakım ve belge bitişleri için kullanılır.",
   "autolog.set.distanceUnit": "Yeni araçlar için varsayılan mesafe birimi",
-  "autolog.set.volumeUnit": "Hacim birimi",
   "autolog.set.unitsNote": "Her aracın kendi mesafe birimi vardır; bunu değiştirmek kayıtlı sayıları çevirmez.",
   "autolog.set.usage": "Araçlar: {vehicles} / {maxVehicles} · Servisler: {services} / {maxServices} · Takvim satırları: {schedules} · Yedek boyutu: {mb} / {maxMb} MB",
   "autolog.set.resetDefaults": "Ayarları {language} varsayılanlarına sıfırla",
@@ -2734,7 +2760,7 @@ const __default = Object.freeze({
   mode: "full",
   demoLimits: Object.freeze({}),
   storagePrefix: "autolog",
-  version: "1.0.0",
+  version: "1.0.1",
   schemaVersion: 1,
   preview: false,
 });
@@ -3672,7 +3698,7 @@ const THEMES = ["system", "light", "dark"];
 
 const detectLang = (navLang) => matchLang(navLang) ?? "en";
 
-const LIMITS = Object.freeze({ vehicles: 500, services: 5000, schedules: 3000, name: 120 });
+const LIMITS = Object.freeze({ vehicles: 500, services: 5000, schedules: 5000, name: 120 });
 const MAX_MINOR = 10 ** 11;
 
 function defaultSettings(lang = "en") {
@@ -4681,7 +4707,7 @@ async function deleteAllNow(ctx) {
 return { SIZE_WARN_BYTES, SIZE_STOP_BYTES, sanitizeAppData, rescaleDataset, rescaleStoreForCurrency, usage, backupNow, restoreNow, deleteAllNow };
 })();
 __m["core/settings-screen.js"] = (function () {
-const { CURRENCIES, DISTANCE_UNITS, LANGS, LANG_NAMES, LOCALES, VOLUME_UNITS } = __m["core/i18n.js"];
+const { CURRENCIES, DISTANCE_UNITS, LANGS, LANG_NAMES, LOCALES } = __m["core/i18n.js"];
 const { LIMITS_BUSINESS, validateEmail, validatePhone } = __m["core/business.js"];
 const { THEMES, applyLanguage, checkBackupDays, checkLeadDays, PAPERS, LEAD_DAYS_MIN, LEAD_DAYS_MAX, LIMITS } = __m["core/settings.js"];
 const { backupNow, deleteAllNow, restoreNow, usage, SIZE_WARN_BYTES } = __m["core/data-actions.js"];
@@ -4759,7 +4785,6 @@ async function renderSettings(container, ctx) {
     langSelect.element,
     h("p", { class: "field-hint", id: "setting-lang-note", text: t("settings.langNote") }),
     select({ id: "setting-distance", label: t("autolog.set.distanceUnit"), value: s.distanceUnit, options: DISTANCE_UNITS.map((u) => ({ value: u, label: t(`autolog.unit.${u}`) })), onChange: (v) => change({ distanceUnit: v }) }).element,
-    select({ id: "setting-volume", label: t("autolog.set.volumeUnit"), value: s.volumeUnit, options: VOLUME_UNITS.map((u) => ({ value: u, label: t(`autolog.unit.${u}`) })), onChange: (v) => change({ volumeUnit: v }) }).element,
     h("p", { class: "field-hint", id: "setting-units-note", text: t("autolog.set.unitsNote") }),
     select({
       id: "setting-currency", label: t("settings.currency"), value: s.currency, options: CURRENCIES.map((c) => ({ value: c, label: c })),
@@ -4860,6 +4885,8 @@ function wrapPageFrame(content) {
     h("tbody", {}, h("tr", {}, h("td", { class: "page-cell" }, content)))
   );
 }
+
+const needsFileDelivery = (win = globalThis.window) => win?.navigator?.standalone === true;
 
 let cleanupPrev = null;
 
@@ -4971,7 +4998,390 @@ function buildVehicleCard({ vehicle, history, t, formatDate, formatCurrency, for
   );
 }
 
-return { printHeaderData, buildPrintHeader, wrapPageFrame, PAPER_IDS, printDocument, receiptData, buildServiceReceipt, vehicleCardData, buildVehicleCard };
+return { printHeaderData, buildPrintHeader, wrapPageFrame, needsFileDelivery, PAPER_IDS, printDocument, receiptData, buildServiceReceipt, vehicleCardData, buildVehicleCard };
+})();
+__m["core/pdf.js"] = (function () {
+
+const enc = new TextEncoder();
+const bytesOf = (s) => enc.encode(s);
+
+function base64ToBytes(input) {
+  if (typeof input !== "string" || input === "") return null;
+  const b64 = input.startsWith("data:") ? input.slice(input.indexOf(",") + 1) : input;
+  if (!/^[A-Za-z0-9+/\r\n]*={0,2}$/.test(b64)) return null;
+  const clean = b64.replace(/[\r\n]/g, "");
+  let bin;
+  try {
+    bin = typeof atob === "function" ? atob(clean) : Buffer.from(clean, "base64").toString("binary");
+  } catch { return null; }
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i) & 0xff;
+  return out;
+}
+
+function jpegSize(bytes) {
+  if (!(bytes instanceof Uint8Array) || bytes.length < 4) return null;
+  if (bytes[0] !== 0xff || bytes[1] !== 0xd8) return null;
+  let i = 2;
+  while (i + 9 < bytes.length) {
+    if (bytes[i] !== 0xff) { i += 1; continue; }
+    const marker = bytes[i + 1];
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) { i += 2; continue; }
+    const len = (bytes[i + 2] << 8) | bytes[i + 3];
+    if (len < 2) return null;
+    if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
+      const h = (bytes[i + 5] << 8) | bytes[i + 6];
+      const w = (bytes[i + 7] << 8) | bytes[i + 8];
+      return w > 0 && h > 0 ? { width: w, height: h } : null;
+    }
+    i += 2 + len;
+  }
+  return null;
+}
+
+const pdfText = (s) => String(s ?? "").replace(/([\\()])/g, "\\$1").replace(/[\r\n]+/g, " ");
+
+function buildPdf(pages, { dpi = 200, title = "" } = {}) {
+  if (!Array.isArray(pages) || pages.length === 0) throw new Error("buildPdf: sayfa yok");
+  const sized = pages.map((p, i) => {
+    if (!(p?.jpeg instanceof Uint8Array) || p.jpeg.length === 0) throw new Error(`buildPdf: sayfa ${i + 1} jpeg baytlari gecersiz`);
+    const size = jpegSize(p.jpeg);
+    if (!size) throw new Error(`buildPdf: sayfa ${i + 1} JPEG olcusu okunamadi (bozuk ya da JPEG degil)`);
+    return { jpeg: p.jpeg, ...size };
+  });
+  const d = dpi > 0 ? dpi : 200;
+  const pt = (px) => Math.round((px / d) * 72 * 1000) / 1000;
+
+  const chunks = [];
+  let len = 0;
+  const push = (u8) => { chunks.push(u8); len += u8.length; };
+  const offsets = [];
+  const obj = (n, body, stream) => {
+    offsets[n] = len;
+    push(bytesOf(`${n} 0 obj\n${body}\n`));
+    if (stream) { push(bytesOf("stream\n")); push(stream); push(bytesOf("\nendstream\n")); }
+    push(bytesOf("endobj\n"));
+  };
+
+  push(bytesOf("%PDF-1.4\n"));
+  push(new Uint8Array([0x25, 0xe2, 0xe3, 0xcf, 0xd3, 0x0a]));
+
+  const firstPageObj = 4;
+  const pageIds = sized.map((_, i) => firstPageObj + i * 3);
+  obj(1, `<< /Type /Catalog /Pages 2 0 R >>`);
+  obj(2, `<< /Type /Pages /Kids [${pageIds.map((n) => `${n} 0 R`).join(" ")}] /Count ${sized.length} >>`);
+  obj(3, `<< /Producer (UNVERCO AutoLog)${title ? ` /Title (${pdfText(title)})` : ""} >>`);
+
+  sized.forEach((p, i) => {
+    const pageN = pageIds[i], contN = pageN + 1, imgN = pageN + 2;
+    const w = pt(p.width), h = pt(p.height);
+    obj(pageN, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${w} ${h}] /Resources << /XObject << /Im0 ${imgN} 0 R >> >> /Contents ${contN} 0 R >>`);
+    const content = bytesOf(`q\n${w} 0 0 ${h} 0 0 cm\n/Im0 Do\nQ\n`);
+    obj(contN, `<< /Length ${content.length} >>`, content);
+    obj(imgN, `<< /Type /XObject /Subtype /Image /Width ${p.width} /Height ${p.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${p.jpeg.length} >>`, p.jpeg);
+  });
+
+  const total = 3 + sized.length * 3;
+  const xrefAt = len;
+  let xref = `xref\n0 ${total + 1}\n0000000000 65535 f \n`;
+  for (let n = 1; n <= total; n += 1) xref += `${String(offsets[n]).padStart(10, "0")} 00000 n \n`;
+  push(bytesOf(xref));
+  push(bytesOf(`trailer\n<< /Size ${total + 1} /Root 1 0 R /Info 3 0 R >>\nstartxref\n${xrefAt}\n%%EOF\n`));
+
+  const out = new Uint8Array(len);
+  let at = 0;
+  for (const c of chunks) { out.set(c, at); at += c.length; }
+  return out;
+}
+
+return { base64ToBytes, jpegSize, buildPdf };
+})();
+__m["core/canvas-doc.js"] = (function () {
+const { base64ToBytes, buildPdf } = __m["core/pdf.js"];
+
+const DPI = 200;
+const FAMILY = "-apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif";
+const PAPERS = Object.freeze({
+  letter: { w: 1700, h: 2200, m: 130 },
+  a4: { w: 1654, h: 2339, m: 130 },
+  thermal80: { w: 630, h: 0, m: 28 },
+});
+const MAX_ROLL = 9000;
+const INK = "#111111";
+const MUTED = "#555555";
+const RULE = "#bbbbbb";
+const BAND = "#eeeeee";
+
+const font = (size, bold = false) => `${bold ? "700" : "400"} ${size}px ${FAMILY}`;
+const str = (v) => (v === null || v === undefined ? "" : String(v));
+
+function wrapText(text, fnt, maxW, measure) {
+  const out = [];
+  for (const para of str(text).split("\n")) {
+    let line = "";
+    for (const word of para.split(/\s+/).filter(Boolean)) {
+      const tryLine = line ? `${line} ${word}` : word;
+      if (measure(tryLine, fnt) <= maxW) { line = tryLine; continue; }
+      if (line) out.push(line);
+      line = "";
+      let rest = word;
+      while (measure(rest, fnt) > maxW && rest.length > 1) {
+        let n = rest.length - 1;
+        while (n > 1 && measure(rest.slice(0, n), fnt) > maxW) n -= 1;
+        out.push(rest.slice(0, n));
+        rest = rest.slice(n);
+      }
+      line = rest;
+    }
+    out.push(line);
+  }
+  return out.length ? out : [""];
+}
+
+function layoutDoc({ doc, header = {}, mark = "", paper = "letter" }, measure) {
+  const P = PAPERS[paper] ?? PAPERS.letter;
+  const roll = P.h === 0;
+  const S = roll
+    ? { body: 23, small: 20, h3: 26, title: 34, biz: 30, lh: 1.32, pad: 6 }
+    : { body: 27, small: 23, h3: 32, title: 46, biz: 40, lh: 1.34, pad: 9 };
+  const W = P.w;
+  const left = P.m;
+  const right = W - P.m;
+  const cw = right - left;
+  const footH = mark ? Math.round(S.small * 2.4) : 0;
+  const limit = (roll ? MAX_ROLL : P.h) - P.m - footH - S.pad * 8;
+
+  const pages = [];
+  let ops;
+  let y;
+  const newPage = () => { ops = []; pages.push({ height: 0, ops }); y = P.m; };
+  const closePage = () => {
+    const page = pages[pages.length - 1];
+    const h = roll ? Math.ceil(y + footH + P.m) : P.h;
+    if (mark) ops.push({ t: "text", x: W / 2, y: h - P.m + (roll ? 0 : Math.round(S.small * 0.2)), text: mark, font: font(S.small), color: MUTED, align: "center" });
+    page.height = h;
+  };
+  const ensure = (need, onBreak) => {
+    if (y + need <= limit) return false;
+    closePage(); newPage();
+    if (onBreak) onBreak();
+    return true;
+  };
+  const text = (x, yy, t, fnt, { color = INK, align = "left" } = {}) => ops.push({ t: "text", x, y: yy, text: t, font: fnt, color, align });
+  const rule = (yy, color = RULE, w = 2) => ops.push({ t: "line", x1: left, y1: yy, x2: right, y2: yy, color, w });
+  const para = (t, size, { bold = false, color = INK, x = left, maxW = cw, align = "left", gapAfter = 0 } = {}) => {
+    const fnt = font(size, bold);
+    const lh = Math.round(size * S.lh);
+    for (const ln of wrapText(t, fnt, maxW, measure)) {
+      ensure(lh);
+      text(align === "right" ? x + maxW : align === "center" ? x + maxW / 2 : x, y + size, ln, fnt, { color, align });
+      y += lh;
+    }
+    y += gapAfter;
+  };
+
+  newPage();
+
+  const hName = str(header.name);
+  const hLines = (Array.isArray(header.lines) ? header.lines : []).map(str).filter(Boolean);
+  const accent = /^#[0-9a-f]{6}$/i.test(str(header.accent)) ? header.accent : INK;
+  if (header.logo && header.logo.w > 0 && header.logo.h > 0) {
+    const maxH = roll ? 120 : 170;
+    const maxW = roll ? cw : 520;
+    const k = Math.min(maxH / header.logo.h, maxW / header.logo.w, 1.5);
+    const lw = Math.round(header.logo.w * k);
+    const lh = Math.round(header.logo.h * k);
+    ops.push({ t: "image", x: roll ? Math.round(left + (cw - lw) / 2) : left, y, w: lw, h: lh });
+    y += lh + S.pad * 2;
+  }
+  if (hName) para(hName, S.biz, { bold: true, align: roll ? "center" : "left" });
+  for (const l of hLines) para(l, S.small, { color: MUTED, align: roll ? "center" : "left" });
+  if (hName || hLines.length || header.logo) {
+    y += S.pad;
+    ops.push({ t: "rect", x: left, y, w: cw, h: roll ? 4 : 6, color: accent });
+    y += S.pad * 3;
+  }
+
+  para(str(doc?.title), S.title, { bold: true });
+  if (doc?.period) para(str(doc.period), S.body, { color: MUTED });
+  y += S.pad * 2;
+
+  const heading = (t) => {
+    if (!t) return;
+    ensure(Math.round(S.h3 * S.lh) * 2 + S.pad * 4);
+    y += S.pad;
+    para(t, S.h3, { bold: true, gapAfter: S.pad });
+  };
+
+  const kvRows = (rows) => {
+    const labelW = Math.round(cw * (roll ? 0.46 : 0.42));
+    const valW = cw - labelW - S.pad * 2;
+    for (const [k, v, strong] of rows) {
+      const fl = font(S.body, !!strong);
+      const kl = wrapText(k, fl, labelW, measure);
+      const vl = wrapText(v, fl, valW, measure);
+      const lh = Math.round(S.body * S.lh);
+      const h = Math.max(kl.length, vl.length) * lh + S.pad;
+      ensure(h + (strong ? S.pad : 0));
+      if (strong) { rule(y, INK, 2); y += S.pad; }
+      kl.forEach((ln, i) => text(left, y + S.body + i * lh, ln, fl));
+      vl.forEach((ln, i) => text(right, y + S.body + i * lh, ln, fl, { align: "right" }));
+      y += h;
+    }
+  };
+
+  const tableWide = (sec) => {
+    const cols = sec.columns;
+    const cp = S.pad * 1.6;
+    const fb = font(S.small, true);
+    const fc = font(S.body);
+    const lh = Math.round(S.body * S.lh);
+    const nat = cols.map((c) => Math.min(cw * 0.5, Math.max(measure(str(c.label), fb), ...sec.rows.map((r) => measure(str(r[c.key]), fc)), 40) + cp * 2));
+    const sum = nat.reduce((a, b) => a + b, 0);
+    let widths;
+    if (sum <= cw) {
+      const any = cols.some((c) => !c.num);
+      const flexes = cols.map((c) => (any ? !c.num : true));
+      const fs = nat.reduce((a, n, i) => a + (flexes[i] ? n : 0), 0) || 1;
+      widths = nat.map((n, i) => n + (flexes[i] ? ((cw - sum) * n) / fs : 0));
+    } else {
+      const fixed = cols.reduce((a, c, i) => a + (c.num ? nat[i] : 0), 0);
+      const flexSum = sum - fixed;
+      const room = Math.max(cw - fixed, cw * 0.4);
+      const k = room / (flexSum || 1);
+      widths = nat.map((n, i) => (cols[i].num ? n : Math.max(90, n * k)));
+      const s2 = widths.reduce((a, b) => a + b, 0);
+      widths = widths.map((w) => (w * cw) / s2);
+    }
+    const xs = [];
+    widths.reduce((x, w) => { xs.push(x); return x + w; }, left);
+
+    const headRow = () => {
+      const lines = cols.map((c, i) => wrapText(c.label, fb, widths[i] - cp * 2, measure));
+      const hlh = Math.round(S.small * S.lh);
+      const h = Math.max(...lines.map((l) => l.length)) * hlh + S.pad * 2;
+      ops.push({ t: "rect", x: left, y, w: cw, h, color: BAND });
+      lines.forEach((ls, i) => ls.forEach((ln, j) => text(cols[i].num ? xs[i] + widths[i] - cp : xs[i] + cp, y + S.pad + S.small + j * hlh, ln, fb, { align: cols[i].num ? "right" : "left" })));
+      y += h;
+      rule(y, INK, 2);
+    };
+    ensure(lh * 3 + S.pad * 6);
+    headRow();
+    for (const r of sec.rows) {
+      const lines = cols.map((c, i) => wrapText(r[c.key], fc, widths[i] - cp * 2, measure));
+      const h = Math.max(...lines.map((l) => l.length)) * lh + S.pad * 2;
+      ensure(h, headRow);
+      lines.forEach((ls, i) => ls.forEach((ln, j) => text(cols[i].num ? xs[i] + widths[i] - cp : xs[i] + cp, y + S.pad + S.body + j * lh, ln, fc, { align: cols[i].num ? "right" : "left" })));
+      y += h;
+      rule(y, RULE, 1);
+    }
+    if (sec.total) {
+      const ft = font(S.body, true);
+      const vW = Math.max(measure(str(sec.total.value), ft) + cp * 2, widths[widths.length - 1]);
+      const ll = wrapText(sec.total.label, ft, cw - vW - cp * 2, measure);
+      const h = ll.length * lh + S.pad * 2;
+      ensure(h);
+      rule(y, INK, 2);
+      ll.forEach((ln, j) => text(left + cp, y + S.pad + S.body + j * lh, ln, ft));
+      text(right - cp, y + S.pad + S.body, str(sec.total.value), ft, { align: "right" });
+      y += h;
+    }
+  };
+
+  const tableRoll = (sec) => {
+    const cols = sec.columns;
+    const amt = cols.find((c) => c.amount);
+    const fh = font(S.body, true);
+    const lh = Math.round(S.body * S.lh);
+    for (const r of sec.rows) {
+      const head = cols.filter((c) => c.primary).map((c) => str(r[c.key])).filter(Boolean).join(" · ") || (amt ? "" : str(r[cols[0].key]));
+      const a = amt ? str(r[amt.key]) : "";
+      const aW = a ? measure(a, fh) + S.pad * 2 : 0;
+      const hl = wrapText(head, fh, cw - aW, measure);
+      ensure(hl.length * lh + S.pad);
+      hl.forEach((ln, j) => text(left, y + S.body + j * lh, ln, fh));
+      if (a) text(right, y + S.body, a, fh, { align: "right" });
+      y += hl.length * lh;
+      for (const c of cols.filter((c) => !c.primary && !c.amount && r[c.key])) para(`${c.label}: ${str(r[c.key])}`, S.small, { color: MUTED });
+      y += S.pad;
+      rule(y, RULE, 1);
+      y += S.pad;
+    }
+    if (sec.total) para([sec.total.label, sec.total.value].filter(Boolean).join(": "), S.body, { bold: true, align: "right", gapAfter: S.pad });
+  };
+
+  for (const sec of Array.isArray(doc?.sections) ? doc.sections : []) {
+    heading(sec.heading);
+    if (sec.kind === "table") (roll ? tableRoll : tableWide)(sec);
+    else if (sec.kind === "kv") kvRows(sec.rows ?? []);
+    else para(str(sec.text), S.body, { color: sec.kind === "empty" ? MUTED : INK });
+    y += S.pad * 3;
+  }
+  for (const n of Array.isArray(doc?.notes) ? doc.notes : []) para(str(n), S.small, { color: MUTED });
+  closePage();
+  return { width: W, pages };
+}
+
+function paintPage(c2d, page, width, image = null) {
+  c2d.fillStyle = "#ffffff";
+  c2d.fillRect(0, 0, width, page.height);
+  c2d.textBaseline = "alphabetic";
+  for (const op of page.ops) {
+    if (op.t === "text") { c2d.font = op.font; c2d.fillStyle = op.color; c2d.textAlign = op.align; c2d.fillText(op.text, op.x, op.y); }
+    else if (op.t === "rect") { c2d.fillStyle = op.color; c2d.fillRect(op.x, op.y, op.w, op.h); }
+    else if (op.t === "line") { c2d.strokeStyle = op.color; c2d.lineWidth = op.w; c2d.beginPath(); c2d.moveTo(op.x1, op.y1); c2d.lineTo(op.x2, op.y2); c2d.stroke(); }
+    else if (op.t === "image" && image) c2d.drawImage(image, op.x, op.y, op.w, op.h);
+  }
+}
+
+function loadImage(src, doc) {
+  return new Promise((resolve) => {
+    if (!src) return resolve(null);
+    const img = doc.createElement("img");
+    img.onload = () => resolve(img.naturalWidth > 0 ? img : null);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+async function docToPdf({ doc, header = {}, mark = "", paper = "letter", title = "" }, { document: d = globalThis.document } = {}) {
+  const img = await loadImage(header.logo, d);
+  const canvas = d.createElement("canvas");
+  const c2d = canvas.getContext("2d");
+  const measure = (t, fnt) => { c2d.font = fnt; return c2d.measureText(t).width; };
+  const lay = layoutDoc({ doc, header: { ...header, logo: img ? { w: img.naturalWidth, h: img.naturalHeight } : null }, mark, paper }, measure);
+  const pages = [];
+  for (const page of lay.pages) {
+    canvas.width = lay.width;
+    canvas.height = page.height;
+    paintPage(canvas.getContext("2d"), page, lay.width, img);
+    const jpeg = base64ToBytes(canvas.toDataURL("image/jpeg", 0.9));
+    if (!jpeg) throw new Error("page_render_failed");
+    pages.push({ jpeg });
+  }
+  canvas.width = 1; canvas.height = 1;
+  return buildPdf(pages, { dpi: DPI, title });
+}
+
+async function deliverPdf({ bytes, filename, title = "" }, { win = globalThis.window } = {}) {
+  const name = /\.pdf$/i.test(filename) ? filename : `${filename}.pdf`;
+  const nav = win.navigator;
+  if (typeof win.File === "function" && typeof nav.share === "function") {
+    const file = new win.File([bytes], name, { type: "application/pdf" });
+    if (typeof nav.canShare !== "function" || nav.canShare({ files: [file] })) {
+      try { await nav.share({ files: [file], title }); return "shared"; }
+      catch (e) { if (e && e.name === "AbortError") return "cancelled"; }
+    }
+  }
+  const url = win.URL.createObjectURL(new win.Blob([bytes], { type: "application/pdf" }));
+  const a = win.document.createElement("a");
+  a.href = url; a.download = name; a.rel = "noopener";
+  win.document.body.append(a); a.click(); a.remove();
+  win.setTimeout(() => win.URL.revokeObjectURL(url), 60000);
+  return "downloaded";
+}
+
+return { DPI, wrapText, layoutDoc, paintPage, docToPdf, deliverPdf };
 })();
 __m["core/pwa.js"] = (function () {
 
@@ -5254,6 +5664,7 @@ return { sortServices, getServicesForVehicle, getLastService, mileageAfterServic
 __m["modules/autocare/logic/schema.js"] = (function () {
 
 const { isIsoDate, todayIso } = __m["core/dates.js"];
+const { LIMITS: RECORD_LIMITS } = __m["core/settings.js"];
 
 const COLLECTIONS = Object.freeze(["vehicles", "services", "schedules"]);
 const SOURCES = Object.freeze(["manual", "sample"]);
@@ -5284,7 +5695,7 @@ const MAX_INTERVAL_DISTANCE = 1_000_000;
 const MAX_INTERVAL_MONTHS = 600;
 const DEFAULT_CURRENCY = "USD";
 const LIMITS = Object.freeze({
-  vehicles: 100, services: 20000, schedules: 3000,
+  vehicles: RECORD_LIMITS.vehicles, services: RECORD_LIMITS.services, schedules: RECORD_LIMITS.schedules,
   name: 80, make: 40, model: 60, color: 30, plate: 20, vin: 17, note: 500, provider: 80, location: 120, parts: 300, id: 100,
   yearMin: 1900, yearMax: 2100, mileage: MAX_MILEAGE, cost: MAX_COST,
 });
@@ -5362,7 +5773,7 @@ function cleanVehicle(raw, fx, o) {
     name,
     make: str(fx, "make", raw.make, LIMITS.make),
     model: str(fx, "model", raw.model, LIMITS.model),
-    year: int(fx, "year", raw.year, LIMITS.yearMin, LIMITS.yearMax, 0),
+    year: raw.year === 0 ? 0 : int(fx, "year", raw.year, LIMITS.yearMin, LIMITS.yearMax, 0),
     color: str(fx, "color", raw.color, LIMITS.color),
     licensePlate: str(fx, "licensePlate", raw.licensePlate, LIMITS.plate).toUpperCase(),
     vin: str(fx, "vin", raw.vin, LIMITS.vin).toUpperCase(),
@@ -5681,10 +6092,13 @@ function buildDefaultSchedules(vehicleId, opts = {}) {
     createSchedule(vehicleId, { serviceType, intervalMiles: miles ? kmToMiles(km) : km, intervalMonths, priority }));
 }
 
-const fill = (tpl, vars) => tpl.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
+const fill = (tpl, vars) => tpl
+  .replace(/\[([^\[\]]*)\]/g, (_, seg) => ([...seg.matchAll(/\{(\w+)\}/g)].every((m) => String(vars[m[1]] ?? "").trim() !== "") ? seg : ""))
+  .replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "")
+  .replace(/[ \t]{2,}/g, " ").trim();
 const MESSAGE_TEMPLATES = Object.freeze({
-  reminder: "Your {vehicle} {serviceType} is due at {mileage}. Schedule service today!",
-  completed: "Service completed on {vehicle}: {serviceType} at {mileage}. Next due: {nextDue}",
+  reminder: "Your {vehicle} {serviceType} is due[ at {mileage}]. Schedule service today!",
+  completed: "Service completed on {vehicle}: {serviceType}[ at {mileage}].[ Next due: {nextDue}]",
 });
 
 function reminderMessage({ vehicle, schedule }, opts = {}) {
@@ -5696,7 +6110,7 @@ function completedMessage({ vehicle, service, schedule }, opts = {}) {
   const next = [schedule?.nextDueMileage > 0 ? formatMileage(schedule.nextDueMileage, vehicle?.mileageUnit) : "", schedule?.nextDueDate ?? ""].filter(Boolean).join(" / ");
   return fill(opts.template ?? MESSAGE_TEMPLATES.completed, {
     vehicle: vehicleLabel(vehicle), serviceType: (opts.labelOf ?? serviceLabel)(service?.serviceType),
-    mileage: service?.mileage > 0 ? formatMileage(service.mileage, vehicle?.mileageUnit) : "-", nextDue: next || "-",
+    mileage: service?.mileage > 0 ? formatMileage(service.mileage, vehicle?.mileageUnit) : "", nextDue: next,
   });
 }
 
@@ -5713,11 +6127,11 @@ const { localizeNumber, parseMoneyText, parseNumberText } = __m["core/number-inp
 const { guardWrite } = __m["core/safe.js"];
 const { StoreError } = __m["core/store.js"];
 const { button, field, focusFirstInvalid, h, nextId, select } = __m["core/ui.js"];
-const { SERVICE_TYPES, cleanRecord } = __m["modules/autocare/logic/schema.js"];
+const { LIMITS, SERVICE_TYPES, cleanRecord } = __m["modules/autocare/logic/schema.js"];
 const { sortVehicles, vehicleLabel } = __m["modules/autocare/logic/vehicles.js"];
 const { mileageAfterService } = __m["modules/autocare/logic/services.js"];
 const { applyService, refreshFromServices, withNextDue } = __m["modules/autocare/logic/schedules.js"];
-const { buildDefaultSchedules, reminderMessage, completedMessage, whatsappLink } = __m["modules/autocare/logic/templates.js"];
+const { buildDefaultSchedules, reminderMessage, completedMessage, smsLink, whatsappLink } = __m["modules/autocare/logic/templates.js"];
 
 const SERVICE_ICONS = Object.freeze({
   oil_change: "🛢️", oil_filter: "🛢️", air_filter: "💨", cabin_filter: "🌬️", fuel_filter: "⛽",
@@ -5770,6 +6184,9 @@ function yearOptions(services, today = todayIso()) {
 }
 
 const shareUrl = (text) => whatsappLink(String(text ?? ""));
+const smsUrl = (text) => smsLink(String(text ?? ""));
+
+const healthView = (health) => (health.total > 0 && health.counts.unknown >= health.total ? { ...health, score: 0, total: 0, noRecords: true } : health);
 
 function dueText(i18n, row, unit = "km") {
   const { t, tn, formatNumber } = i18n;
@@ -5947,7 +6364,13 @@ function syncAfterService(tx, saved, old) {
 
 async function saveVehicle(store, record, id) {
   const clean = cleanRecord("vehicles", record, { keepMeta: false }).record;
-  return id ? store.update("vehicles", id, clean) : store.add("vehicles", clean);
+  if (id) return store.update("vehicles", id, clean);
+  return store.transactMany(["vehicles", "schedules"], (tx) => {
+    const v = tx.add("vehicles", clean);
+    const defaults = buildDefaultSchedules(v.id, { mileageUnit: v.mileageUnit });
+    if (tx.list("schedules").length + defaults.length <= LIMITS.schedules) for (const s of defaults) tx.add("schedules", s);
+    return v;
+  });
 }
 
 async function deleteVehicle(store, id) {
@@ -6015,14 +6438,14 @@ async function createDefaultSchedules(store, vehicleId) {
   });
 }
 
-return { SERVICE_ICONS, serviceIcon, PIE_COLORS, healthLevel, monthTotal, barPercents, pieGradient, yearOptions, shareUrl, dueText, serviceName, vehicleName, unitLabel, fmtCost, fmtDate, fmtDist, kv, statusBadge, expiryBadge, priorityTag, healthRing, barChart, pieChart, loadAll, openModal, openForm, selectField, errText, readMoney, readInt, moneyValue, intValue, vehicleOptions, serviceTypeOptions, reminderText, completedText, linkButton, saveVehicle, deleteVehicle, saveService, deleteService, markScheduleDone, saveSchedule, deleteSchedule, createDefaultSchedules };
+return { SERVICE_ICONS, serviceIcon, PIE_COLORS, healthLevel, monthTotal, barPercents, pieGradient, yearOptions, shareUrl, smsUrl, healthView, dueText, serviceName, vehicleName, unitLabel, fmtCost, fmtDate, fmtDist, kv, statusBadge, expiryBadge, priorityTag, healthRing, barChart, pieChart, loadAll, openModal, openForm, selectField, errText, readMoney, readInt, moneyValue, intValue, vehicleOptions, serviceTypeOptions, reminderText, completedText, linkButton, saveVehicle, deleteVehicle, saveService, deleteService, markScheduleDone, saveSchedule, deleteSchedule, createDefaultSchedules };
 })();
 __m["modules/autocare/views/expenses.js"] = (function () {
 const { todayIso } = __m["core/dates.js"];
 const { button, emptyState, field, h, table } = __m["core/ui.js"];
 const { LIMITS, validateService } = __m["modules/autocare/logic/schema.js"];
 const { sortServices } = __m["modules/autocare/logic/services.js"];
-const { completedText, deleteService, errText, fmtCost, fmtDate, fmtDist, intValue, linkButton, loadAll, moneyValue, openForm, readInt, readMoney, saveService, selectField, serviceIcon, serviceName, serviceTypeOptions, shareUrl, vehicleName, vehicleOptions } = __m["modules/autocare/views/common.js"];
+const { completedText, deleteService, errText, fmtCost, fmtDate, fmtDist, intValue, linkButton, loadAll, moneyValue, openForm, readInt, readMoney, saveService, selectField, serviceIcon, serviceName, serviceTypeOptions, shareUrl, smsUrl, vehicleName, vehicleOptions } = __m["modules/autocare/views/common.js"];
 
 
 
@@ -6135,9 +6558,9 @@ async function mountExpenses(ctx, root) {
         { key: "date", label: t("expenses.date"), nowrap: true, render: (s) => fmtDate(ctx, s.date) },
         { key: "vehicle", label: t("expenses.vehicle"), render: (s) => vehicleName(ctx, data.vById.get(s.vehicleId)) },
         { key: "type", label: t("expenses.serviceType"), render: (s) => `${serviceIcon(s.serviceType)} ${serviceName(ctx, s.serviceType)}` },
-        { key: "mileage", label: t("expenses.mileage"), align: "num", narrowHide: true, render: (s) => (s.mileage > 0 ? fmtDist(ctx, s.mileage, data.vById.get(s.vehicleId)?.mileageUnit) : "") },
+        { key: "mileage", label: t("expenses.mileage"), align: "num", render: (s) => (s.mileage > 0 ? fmtDist(ctx, s.mileage, data.vById.get(s.vehicleId)?.mileageUnit) : "") },
         { key: "cost", label: t("expenses.cost"), align: "num", render: (s) => (s.cost > 0 ? fmtCost(ctx, s.cost) : "") },
-        { key: "provider", label: t("expenses.provider"), narrowHide: true, render: (s) => s.provider },
+        { key: "provider", label: t("expenses.provider"), render: (s) => s.provider },
         {
           key: "actions", label: t("common.actions"), actions: true, render: (s) => {
             const v = data.vById.get(s.vehicleId);
@@ -6145,6 +6568,7 @@ async function mountExpenses(ctx, root) {
             return h("div", { class: "row" },
               button({ label: t("common.edit"), ariaLabel: `${t("common.edit")}: ${serviceName(ctx, s.serviceType)} ${fmtDate(ctx, s.date)}`, onClick: () => edit(s) }),
               v ? linkButton({ href: shareUrl(completedText(ctx, v, s, sch)), label: "", icon: "💬", cls: "btn-wa btn-icon", ariaLabel: `${t("expenses.share")}: ${serviceName(ctx, s.serviceType)}`, external: true }) : null,
+              v ? linkButton({ href: smsUrl(completedText(ctx, v, s, sch)), label: "", icon: "✉️", cls: "btn-sms btn-icon", ariaLabel: `${t("expenses.shareSms")}: ${serviceName(ctx, s.serviceType)}` }) : null,
               button({ label: t("common.delete"), variant: "danger", ariaLabel: `${t("common.delete")}: ${serviceName(ctx, s.serviceType)} ${fmtDate(ctx, s.date)}`, onClick: () => remove(s) }));
           },
         },
@@ -6169,7 +6593,7 @@ const { button, emptyState, field, h } = __m["core/ui.js"];
 const { LIMITS, PRIORITIES, validateSchedule, validateService } = __m["modules/autocare/logic/schema.js"];
 const { remaining, scheduleStatus } = __m["modules/autocare/logic/status.js"];
 const { getSchedulesForVehicle } = __m["modules/autocare/logic/schedules.js"];
-const { createDefaultSchedules, deleteSchedule, dueText, errText, fmtDate, fmtDist, intValue, kv, linkButton, loadAll, markScheduleDone, moneyValue, openForm, priorityTag, readInt, readMoney, reminderText, saveSchedule, selectField, serviceIcon, serviceName, serviceTypeOptions, shareUrl, statusBadge, unitLabel, vehicleName, vehicleOptions } = __m["modules/autocare/views/common.js"];
+const { createDefaultSchedules, deleteSchedule, dueText, errText, fmtDate, fmtDist, intValue, kv, linkButton, loadAll, markScheduleDone, moneyValue, openForm, priorityTag, readInt, readMoney, reminderText, saveSchedule, selectField, serviceIcon, serviceName, serviceTypeOptions, shareUrl, smsUrl, statusBadge, unitLabel, vehicleName, vehicleOptions } = __m["modules/autocare/views/common.js"];
 
 
 
@@ -6319,6 +6743,7 @@ async function mountMaintenance(ctx, root, param) {
         button({ label: t("maintenance.markDone"), variant: "primary", ariaLabel: `${t("maintenance.markDone")}: ${serviceName(ctx, s.serviceType)}`, onClick: async () => { if (await openMarkDone(ctx, s.id)) await reload(); } }),
         button({ label: t("common.edit"), ariaLabel: `${t("common.edit")}: ${serviceName(ctx, s.serviceType)}`, onClick: async () => { if (await openScheduleForm(ctx, { schedule: s })) await reload(); } }),
         linkButton({ href: shareUrl(reminderText(ctx, v, s)), label: "", icon: "💬", cls: "btn-wa btn-icon", ariaLabel: `${t("maintenance.sendReminder")}: ${serviceName(ctx, s.serviceType)}`, external: true }),
+        linkButton({ href: smsUrl(reminderText(ctx, v, s)), label: "", icon: "✉️", cls: "btn-sms btn-icon", ariaLabel: `${t("maintenance.sendReminderSms")}: ${serviceName(ctx, s.serviceType)}` }),
         button({ label: t("common.delete"), variant: "danger", ariaLabel: `${t("common.delete")}: ${serviceName(ctx, s.serviceType)}`, onClick: () => remove(s, v) })));
   }
 
@@ -6367,7 +6792,7 @@ const { vehicleExpiries } = __m["modules/autocare/logic/vehicles.js"];
 const { getSchedulesForVehicle } = __m["modules/autocare/logic/schedules.js"];
 const { sortServices } = __m["modules/autocare/logic/services.js"];
 const { totalCostByVehicle } = __m["modules/autocare/logic/calc.js"];
-const { createDefaultSchedules, deleteVehicle, dueText, errText, expiryBadge, fmtCost, fmtDate, fmtDist, healthLevel, healthRing, intValue, kv, loadAll, moneyValue, openForm, priorityTag, readInt, readMoney, saveVehicle, selectField, serviceIcon, serviceName, statusBadge, vehicleName } = __m["modules/autocare/views/common.js"];
+const { createDefaultSchedules, deleteVehicle, dueText, errText, expiryBadge, fmtCost, fmtDate, fmtDist, healthLevel, healthRing, healthView, intValue, kv, loadAll, moneyValue, openForm, priorityTag, readInt, readMoney, saveVehicle, selectField, serviceIcon, serviceName, statusBadge, vehicleName } = __m["modules/autocare/views/common.js"];
 
 
 
@@ -6453,7 +6878,7 @@ async function mountList(ctx, root) {
       return;
     }
     body.replaceChildren(h("div", { class: "vehicle-grid" }, data.vehicles.map((v) => {
-      const health = vehicleHealth(v, data.schedules);
+      const health = healthView(vehicleHealth(v, data.schedules));
       const level = healthLevel(health.score, health.total);
       const sub = [v.make, v.model, v.year > 0 ? v.year : ""].filter(Boolean).join(" ");
       return h("a", { class: "card vehicle-card", href: `#/vehicles/${encodeURIComponent(v.id)}`, "data-level": level, "aria-label": `${vehicleName(ctx, v)}${sub ? `, ${sub}` : ""}` },
@@ -6495,7 +6920,7 @@ async function mountDetail(ctx, root, id) {
       body.replaceChildren(emptyState({ title: t("vehicles.notFound"), text: "" }), h("p", { class: "center" }, h("a", { class: "btn btn-primary", href: "#/vehicles", text: t("common.back") })));
       return;
     }
-    const health = vehicleHealth(v, data.schedules);
+    const health = healthView(vehicleHealth(v, data.schedules));
     const services = sortServices(data.services.filter((s) => s.vehicleId === v.id));
     const total = totalCostByVehicle(data.services, v.id);
     const schedules = getSchedulesForVehicle(data, v.id);
@@ -6571,7 +6996,7 @@ const { button, emptyState, h } = __m["core/ui.js"];
 const { remaining, scheduleStatus, vehicleHealth } = __m["modules/autocare/logic/status.js"];
 const { sortServices } = __m["modules/autocare/logic/services.js"];
 const { upcomingServices } = __m["modules/autocare/logic/calc.js"];
-const { dueText, fmtCost, fmtDate, fmtDist, healthLevel, healthRing, linkButton, loadAll, monthTotal, reminderText, serviceIcon, serviceName, shareUrl, statusBadge, vehicleName } = __m["modules/autocare/views/common.js"];
+const { dueText, fmtCost, fmtDate, fmtDist, healthLevel, healthRing, linkButton, loadAll, monthTotal, reminderText, serviceIcon, serviceName, healthView, shareUrl, smsUrl, statusBadge, vehicleName } = __m["modules/autocare/views/common.js"];
 const { openServiceForm } = __m["modules/autocare/views/expenses.js"];
 const { openMarkDone } = __m["modules/autocare/views/maintenance.js"];
 const { openVehicleForm } = __m["modules/autocare/views/vehicles.js"];
@@ -6594,11 +7019,11 @@ async function mountDashboard(ctx, root) {
       h("h3", { id: "dash-health-h", text: t("dashboard.vehicleHealth") }),
       h("p", { class: "muted", text: t("dashboard.healthHint") }),
       h("div", { class: "vehicle-grid" }, data.vehicles.map((v) => {
-        const health = vehicleHealth(v, data.schedules);
+        const health = healthView(vehicleHealth(v, data.schedules));
         const sub = [v.make, v.model, v.year > 0 ? v.year : ""].filter(Boolean).join(" ");
         const counts = health.total
           ? [health.counts.overdue ? tn("dashboard.countOverdue", health.counts.overdue) : "", health.counts.due_soon ? tn("dashboard.countDueSoon", health.counts.due_soon) : ""].filter(Boolean).join(" · ")
-          : t("dashboard.noSchedule");
+          : t(health.noRecords ? "dashboard.noRecordsYet" : "dashboard.noSchedule");
         return h("a", { class: "card vehicle-card", href: `#/vehicles/${encodeURIComponent(v.id)}`, "data-level": healthLevel(health.score, health.total) },
           healthRing(ctx, health, { label: false }),
           h("div", { class: "vehicle-card-main" },
@@ -6638,7 +7063,8 @@ async function mountDashboard(ctx, root) {
             statusBadge(ctx, r.status),
             h("div", { class: "row-actions" },
               button({ label: t("maintenance.markDone"), onClick: async () => { if (await openMarkDone(ctx, r.schedule.id)) await reload(); } }),
-              linkButton({ href: shareUrl(reminderText(ctx, r.vehicle, r.schedule)), label: "", icon: "💬", cls: "btn-wa btn-icon", ariaLabel: `${t("maintenance.sendReminder")}: ${serviceName(ctx, r.schedule.serviceType)}`, external: true })));
+              linkButton({ href: shareUrl(reminderText(ctx, r.vehicle, r.schedule)), label: "", icon: "💬", cls: "btn-wa btn-icon", ariaLabel: `${t("maintenance.sendReminder")}: ${serviceName(ctx, r.schedule.serviceType)}`, external: true }),
+              linkButton({ href: smsUrl(reminderText(ctx, r.vehicle, r.schedule)), label: "", icon: "✉️", cls: "btn-sms btn-icon", ariaLabel: `${t("maintenance.sendReminderSms")}: ${serviceName(ctx, r.schedule.serviceType)}` })));
         }))
       : h("p", { class: "muted", text: data.schedules.length ? t("dashboard.noUpcoming") : t("dashboard.noSchedule") });
     return h("section", { class: "dash-section card", "aria-labelledby": "dash-up-h" },
@@ -6721,11 +7147,40 @@ function buildServiceHistory(ctx, { vehicle: v, services }) {
     h("p", { class: "rc-total-line", text: `${L("print.total", "Total")}: ${[...totals].map(([c, m]) => formatCurrency(m, c)).join(" + ") || "-"}` }));
 }
 
-async function printServiceHistory(ctx, data) {
-  await ctx.print({ title: tr(ctx.i18n.t, "autocare.print.historyTitle", "Service history"), node: buildServiceHistory(ctx, data), paper: data.paper });
+function serviceHistoryDoc(ctx, { vehicle: v, services }) {
+  const { t, formatDate, formatCurrency } = ctx.i18n;
+  const L = (k, d) => tr(t, `autocare.${k}`, d);
+  const rows = getServicesForVehicle({ services }, v.id);
+  const totals = new Map();
+  for (const s of rows) if (s.cost > 0) totals.set(s.currency, (totals.get(s.currency) ?? 0) + s.cost);
+  const meta = [vehicleLabel(v), [v.make, v.model, v.year > 0 ? v.year : ""].filter(Boolean).join(" "), v.licensePlate, v.vin ? `VIN ${v.vin}` : "", formatMileage(v.currentMileage, v.mileageUnit)];
+  const title = L("print.historyTitle", "Service history");
+  const period = meta.filter(Boolean).join(" · ");
+  if (!rows.length) return { id: "service-history", title, period, sections: [{ kind: "empty", text: tr(t, "reports.noData", "-") }], notes: [], empty: true };
+  return {
+    id: "service-history", title, period, empty: false, notes: [],
+    sections: [{
+      kind: "table",
+      columns: [
+        { key: "date", label: L("print.col.date", "Date"), primary: true }, { key: "service", label: L("print.col.service", "Service"), primary: true },
+        { key: "mileage", label: L("print.col.mileage", "Mileage"), num: true }, { key: "provider", label: L("print.col.provider", "Provider") },
+        { key: "parts", label: L("print.col.parts", "Parts") }, { key: "cost", label: L("print.col.cost", "Cost"), num: true, amount: true },
+      ],
+      rows: rows.map((s) => ({
+        date: formatDate(s.date), mileage: s.mileage > 0 ? formatMileage(s.mileage, v.mileageUnit) : "",
+        service: tr(t, `autocare.service.${s.serviceType}`, serviceLabel(s.serviceType)),
+        provider: [s.provider, s.location].filter(Boolean).join(", "), parts: s.parts, cost: s.cost > 0 ? formatCurrency(s.cost, s.currency) : "",
+      })),
+      total: { label: L("print.total", "Total"), value: [...totals].map(([c, m]) => formatCurrency(m, c)).join(" + ") || "-" },
+    }],
+  };
 }
 
-return { buildServiceHistory, printServiceHistory };
+async function printServiceHistory(ctx, data) {
+  await ctx.print({ title: tr(ctx.i18n.t, "autocare.print.historyTitle", "Service history"), node: buildServiceHistory(ctx, data), doc: serviceHistoryDoc(ctx, data), paper: data.paper });
+}
+
+return { buildServiceHistory, serviceHistoryDoc, printServiceHistory };
 })();
 __m["modules/autocare/views/reports.js"] = (function () {
 const { todayIso } = __m["core/dates.js"];
@@ -6733,7 +7188,7 @@ const { button, emptyState, h, table } = __m["core/ui.js"];
 const { printServiceHistory } = __m["modules/autocare/print/service-history.js"];
 const { costByCategory, costPerMile, monthlyCosts, totalCostByVehicle } = __m["modules/autocare/logic/calc.js"];
 const { sortServices } = __m["modules/autocare/logic/services.js"];
-const { barChart, fmtCost, fmtDate, fmtDist, linkButton, loadAll, pieChart, selectField, serviceIcon, serviceName, shareUrl, vehicleName, vehicleOptions, yearOptions } = __m["modules/autocare/views/common.js"];
+const { barChart, fmtCost, fmtDate, fmtDist, linkButton, loadAll, pieChart, selectField, serviceIcon, serviceName, shareUrl, smsUrl, vehicleName, vehicleOptions, yearOptions } = __m["modules/autocare/views/common.js"];
 
 
 
@@ -6798,7 +7253,7 @@ async function mountReports(ctx, root) {
   }
 
   function shareText(f) {
-    return t("reports.shareTemplate", { vehicle: vehicleName(ctx, f.v), year: state.year, total: fmtCost(ctx, f.yearTotal), count: f.rows.length, perUnit: perUnitText(f), unit: ctx.i18n.t(`units.${f.v.mileageUnit === "mi" ? "mi" : "km"}`) });
+    return t("reports.shareTemplate", { vehicle: vehicleName(ctx, f.v), year: state.year, total: fmtCost(ctx, f.yearTotal), count: tn("reports.serviceCount", f.rows.length), perUnit: perUnitText(f), unit: ctx.i18n.t(`units.${f.v.mileageUnit === "mi" ? "mi" : "km"}`) });
   }
 
   function paint() {
@@ -6814,7 +7269,8 @@ async function mountReports(ctx, root) {
 
     const actions = h("div", { class: "row report-actions" },
       button({ id: "rp-print", label: `🖨 ${t("reports.print")}`, exportAction: true, onClick: () => printServiceHistory(ctx, { vehicle: f.v, services: data.services.filter((x) => x.vehicleId === f.v.id) }) }),
-      linkButton({ href: shareUrl(shareText(f)), label: t("reports.share"), icon: "💬", cls: "btn-wa", external: true }));
+      linkButton({ href: shareUrl(shareText(f)), label: t("reports.share"), icon: "💬", cls: "btn-wa", external: true }),
+      linkButton({ href: smsUrl(shareText(f)), label: t("reports.shareSms"), icon: "✉️", cls: "btn-sms" }));
 
     const stats = h("div", { class: "stat-grid" },
       h("div", { class: "stat", id: "rp-year-total" }, h("span", { class: "stat-label", text: `${t("reports.yearlyTotal")} (${state.year})` }), h("span", { class: "stat-value", text: fmtCost(ctx, f.yearTotal) })),
@@ -6862,7 +7318,8 @@ const { applyLanguage, createAutoSettings, loadSettings, sanitizeSettings, saveS
 const { backupNow, rescaleStoreForCurrency, restoreNow } = __m["core/data-actions.js"];
 const { renderSettings } = __m["core/settings-screen.js"];
 const { createBusinessProfile } = __m["core/business.js"];
-const { printDocument } = __m["core/print.js"];
+const { needsFileDelivery, printDocument, printHeaderData } = __m["core/print.js"];
+const { deliverPdf, docToPdf } = __m["core/canvas-doc.js"];
 const { initPwa } = __m["core/pwa.js"];
 const { errorKey } = __m["core/safe.js"];
 const { createSync } = __m["core/sync.js"];
@@ -6907,6 +7364,9 @@ async function main() {
   let shown = 0;
   let volatile = false;
   let backupDismissed = false;
+  let pwaNote = null;
+  let backupShown = false;
+  let pwaApi = null;
 
   const build = (settings) => {
     const old = ctx;
@@ -6935,9 +7395,16 @@ async function main() {
         const { confirmed } = await confirmDialog({ title, message, confirmLabel: confirmLabel ?? ctx.i18n.t("common.delete"), cancelLabel: ctx.i18n.t("common.cancel"), danger });
         return confirmed;
       },
-      print: async ({ title, node, business, paper }) => {
+      print: async ({ title, node, business, paper, doc }) => {
         try {
-          printDocument({ title, node, business: business ?? (await ctx.business.get()), paper: paper ?? (await ctx.auto.get()).paper });
+          const biz = business ?? (await ctx.business.get());
+          const pp = paper ?? (await ctx.auto.get()).paper;
+          if (doc && needsFileDelivery(window)) {
+            const bytes = await docToPdf({ doc, header: printHeaderData(biz), mark: "", paper: pp, title });
+            await deliverPdf({ bytes, filename: `${config.appId}-${doc.id || "document"}`, title });
+            return;
+          }
+          printDocument({ title, node, business: biz, paper: pp });
         } catch (e) {
           console.error(e);
           ctx.notify(ctx.i18n.t("print.error"), "error");
@@ -7001,23 +7468,38 @@ async function main() {
     const vol = document.getElementById("volatile-note");
     vol.hidden = !volatile;
     vol.textContent = t("storage.volatile");
+    paintPwaBar();
+  };
+
+  const paintPwaBar = () => {
+    const bar = document.getElementById("pwa-bar");
+    if (!bar || !ctx) return;
+    const { t } = ctx.i18n;
+    const say = (text, ...actions) => bar.replaceChildren(h("div", { class: "banner row", role: "status" }, h("span", { text }), ...actions));
+    const dismiss = () => { pwaNote = null; bar.replaceChildren(); };
+    if (!pwaNote || (backupShown && pwaNote !== "update")) { bar.replaceChildren(); return; }
+    if (pwaNote === "update") say(t("pwa.updateAvailable"), button({ label: t("pwa.refresh"), variant: "primary", onClick: () => pwaApi.applyUpdate() }), button({ label: t("pwa.dismiss"), onClick: dismiss }));
+    else if (pwaNote === "install") say(t("pwa.install"), button({ label: t("pwa.install"), variant: "primary", onClick: async () => { await pwaApi.promptInstall(); dismiss(); } }), button({ label: t("pwa.dismiss"), onClick: dismiss }));
+    else say(t("pwa.installIos"), button({ label: t("pwa.dismiss"), onClick: dismiss }));
   };
 
   const paintBackupBar = async () => {
     const bar = document.getElementById("backup-bar");
-    if (!ctx.store || !ctx.auto || backupDismissed) { bar.replaceChildren(); return; }
+    if (!ctx.store || !ctx.auto || backupDismissed) { bar.replaceChildren(); backupShown = false; paintPwaBar(); return; }
     try {
       const auto = await ctx.auto.get();
       const n = (await ctx.store.count("services")) + (await ctx.store.count("vehicles"));
       const last = auto.lastBackupAt ? Date.parse(auto.lastBackupAt) : null;
       const due = last === null || (Date.now() - last) / 86400000 >= auto.backupEveryDays;
-      if (!n || !due) { bar.replaceChildren(); return; }
+      if (!n || !due) { bar.replaceChildren(); backupShown = false; paintPwaBar(); return; }
       const { t, formatDate } = ctx.i18n;
       const text = last === null ? t("backup.never") : t("backup.reminder", { when: formatDate(new Date(last)) });
       bar.replaceChildren(h("div", { class: "banner row", role: "status", id: "backup-strip" },
         h("span", { text }),
         button({ id: "backup-now", label: t("autolog.backup.download"), variant: "primary", exportAction: true, onClick: async () => { if (await backupNow(ctx)) await paintBackupBar(); } }),
-        button({ id: "backup-later", label: t("backup.later"), onClick: () => { backupDismissed = true; bar.replaceChildren(); } })));
+        button({ id: "backup-later", label: t("backup.later"), onClick: () => { backupDismissed = true; bar.replaceChildren(); backupShown = false; paintPwaBar(); } })));
+      backupShown = true;
+      paintPwaBar();
     } catch (e) {
       console.error(e);
     }
@@ -7136,22 +7618,11 @@ async function main() {
   await show(route);
   if (adapter.takeCorrupted && adapter.takeCorrupted().length) ctx.notify(ctx.i18n.t("storage.corrupt"), "error");
 
-  const bar = document.getElementById("pwa-bar");
-  const say = (text, ...actions) => bar.replaceChildren(h("div", { class: "banner row", role: "status" }, h("span", { text }), ...actions));
-  const pwa = initPwa({
-    onUpdate: () => {
-      const { t } = ctx.i18n;
-      say(t("pwa.updateAvailable"), button({ label: t("pwa.refresh"), variant: "primary", onClick: () => pwa.applyUpdate() }), button({ label: t("pwa.dismiss"), onClick: () => bar.replaceChildren() }));
-    },
-    onInstallAvailable: () => {
-      const { t } = ctx.i18n;
-      say(t("pwa.install"), button({ label: t("pwa.install"), variant: "primary", onClick: async () => { await pwa.promptInstall(); bar.replaceChildren(); } }), button({ label: t("pwa.dismiss"), onClick: () => bar.replaceChildren() }));
-    },
+  pwaApi = initPwa({
+    onUpdate: () => { pwaNote = "update"; paintPwaBar(); },
+    onInstallAvailable: () => { if (pwaNote !== "update") pwaNote = "install"; paintPwaBar(); },
   });
-  if (pwa.ios && !pwa.standalone) {
-    const { t } = ctx.i18n;
-    say(t("pwa.installIos"), button({ label: t("pwa.dismiss"), onClick: () => bar.replaceChildren() }));
-  }
+  if (pwaApi.ios && !pwaApi.standalone && !pwaNote) { pwaNote = "ios"; paintPwaBar(); }
 }
 
 main().catch((e) => {
