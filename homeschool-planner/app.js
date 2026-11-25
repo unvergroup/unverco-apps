@@ -82,6 +82,13 @@ async function main() {
       prefs: old ? old.prefs : null, // okul yili ayarlari: { get, save, invalidate }
       refresh: () => show(route),
       navigate: (to) => { location.hash = to ? `#/${to}` : `#/${DEFAULT_SCREEN}`; },
+      // Adresi gecmise kayit eklemeden ve ekrani yeniden kurmadan degistirir (hashchange olmaz). "Yeni" rotasi (#/kids/new) pencereyi
+      // actiktan sonra liste rotasina cekilir: yenilemede / ctx.refresh'te bos pencere kendiliginden yeniden acilmaz.
+      replaceRoute: (to) => {
+        try { history.replaceState(history.state, "", `#/${to}`); } catch { /* file:// kisitliysa adres kalir; rota durumu yine guncellenir */ }
+        route = parseRoute(`#/${to}`, screenIds, DEFAULT_SCREEN);
+        paintChrome();
+      },
       notify: (message, kind = "info", opts = {}) => toast(message, { kind, ...opts, closeLabel: ctx.i18n.t("common.close") }),
       fail: (err) => {
         console.error(err); // yalniz yerel konsol; hicbir yere gonderilmez

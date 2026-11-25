@@ -163,5 +163,8 @@ export async function mountKids(ctx, root, param) {
         loop.length ? h("ul", { class: "item-list", id: "sub-loop" }, ...loop.map(row)) : null));
   }
   paint();
-  if (param === "new") await addKid();
+  if (param === "new") {
+    ctx.replaceRoute("kids"); // pencere acilmadan once adres liste rotasina: kaydet / Iptal / Esc sonrasi yenilemede pencere acilmaz
+    await addKid();
+  }
 }

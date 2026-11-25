@@ -2,7 +2,7 @@
 // Strateji: once onbellek; yoksa ag; yalniz ayni kaynak (origin) GET istekleri. Uygulama hicbir yere veri gondermez.
 // Onbellege tum JS / CSS dosyalari, 5 dil dosyasi, manifest VE simge dosyalari girer (asagidaki PRECACHE listesi).
 const PRODUCT = "unvercohsp";
-const VERSION = "1.0.3";
+const VERSION = "1.0.4";
 const CACHE = PRODUCT + "-v" + VERSION;
 const PRECACHE = [
   "./",
