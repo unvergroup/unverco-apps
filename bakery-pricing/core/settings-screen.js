@@ -223,7 +223,7 @@ export async function renderSettings(container, ctx) {
 
   container.replaceChildren(
     h("h2", { text: t("settings.title") }),
-    shop, logoCard, pricing, printing, format, data,
+    pricing, shop, logoCard, printing, format, data,
     h("div", { class: "card stack", id: "set-about" },
       h("p", { id: "settings-privacy", text: t("bk.privacy.text") }),
       h("p", { id: "settings-scope", class: "muted", text: t("bk.scope.text") }),

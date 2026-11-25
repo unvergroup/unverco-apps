@@ -5,7 +5,7 @@ import { guardWrite } from "../../../core/safe.js";
 import { formatMinorPlain } from "../../../core/money.js";
 import { localizeNumber, parseMoneyText, parseNumberText } from "../../../core/number-input.js";
 import { costAll } from "../logic/costing.js";
-import { UNITS, displayOptions } from "../logic/units.js";
+import { UNITS, displayOptions, readableQty } from "../logic/units.js";
 
 /** Tum veri + tum tariflerin canli maliyeti (malzeme fiyati degisince her ekran yeniden hesaplar). */
 export async function loadAll(ctx) {
@@ -19,7 +19,7 @@ export async function loadAll(ctx) {
 export const unitLabel = (ctx, u) => ctx.i18n.t(`unit.${u}`);
 export const unitOptions = (ctx) => UNITS.map((u) => ({ value: u, label: unitLabel(ctx, u) }));
 /** Miktar + birim: "2.5 cup", "375 g" (g / ml tam sayi, digerleri en cok 2 ondalik; logic/units.js displayDigits). */
-export const qtyText = (ctx, q, u) => `${ctx.i18n.formatNumber(q, displayOptions(q, u))} ${unitLabel(ctx, u)}`;
+export const qtyText = (ctx, q0, u0) => { const { n: q, unit: u } = readableQty(q0, u0); return `${ctx.i18n.formatNumber(q, displayOptions(q, u))} ${unitLabel(ctx, u)}`; };
 export const statusChip = (ctx, status) => h("span", { class: "badge status-badge", "data-status": status, text: ctx.i18n.t(`status.${status}`) });
 export const yieldText = (ctx, r) => `${ctx.i18n.formatNumber(r.yieldQty, { maximumFractionDigits: 3 })} ${r.yieldUnit || ctx.i18n.t("recipe.unitsDefault")}`;
 

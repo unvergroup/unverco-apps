@@ -3,11 +3,11 @@
 // Belge: { id, title, period, sections[], notes[] }  (bicim: core/canvas-doc.js layoutDoc)
 import { addDays } from "../../../core/dates.js";
 import { lineTotal, orderTotals, suggestedDeposit } from "../logic/orders.js";
-import { displayOptions } from "../logic/units.js";
+import { displayOptions, readableQty } from "../logic/units.js";
 
 const qty = (L, n) => L.formatNumber(n, { maximumFractionDigits: 3 });
 /** Birimli miktar: g / ml tam sayi, digerleri en cok 2 ondalik (gorunum; ic hesap hassas). */
-const amt = (L, n, u) => `${L.formatNumber(n, displayOptions(n, u))} ${L.unit(u)}`;
+const amt = (L, n0, u0) => { const { n, unit: u } = readableQty(n0, u0); return `${L.formatNumber(n, displayOptions(n, u))} ${L.unit(u)}`; };
 const when = (L, o) => [L.formatDate(o.date, { dateStyle: "full" }), o.time ? L.time(o.time) : ""].filter(Boolean).join(" · ");
 
 /** Siparis belgesi. kind: "confirmation" (siparis onayi) | "quote" (teklif) | "invoice" (kaporali fatura). today: YYYY-MM-DD. */

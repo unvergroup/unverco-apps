@@ -36,6 +36,15 @@ export function convert(qty, from, to, density = null) {
 /** Gorunen ondalik basamak: g / ml tam sayi; diger birimler (lb, oz, kg, l, cup, tbsp, tsp, pc) en cok 2. Ic hesap hassas kalir. */
 export const displayDigits = (unit) => (unit === "g" || unit === "ml" ? 0 : 2);
 
+/** Okunur gorunum birimi: kg < 1 -> g, l < 1 -> ml, lb < 0.1 -> oz (yalniz gosterim; ic hesap ayni miktar). Donus: { n, unit }. */
+export function readableQty(n, unit) {
+  if (typeof n !== "number" || !(n > 0)) return { n, unit };
+  if (unit === "kg" && n < 1) return { n: n * 1000, unit: "g" };
+  if (unit === "l" && n < 1) return { n: n * 1000, unit: "ml" };
+  if (unit === "lb" && n < 0.1) return { n: n * 16, unit: "oz" };
+  return { n, unit };
+}
+
 /** Intl secenekleri: displayDigits; pozitif ama o basamakta 0'a yuvarlanan miktar ("0 kg") 1 anlamli basamakla gosterilir (0.004 kg). */
 export function displayOptions(n, unit) {
   const d = displayDigits(unit);

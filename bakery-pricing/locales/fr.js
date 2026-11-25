@@ -227,7 +227,7 @@ export default {
   "nav.sales": "Ventes",
   "nav.settings": "Réglages",
   "nav.short.ingredients": "Ingréd.",
-  "nav.short.orders": "Cdes",
+  "nav.short.orders": "Cmdes",
   "nav.short.plan": "Plan",
   "nav.short.recipes": "Recettes",
   "nav.short.sales": "Ventes",
