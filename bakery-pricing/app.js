@@ -190,7 +190,8 @@ async function main() {
     langSel.value = lang;
     langSel.setAttribute("aria-label", t("settings.language"));
     nav.setAttribute("aria-label", t("nav.menu"));
-    nav.replaceChildren(...NAV.map((s) => h("a", { class: "nav-link", id: `nav-${s.id}`, href: `#/${s.id}`, "aria-current": route.name === s.id ? "page" : "false" },
+    // Kisa etiket (nav.short.*) gorunur; ekran okuyucu tam adi duyar (aria-label = uzun ad).
+    nav.replaceChildren(...NAV.map((s) => h("a", { class: "nav-link", id: `nav-${s.id}`, href: `#/${s.id}`, "aria-label": t(s.labelKey), "aria-current": route.name === s.id ? "page" : "false" },
       h("span", { class: "nav-icon" }, iconSvg(s.icon, { size: 24 })), h("span", { class: "nav-text", text: navLabel(t, s) }))));
     const vol = document.getElementById("volatile-note");
     vol.hidden = !volatile;

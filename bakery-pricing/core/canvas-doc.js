@@ -27,7 +27,8 @@ export function wrapText(text, fnt, maxW, measure) {
   const out = [];
   for (const para of str(text).split("\n")) {
     let line = "";
-    for (const word of para.split(/\s+/).filter(Boolean)) {
+    // YALNIZ normal bosluk / sekme boler: bolunmez bosluklar (U+00A0, U+202F; fr/de para ve binlik ayiraci) sozcugun parcasidir.
+    for (const word of para.split(/[ \t]+/).filter(Boolean)) {
       const tryLine = line ? `${line} ${word}` : word;
       if (measure(tryLine, fnt) <= maxW) { line = tryLine; continue; }
       if (line) out.push(line);
@@ -188,11 +189,19 @@ export function layoutDoc({ doc, header = {}, mark = "", paper = "letter" }, mea
     };
     ensure(lh * 3 + S.pad * 6);
     headRow();
+    // Sayi ve kirilmaz sutun: TEK satir; genislige sigmazsa yazi o hucrede kuculur (tutar asla ortasindan bolunmez).
+    const oneLine = (c, i, text, base) => {
+      const room = widths[i] - cp * 2;
+      let size = base;
+      while (size > 14 && measure(str(text), font(size)) > room) size -= 1;
+      return { lines: [str(text)], fnt: font(size) };
+    };
     for (const r of sec.rows) {
-      const lines = cols.map((c, i) => wrapText(r[c.key], fc, widths[i] - cp * 2, measure));
+      const cells = cols.map((c, i) => (fixedCol(c) ? oneLine(c, i, r[c.key], S.body) : { lines: wrapText(r[c.key], fc, widths[i] - cp * 2, measure), fnt: fc }));
+      const lines = cells.map((x) => x.lines);
       const h = Math.max(...lines.map((l) => l.length)) * lh + S.pad * 2;
       ensure(h, headRow);
-      lines.forEach((ls, i) => ls.forEach((ln, j) => text(cols[i].num ? xs[i] + widths[i] - cp : xs[i] + cp, y + S.pad + S.body + j * lh, ln, fc, { align: cols[i].num ? "right" : "left" })));
+      lines.forEach((ls, i) => ls.forEach((ln, j) => text(cols[i].num ? xs[i] + widths[i] - cp : xs[i] + cp, y + S.pad + S.body + j * lh, ln, cells[i].fnt, { align: cols[i].num ? "right" : "left" })));
       y += h;
       rule(y, RULE, 1);
     }

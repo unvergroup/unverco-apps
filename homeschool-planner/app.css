@@ -625,14 +625,20 @@ h3 { letter-spacing: -.012em; }
 .nav-text-long { display: none; }
 @media (min-width: 1024px) { .nav-text-short { display: none; } .nav-text-long { display: inline; } }
 .item-list { grid-template-columns: minmax(0, 1fr); }
-.item-row .badge { white-space: normal; text-align: end; flex: 0 1 auto; min-inline-size: 0; max-inline-size: 45%; }
 
 /* Sekme: secili olmayan sekmede hover yalniz renk (kutu yok) ve yalniz gercek fare isaretcisinde; dokunmatikte yapisan hover secili gibi gorunmez. */
 .tab:hover { background: none; }
 @media (hover: hover) and (pointer: fine) { .tab:not([aria-selected="true"]):hover { color: var(--text); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; } }
 /* Rozetler: sure / sayi / tarih parcalari tek satir; uzun rozet yalniz parcalar arasinda sarar. */
 .badge, .count-pill, .tag { white-space: nowrap; }
-.item-row .badge { white-space: normal; }
 .item-row .badge > span { white-space: nowrap; }
 .lesson-note { font-size: var(--fs-s); color: var(--muted); font-style: italic; overflow-wrap: break-word; }
-.item-row .badge { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; column-gap: .35em; max-inline-size: 50%; }
+.item-row .badge { display: inline-flex; flex-wrap: wrap; justify-content: flex-end; column-gap: .35em; flex: none; max-inline-size: 50%; text-align: end; }
+/* Yoklama sayaci: iki parca (bu ay / okul yili), her parca tek satir; dar ekranda parcalar alt alta. */
+.att-counts { display: inline-flex; flex-wrap: wrap; column-gap: .6em; row-gap: .15em; max-inline-size: 100%; white-space: normal; }
+.att-counts > span { white-space: nowrap; }
+/* Baslik: dil secicinin sagindaki ayirac cizgi yalniz musteri logosu gorunurken (logo yokken tek basina ince cizgi kalmasin). */
+@media (min-width: 560px) {
+  .header-actions { border-inline-end: 0; padding-inline-end: 0; }
+  .header-row:has(.brand-logo:not([hidden])) .header-actions { border-inline-end: 1px solid var(--border); padding-inline-end: var(--space-3); }
+}

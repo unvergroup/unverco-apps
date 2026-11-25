@@ -128,3 +128,4 @@
 
 /* kirilmaz sutunlar (tarih, saat, durum, musteri): belge tablolarinda tek satir */
 .pl-table .nowrap { white-space: nowrap; }
+.pl-table td.num, .pl-table th.num, .rc-totals td.num { white-space: nowrap; }

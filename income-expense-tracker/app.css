@@ -607,35 +607,46 @@ h3 { letter-spacing: -.012em; }
 .mini-wrap { --sc-bg: var(--surface); }
 .doc-preview { --sc-bg: var(--paper); }
 .mini-table tbody th, .mini-table tbody td { background: transparent; }
-/* Dar ekran (<= 400 px): aylik tablo iki satirlik kartlara doner; hicbir sutun kaydirmanin arkasinda kalmaz. */
+/* Dar ekran (<= 400 px): aylik tablo kartlara doner. Ust satir: ay (sarilabilir) + net (tek satir); altinda gelir ve gider
+   AYRI satirlarda, etiket solda tutar sagda (buyuk tutarlar da ust uste binmez, kesilmez). */
 @media (max-width: 400px) {
   .mini-table, .mini-table tbody, .mini-table tfoot, .mini-table caption { display: block; }
   .mini-table thead { display: none; }
   .mini-table tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--space-3); row-gap: 2px; padding: var(--space-2) var(--space-3); border-block-end: 1px solid var(--border); }
-  .mini-table tr > * { border: 0; padding: 0; }
-  .mini-table .mt-month { grid-column: 1; grid-row: 1; }
+  .mini-table tr > * { border: 0; padding: 0; min-inline-size: 0; }
+  .mini-table .mt-month { grid-column: 1; grid-row: 1; white-space: normal; overflow-wrap: break-word; }
   .mini-table .mt-net { grid-column: 2; grid-row: 1; font-weight: 700; text-align: end; }
-  .mini-table .mt-inc, .mini-table .mt-exp { grid-row: 2; font-size: .75rem; color: var(--muted); }
-  .mini-table .mt-inc { grid-column: 1; text-align: start; }
-  .mini-table .mt-exp { grid-column: 2; text-align: end; }
-  .mini-table .mt-inc::before, .mini-table .mt-exp::before { content: attr(data-label) " "; }
+  .mini-table .mt-inc, .mini-table .mt-exp { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: var(--space-3); font-size: .75rem; color: var(--muted); text-align: end; }
+  .mini-table .mt-inc { grid-row: 2; }
+  .mini-table .mt-exp { grid-row: 3; }
+  .mini-table .mt-inc::before, .mini-table .mt-exp::before { content: attr(data-label); text-align: start; }
   .mini-table tfoot tr { background: var(--surface-2); }
 }
-/* Rapor onizlemesi: kelime sinirinda kir, tirele (html lang), tarih / tutar / tur bolunmez; dar ekranda Not sutunu gizli */
+}
+/* Rapor onizlemesi: kelime sinirinda kir, tirele (html lang), tarih / tutar / tur bolunmez */
 .doc-preview { overflow-wrap: normal; }
 .doc-preview td, .doc-preview th { overflow-wrap: break-word; hyphens: auto; }
 .doc-preview thead th { white-space: nowrap; }
 .doc-preview .nowrap, .doc-preview .num { white-space: nowrap; hyphens: none; }
-@media (max-width: 480px) {
-  .doc-preview { padding: var(--space-3); }
-  .doc-preview .rc-table { font-size: .75rem; }
-  .doc-preview th, .doc-preview td { padding: 3px 4px; }
-  .doc-preview .col-note { display: none; }
-}
+@media (max-width: 480px) { .doc-preview { padding: var(--space-3); } }
 /* Masaustu: kayit / yolculuk formu iki sutun (pencere 800 px yukseklige sigsin) */
 @media (min-width: 900px) and (min-height: 560px) {
   .dialog.form-dialog { max-inline-size: min(50rem, calc(100vw - 4rem)); }
   .form-dialog .form-group { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3) var(--space-4); align-items: start; }
   .form-dialog .form-group > legend { grid-column: 1 / -1; }
   .form-dialog .form-group + .form-group { margin-block-start: var(--space-3); }
+}
+
+/* Rapor onizlemesi: 480 px altinda tablo yerine blok duzeni (modules/ledger/print/render.js rolls) */
+.doc-preview .pv-narrow { display: none; }
+.doc-preview .pl-list { margin-block-end: var(--space-3); }
+.doc-preview .pl-item { padding-block: var(--space-2); border-block-end: 1px solid #ddd; }
+.doc-preview .pl-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); margin: 0; font-weight: 650; }
+.doc-preview .pl-main { min-inline-size: 0; overflow-wrap: break-word; hyphens: auto; }
+.doc-preview .pl-amt { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.doc-preview .pl-line { margin: 2px 0 0; font-size: .8125rem; color: #555; overflow-wrap: break-word; hyphens: auto; }
+.doc-preview .pl-total-line { margin: var(--space-2) 0 0; font-weight: 700; text-align: end; }
+@media (max-width: 480px) {
+  .doc-preview .pv-wide { display: none; }
+  .doc-preview .pv-narrow { display: block; }
 }

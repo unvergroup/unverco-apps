@@ -52,7 +52,9 @@ export async function mountReports(ctx, root, param) {
         button({ id: "report-print", label: t("report.print"), variant: "primary", glyph: "print", exportAction: true, onClick: print }),
         button({ id: "report-csv", label: id === "mileage" ? t("report.mileageCsv") : t("csv.exportPeriod"), exportAction: true, onClick: csv })),
       h("p", { class: "muted", text: t("report.printHint") }),
-      h("div", { class: "card doc-preview", id: "report-preview", "data-report": id, "data-empty": doc.empty ? "1" : "0" }, renderDoc(doc, "letter")),
+      // Onizleme iki duzende: genis ekranda tablo, 480 px altinda blok duzeni (render.js rolls; yatay kirpma / kaydirma yok). Yazdirma degismez.
+      h("div", { class: "card doc-preview", id: "report-preview", "data-report": id, "data-empty": doc.empty ? "1" : "0" },
+        h("div", { class: "pv-wide" }, renderDoc(doc, "letter")), h("div", { class: "pv-narrow" }, renderDoc(doc, "thermal80"))),
       disclaimer(ctx));
     if (focusSel) root.querySelector(focusSel)?.focus();
   };

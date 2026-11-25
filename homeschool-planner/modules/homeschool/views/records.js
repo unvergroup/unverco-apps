@@ -144,7 +144,8 @@ export async function mountRecords(ctx, root, param) {
       h("p", { class: "muted", id: "att-sick-note", text: t("hs.att.sickNote") }),
       h("div", { class: `att-cal kid-c${colorIndex(kid.color)}`, id: "att-cal", role: "group", "aria-label": t("hs.att.calendar", { name: kid.name }) }, ...weekdays, ...cells),
       h("ul", { class: "att-legend", "aria-label": t("hs.att.legend") }, ...["auto", ...ATT_KINDS].map((k) => h("li", {}, h("span", { class: `att-swatch att-${k}`, "aria-hidden": "true", text: t(`hs.att.short.${k}`) }), h("span", { text: t(`hs.att.${k}`) })))),
-      h("p", { class: "count-pill", id: "att-counts", role: "status", text: t("hs.att.counts", { month: formatNumber(monthCount), year: formatNumber(yearCount) }) }));
+      h("p", { class: "count-pill att-counts", id: "att-counts", role: "status" },
+        ...t("hs.att.counts", { month: formatNumber(monthCount), year: formatNumber(yearCount) }).split(" · ").map((part) => h("span", { text: part }))));
   }
 
   function paintGrades() {
