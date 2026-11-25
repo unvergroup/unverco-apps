@@ -1,0 +1,81 @@
+/* Income & Expense Tracker yazdirma ciktisi (raporlar): Letter ve A4. Belge #print-root icinde kurulur; yazdirirken uygulamanin geri kalani
+   gizlenir. Kagit boyutu Ayarlar'dan secilir ve body[data-paper] olarak gelir; adli sayfalar (p-letter / p-a4) boyutu belirler. Sayfa kenari 0:
+   tarayicinin ust / alt bilgisi (yerel dosya yolu) basilmasin; kenar bosluklari belgenin icinde (.page-frame) verilir. */
+@page { size: auto; margin: 0; }
+@page p-letter { size: 8.5in 11in; margin: 0 !important; }
+@page p-a4 { size: A4; margin: 0 !important; }
+@media print {
+  :root { --bg: #fff; --text: #000; --heading: #000; --muted: #444; --border: #bbb; --surface: #fff; --surface-2: #f2f2f2; }
+  html, body { background: #fff !important; color: #000 !important; }
+  body { font-size: 9.5pt; line-height: 1.35; }
+  .no-print, nav, .tabs, button, dialog, #toast-region, .banner, .actions-col, #notice-bar, #pwa-bar, .app-header, .skip-link { display: none !important; }
+  body.printing > :not(#print-root) { display: none !important; }
+  body.printing #print-root { display: block !important; }
+  .app-main { padding: 0 !important; max-inline-size: none !important; }
+  /* sayfa cercevesi: 12,7 mm kenar (yinelenen thead / tfoot bosluk satirlari + yan padding) */
+  .page-frame { --pg: 12.7mm; inline-size: 100%; border-collapse: collapse; }
+  body[data-paper="letter"] .page-frame { page: p-letter; }
+  body[data-paper="a4"] .page-frame { page: p-a4; }
+  .page-frame > thead > tr > td, .page-frame > tfoot > tr > td, .page-frame > tbody > tr > td { border: 0 !important; padding: 0; }
+  .page-frame > tbody > tr > td.page-cell { padding-inline: var(--pg); }
+  .page-frame .page-gap { block-size: var(--pg); }
+  .page-frame > tbody > tr { break-inside: auto; page-break-inside: auto; }
+  .page-frame > thead { display: table-header-group; }
+  .page-frame > tfoot { display: table-footer-group; }
+  table { inline-size: 100%; border-collapse: collapse; }
+  tr { break-inside: avoid; page-break-inside: avoid; }
+  th, td { padding: 2pt 4pt; text-align: start; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  a { color: inherit; text-decoration: none; }
+  .doc { color: #000; }
+  .doc-head { display: flex; align-items: center; gap: 10pt; border-block-end: 2.5pt solid var(--accent, #d4af37); padding-block-end: 5pt; margin-block-end: 9pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; break-inside: avoid; }
+  .doc-ident { flex: 1 1 auto; min-inline-size: 0; }
+  .doc-logo-wrap { flex: 0 0 auto; display: flex; align-items: center; }
+  .doc-logo { display: block; inline-size: auto; block-size: auto; max-block-size: 19mm; max-inline-size: 52mm; object-fit: contain; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .doc-business { font-size: 15pt; margin: 0 0 2pt; color: #000; }
+  .doc-contact p { color: #444; font-size: 8.5pt; margin: 0; }
+  .page-foot { display: flex; align-items: flex-end; justify-content: center; }
+  .doc-footmark { margin: 0; font-size: 7pt; color: #666; text-align: center; letter-spacing: .02em; white-space: nowrap; }
+  /* fis govdesi */
+  .rc-copy { break-inside: auto; }
+  .rc-copy + .rc-copy { break-before: page; page-break-before: always; }
+  .rc-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8pt; margin-block-end: 6pt; }
+  .rc-title { font-size: 12pt; font-weight: 700; margin: 0; letter-spacing: .02em; }
+  .rc-date { font-size: 9pt; margin: 0; }
+  .rc-sec { margin-block-start: 7pt; break-inside: avoid; }
+  .rc-sec > h3 { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .04em; margin: 0 0 2pt; color: #333; border-block-end: .75pt solid #888; padding-block-end: 1pt; }
+  .rc-text { margin: 0; white-space: pre-line; overflow-wrap: anywhere; }
+  .rc-table th { font-size: 8pt; border-block-end: 1pt solid #000; }
+  .rc-table td { border-block-end: .5pt solid #bbb; }
+  .rc-note { font-size: 8.5pt; color: #333; margin: 2pt 0 0; }
+  .rc-totals { margin-inline-start: auto; inline-size: 55%; }
+  .rc-totals td { border: 0; padding: 1pt 4pt; }
+  .rc-totals tr.is-total td { border-block-start: 1pt solid #000; font-weight: 700; }
+  /* 80 mm termal: tek sutun, kucuk puntolu */
+  /* 80 mm rulo: logo ustte ortali, isletme bilgisi altinda (yan yana sigmaz) */
+}
+@media print {
+  .rc-sec > h3 { break-after: avoid; page-break-after: avoid; }
+  .pl-table { table-layout: auto; }
+  .pl-table th, .pl-table td { vertical-align: top; overflow-wrap: break-word; hyphens: auto; }
+  .pl-table .num, .pl-table .nowrap, .rc-totals .num { white-space: nowrap; overflow-wrap: normal; hyphens: none; }
+  .pl-table.pl-keep, .pl-kv { break-inside: avoid; page-break-inside: avoid; }
+  .pl-table tr { break-inside: avoid; page-break-inside: avoid; }
+  .rc-sec > h3, .pl-sec > h3 { break-after: avoid; page-break-after: avoid; }
+  .pl-table thead { display: table-header-group; }
+  .pl-table th { text-align: start; }
+  .pl-table th.num, .pl-table td.num { text-align: right; }
+  .pl-table tr.pl-total th, .pl-table tr.pl-total td { border-block-start: 1pt solid #000; border-block-end: 0; font-weight: 700; }
+  .pl-kv td { border: 0; }
+  .pl-empty { font-size: 10pt; margin-block-start: 8pt; }
+  .pl-item { break-inside: avoid; page-break-inside: avoid; border-block-end: .5pt solid #888; padding-block: 3pt; }
+  .pl-head { display: flex; justify-content: space-between; gap: 6pt; margin: 0; font-weight: 700; }
+  .pl-main { min-inline-size: 0; overflow-wrap: anywhere; }
+  .pl-amt { flex: 0 0 auto; font-variant-numeric: tabular-nums; text-align: right; }
+  .pl-line { margin: 0; font-size: 8pt; color: #333; overflow-wrap: anywhere; }
+  .pl-total-line { margin: 4pt 0 0; font-weight: 700; text-align: end; overflow-wrap: anywhere; }
+}
+@media print {
+  /* uzun liste bolumu sayfaya bolunebilir (aksi halde tum tablo bir sonraki sayfaya itilir); satirlar bolunmez */
+  .rc-sec.pl-sec { break-inside: auto; page-break-inside: auto; }
+}

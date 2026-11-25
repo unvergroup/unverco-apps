@@ -1,0 +1,32 @@
+{
+  "name": "ÜNVERCO Income & Expense Tracker",
+  "short_name": "Income & Expense",
+  "description": "Income, expenses, mileage and printable profit & loss reports for freelancers and small businesses. Works offline; no data leaves your device.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a1536",
+  "theme_color": "#0a1536",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
