@@ -18,9 +18,9 @@ export const lastFour = (customer) => {
 export const signBlock = (t) => h("div", { class: "rc-sign" }, h("div", { text: t("repairs.doc.sigCustomer") }), h("div", { text: t("repairs.doc.sigReceived") }), h("div", { text: t("repairs.doc.date") }));
 
 // Test listesi: [{ key, label, value }] -> iki sutunlu liste. value: "works" | "fault" | "untestable" | null
-export function testsGrid(ctx, items, pick = (i) => i.before) {
+export function testsGrid(ctx, items, pick = (i) => i.before, cls = "rc-two") {
   const { t } = ctx.i18n;
-  return h("div", { class: "rc-two" }, items.map((i) => h("p", { class: "rc-row", text: `${t(`repairs.test.${i.key}`)}: ${pick(i) ? t(`repairs.tests.val.${pick(i)}`) : t("repairs.tests.notRecorded")}` })));
+  return h("div", { class: cls }, items.map((i) => h("p", { class: "rc-row", text: `${t(`repairs.test.${i.key}`)}: ${pick(i) ? t(`repairs.tests.val.${pick(i)}`) : t("repairs.tests.notRecorded")}` })));
 }
 
 const boxItem = (label) => h("span", { class: "rc-opt" }, h("span", { class: "rc-box" }), label);
@@ -67,8 +67,10 @@ function copy(ctx, { data, ct, shop, blank }) {
   if (job) {
     const cond = job.condition;
     const rows = AREAS.map((a) => [t(`repairs.cond.${a}`), t(`repairs.cond.val.${cond.areas[a]}`)]);
-    rows.push([t("repairs.cond.liquid"), t(`repairs.yn.${cond.liquid}`)], [t("repairs.cond.powersOn"), t(`repairs.yn.${cond.powersOn}`)], [t("repairs.cond.priorDamage"), cond.priorDamage]);
-    out.append(sec(t("repairs.cond.title"), kv(rows)));
+    rows.push([t("repairs.cond.liquid"), t(`repairs.yn.${cond.liquid}`)], [t("repairs.cond.powersOn"), t(`repairs.yn.${cond.powersOn}`)]);
+    // Durum satirlari iki sutunda (dort sutunlu izgara); onceki hasar notu uzun olabilir: tam genislikte, ayri satir (etiket seridi 1. sayfada kalsin diye sikistirilir)
+    const condKv = kv(rows); condKv.classList.add("rc-kv-2");
+    out.append(sec(t("repairs.cond.title"), condKv, cond.priorDamage ? h("p", { class: "rc-text rc-prior", text: `${t("repairs.cond.priorDamage")}: ${cond.priorDamage}` }) : null));
   } else {
     out.append(sec(t("repairs.cond.title"),
       ...AREAS.map((a) => h("p", { class: "rc-row" }, `${t(`repairs.cond.${a}`)}: `, ...["ok", "scratches", "dents", "cracked"].map((k) => boxItem(t(`repairs.cond.val.${k}`))))),
@@ -81,7 +83,7 @@ function copy(ctx, { data, ct, shop, blank }) {
     const items = job.tests.items ?? [];
     const any = items.some((i) => i.before) ;
     if (items.length || job.tests.note) {
-      const kids = [testsGrid(ctx, items)];
+      const kids = [testsGrid(ctx, items, undefined, "rc-two rc-three")];
       if (items.some((i) => i.before === "untestable")) kids.push(h("p", { class: "rc-note", text: t("repairs.doc.untestableSentence") }));
       if (job.tests.note) kids.push(h("p", { class: "rc-note", text: `${t("repairs.tests.note")}: ${job.tests.note}` }));
       if (any && ct.printPasscodeLine) kids.push(h("p", { class: "rc-note", text: t("repairs.doc.passcodeLine") }));

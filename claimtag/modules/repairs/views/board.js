@@ -126,6 +126,7 @@ export async function mountBoard(ctx, root) {
       // dar ekran: sayili sekme seridi (role=tablist); yalniz secili sutun gorunur
       if (!cols.some((c) => c.col.id === state.tab)) state.tab = cols[0].col.id;
       tabs = createTabs({ label: t("repairs.nav.board"), selected: state.tab, items: cols.map(({ col, list }) => ({ id: col.id, label: `${t(`repairs.board.col.${col.id}`)} (${list.length})` })), onSelect: (id) => { state.tab = id; paint(); const b = tabsHost.querySelector(`#tab-${id}`); b?.focus(); } });
+      tabs.element.classList.add("tabs-grid"); // dort sekme yan yana, uzun etiket satira sarilir (kesilmez / bitisik gorunmez)
       tabsHost.replaceChildren(tabs.element);
     } else tabsHost.replaceChildren();
     body.replaceChildren(...cols.filter(({ col }) => !mq.matches || col.id === state.tab).map(({ col, list }) =>

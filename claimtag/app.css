@@ -91,16 +91,16 @@ img { max-inline-size: 100%; }
 #app-title-text { overflow: hidden; text-overflow: ellipsis; }
 #home-btn { border-color: var(--border); }
 /* Dil secici: yerel <select>, kendi ok isaretiyle (CSS cizimi; dis gorsel yok) */
-.app-header .lang-select {
+.app-header select.lang-select {
   appearance: none; -webkit-appearance: none; cursor: pointer; text-align: start; max-inline-size: 11rem;
-  padding-inline: var(--space-3) 1.875rem; border-color: var(--border); background-color: transparent;
+  padding-inline: var(--space-3) 2rem; border-color: var(--border); background-color: transparent;
   background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
   background-position: calc(100% - 16px) 52%, calc(100% - 11px) 52%; background-size: 5px 5px; background-repeat: no-repeat;
   text-overflow: ellipsis; white-space: nowrap;
 }
 .app-header .lang-select:hover:not(:disabled) { background-color: var(--surface-2); }
 .app-header .lang-select:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-color: var(--focus); }
-[dir="rtl"] .app-header .lang-select { background-position: 11px 52%, 16px 52%; }
+[dir="rtl"] .app-header select.lang-select { background-position: 11px 52%, 16px 52%; }
 .lang-select option { background: var(--surface); color: var(--text); }
 .btn[hidden] { display: none; }
 /* Yon simgesi: CSS ile cizilen sivri uc; RTL'de aynalanir (metinde ok karakteri yok) */
@@ -131,6 +131,8 @@ body:has(.home-hero) { --content: 72rem; }
 .tab { min-block-size: var(--tap); min-inline-size: var(--tap); padding: 0 var(--space-4); background: none; border: 0; border-block-end: 3px solid transparent; color: var(--muted); font: inherit; font-weight: 550; cursor: pointer; white-space: nowrap; border-radius: var(--r-s) var(--r-s) 0 0; }
 .tab { flex: none; } /* kisalmasin: sigmazsa sekme cubugu kendi icinde kayar */
 @media (max-width: 560px) { .tab { padding-inline: .625rem; } }
+.tabs.tabs-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-1); overflow-x: visible; }
+.tabs-grid .tab { flex: initial; min-inline-size: 0; padding: .375rem .25rem; white-space: normal; text-align: center; font-size: .875rem; line-height: 1.2; overflow-wrap: anywhere; hyphens: auto; }
 .tab:hover { color: var(--text); background: var(--surface-2); }
 .tab[aria-selected="true"] { color: var(--text); border-block-end-color: var(--tool, var(--primary)); font-weight: 700; }
 

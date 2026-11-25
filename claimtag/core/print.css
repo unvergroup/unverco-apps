@@ -16,8 +16,8 @@
   body.printing #print-root { display: block !important; }
   .app-main { padding: 0 !important; max-inline-size: none !important; }
 
-  /* sayfa cercevesi: 12,7 mm kenar (yinelenen thead / tfoot bosluk satirlari + yan padding) */
-  .page-frame { --pg: 12.7mm; inline-size: 100%; border-collapse: collapse; }
+  /* sayfa cercevesi: 8 mm kenar (yinelenen thead / tfoot bosluk satirlari + yan padding) */
+  .page-frame { --pg: 8mm; inline-size: 100%; border-collapse: collapse; }
   body[data-paper="letter"] .page-frame { page: p-letter; }
   body[data-paper="a4"] .page-frame { page: p-a4; }
   body[data-paper="thermal80"] .page-frame { page: p-thermal; --pg: 3mm; }
@@ -46,18 +46,21 @@
   .rc-copyname { font-size: 8.5pt; font-weight: 700; border: 1pt solid #000; padding: 1pt 5pt; white-space: nowrap; }
   .rc-ticket { font-size: 20pt; font-weight: 700; margin: 2pt 0 0; line-height: 1.1; font-variant-numeric: tabular-nums; }
   .rc-date { font-size: 9pt; margin: 0; }
-  .rc-sec { margin-block-start: 7pt; break-inside: avoid; }
+  .rc-sec { margin-block-start: 4pt; break-inside: avoid; }
   .rc-sec > h3 { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .04em; margin: 0 0 2pt; color: #333; border-block-end: .75pt solid #888; padding-block-end: 1pt; }
   .rc-kv { display: grid; grid-template-columns: max-content 1fr; gap: 1pt 8pt; margin: 0; }
+  .rc-kv-2 { grid-template-columns: max-content 1fr max-content 1fr; }
+  .rc-prior { margin-block-start: 1pt; }
   .rc-kv dt { color: #444; }
   .rc-kv dd { margin: 0; overflow-wrap: anywhere; }
   .rc-text { margin: 0; white-space: pre-line; overflow-wrap: anywhere; }
   .rc-table th { font-size: 8pt; border-block-end: 1pt solid #000; }
   .rc-table td { border-block-end: .5pt solid #bbb; }
   .rc-two { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14pt; }
+  .rc-three { grid-template-columns: 1fr 1fr 1fr; gap: 0 10pt; font-size: 9pt; }
   .rc-note { font-size: 8.5pt; color: #333; margin: 2pt 0 0; }
-  .rc-terms { font-size: 8.5pt; white-space: pre-line; margin: 0; overflow-wrap: anywhere; }
-  .rc-sign { display: grid; grid-template-columns: 1fr 1fr; gap: 18pt; margin-block-start: 22pt; break-inside: avoid; }
+  .rc-terms { font-size: 7.5pt; line-height: 1.25; white-space: pre-line; margin: 0; overflow-wrap: anywhere; column-count: 2; column-gap: 12pt; }
+  .rc-sign { display: grid; grid-template-columns: 1fr 1fr 0.6fr; gap: 14pt; margin-block-start: 12pt; break-inside: avoid; }
   .rc-sign > div { border-block-start: .75pt solid #000; padding-block-start: 2pt; font-size: 8.5pt; }
   .rc-totals { margin-inline-start: auto; inline-size: 55%; }
   .rc-totals td { border: 0; padding: 1pt 4pt; }
@@ -66,7 +69,10 @@
   .rc-box { display: inline-block; inline-size: 7pt; block-size: 7pt; border: .75pt solid #000; margin-inline-end: 3pt; vertical-align: -1pt; }
 
   /* cihaz etiketi seridi: yalniz dukkan nushasinin sonunda, 45 mm */
-  .rc-strip { margin-block-start: 10pt; padding-block-start: 5pt; border-block-start: 1pt dashed #000; block-size: 45mm; break-inside: avoid; overflow: hidden; }
+  .rc-strip { margin-block-start: 6pt; padding-block-start: 4pt; border-block-start: 1pt dashed #000; min-block-size: 24mm; break-inside: avoid; overflow: hidden; display: grid; grid-template-columns: auto 1fr; gap: 0 14pt; align-items: center; }
+  .rc-strip > * { grid-column: 1 / -1; }
+  .rc-strip > .rc-strip-ticket { grid-column: 1; }
+  .rc-strip > .rc-strip-name { grid-column: 2; }
   .rc-strip-cut { font-size: 8pt; margin: 0 0 3pt; color: #333; }
   .rc-strip-ticket { font-size: 20pt; font-weight: 700; margin: 0; line-height: 1.1; }
   .rc-strip p { margin: 1pt 0; }
@@ -74,10 +80,13 @@
 
   /* 80 mm termal: tek sutun, kucuk puntolu */
   body[data-paper="thermal80"] { font-size: 8.5pt; }
+  body[data-paper="thermal80"] .rc-three { grid-template-columns: 1fr; }
+  body[data-paper="thermal80"] .rc-kv-2 { grid-template-columns: max-content 1fr; }
+  body[data-paper="thermal80"] .rc-terms { column-count: 1; }
   body[data-paper="thermal80"] .rc-two, body[data-paper="thermal80"] .rc-sign { grid-template-columns: 1fr; }
   body[data-paper="thermal80"] .rc-ticket, body[data-paper="thermal80"] .rc-strip-ticket { font-size: 16pt; }
   body[data-paper="thermal80"] .rc-totals { inline-size: 100%; }
-  body[data-paper="thermal80"] .rc-strip { block-size: auto; min-block-size: 30mm; }
+  body[data-paper="thermal80"] .rc-strip { display: block; block-size: auto; min-block-size: 30mm; }
   body[data-paper="thermal80"] .doc-business { font-size: 12pt; }
 }
 
