@@ -5,7 +5,7 @@ export default Object.freeze({
   demoLimits: Object.freeze({}),
   storagePrefix: "unvercohsp",
   fileSlug: "homeschool-planner", // indirilen dosya adlarinda kullanilir (CSV, yedek, PDF); appId ic kimliktir
-  version: "1.0.1",
+  version: "1.0.2",
   schemaVersion: 1,
   preview: false,
 });

@@ -100,7 +100,7 @@ export async function mountLibrary(ctx, root) {
         ? h("ul", { class: "item-list", id: "book-list" }, ...list.map((b) => h("li", {},
           h("button", { type: "button", class: "item-row", "data-book": b.id, on: { click: async () => { if (await openBookForm(ctx, data, { book: b })) await reload(); } } },
             h("span", { class: "item-main" }, h("strong", { text: b.title }), h("span", { class: "muted", text: [b.author, b.studentId ? N.get(b.studentId)?.name : t("hs.book.family")].filter(Boolean).join(" · ") })),
-            h("span", { class: `badge book-${b.status}`, text: b.status === "done" && b.finishedOn ? `${t("hs.book.st.done")} · ${formatDate(b.finishedOn)}` : t(`hs.book.st.${b.status}`) })))))
+            h("span", { class: `badge book-${b.status}` }, h("span", { text: t(`hs.book.st.${b.status}`) }), b.status === "done" && b.finishedOn ? h("span", { text: formatDate(b.finishedOn, { dateStyle: "short" }) }) : null)))))
         : emptyBox({ icon: "book", title: t("hs.book.emptyTitle"), text: t("hs.book.emptyText") }));
   }
 

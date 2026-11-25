@@ -92,7 +92,8 @@ export async function mountToday(ctx, root, param) {
             x.kind === "loop" ? h("span", { class: "tag tag-loop", text: t("hs.plan.loopTag") }) : null,
             x.kind === "extra" ? h("span", { class: "tag", text: t("hs.today.extraTag") }) : null,
             x.subject?.core ? h("span", { class: "tag tag-core", text: t("hs.subj.coreShort") }) : null,
-            h("span", { class: "muted", text: dur(ctx, done ? x.log.minutes : x.subject?.minutes ?? 0) }))),
+            h("span", { class: "muted", text: dur(ctx, done ? x.log.minutes : x.subject?.minutes ?? 0) })),
+          done && x.log.note ? h("span", { class: "lesson-note", text: x.log.note }) : null),
         done ? button({ id: `edit-${s.id}-${sid}`, label: t("hs.log.editShort"), ariaLabel: t("hs.log.editAria", { subject: name }), glyph: "edit", onClick: () => openLogForm(s, { log: x.log }) }) : null);
     });
     return h("section", { class: `card kid-card kid-c${colorIndex(s.color)}`, "data-kid": s.id, "aria-labelledby": `kid-h-${s.id}` },
