@@ -3,7 +3,7 @@
 // Ayni adreste (unvergroup.github.io) baska uygulamalarin onbellegine DOKUNULMAZ.
 // Strateji: once onbellek; yoksa ag (yalniz ayni kaynak). Uygulama hicbir yere veri gondermez.
 // Liste: sayfa tek dosyadir (index.html), manifest ve simgeler. Dosya eklenirse CORE listesi paketle.py'den uretilir (eksik / fazla dosya olmaz).
-const CACHE = "autolog-v1.0.1";
+const CACHE = "autolog-v1.0.2";
 const CORE = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png", "./icon-512-maskable.png", "./apple-touch-icon-180.png"];
 self.addEventListener("install", (e) => {
   // cache: "reload" -> HTTP onbellegini atla; eski dosya yeni surume girmesin.

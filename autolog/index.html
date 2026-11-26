@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ykNU/wsSv4spE3E/4JWMx5FG2izGNCKZE7RGHkg4uzM='; style-src 'sha256-0retNlahfACyzD0TlTQWM+A0zYP6GCP7+FMPHXb/6fQ='; font-src data:; img-src 'self' data: blob:; connect-src 'none'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-7y9BRvXDjUKetxZEWFABD7DtpOQQc+g0eNwEJpEm9Oo='; style-src 'sha256-0retNlahfACyzD0TlTQWM+A0zYP6GCP7+FMPHXb/6fQ='; font-src data:; img-src 'self' data: blob:; connect-src 'none'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1a5c3a">
   <meta name="color-scheme" content="light dark">
@@ -2760,7 +2760,7 @@ const __default = Object.freeze({
   mode: "full",
   demoLimits: Object.freeze({}),
   storagePrefix: "autolog",
-  version: "1.0.1",
+  version: "1.0.2",
   schemaVersion: 1,
   preview: false,
 });
@@ -4096,6 +4096,7 @@ return { BUSINESS, BUSINESS_ID, DEFAULT_ACCENT, LIMITS_BUSINESS, DEFAULT_BUSINES
 __m["core/click-guard.js"] = (function () {
 const QUIET_MS = 800;
 const NEAR_PX = 30;
+const NAV = "nav, [role=tablist], [data-nav]";
 const CONTROL = "button, a[href], summary, [role=button], [role=tab], [role=menuitem]";
 
 function controlKey(el) {
@@ -4103,9 +4104,9 @@ function controlKey(el) {
   return `${(el.tagName || "").toLowerCase()}|${a("data-action") || el.id || a("aria-label") || (el.textContent || "").trim().slice(0, 60)}`;
 }
 
-function decide(state, { x, y, key, now, rapid = false }) {
+function decide(state, { x, y, key, now, rapid = false, nav = false }) {
   const near = state && now - state.t < QUIET_MS && Math.hypot(x - state.x, y - state.y) <= NEAR_PX;
-  if (near && key !== state.key && !rapid) return { swallow: true, next: state };
+  if (near && key !== state.key && !rapid && !nav) return { swallow: true, next: state };
   return { swallow: false, next: { x, y, t: now, key } };
 }
 
@@ -4118,7 +4119,7 @@ function installClickGuard(doc = typeof document !== "undefined" ? document : nu
     if (!el || el.disabled) return;
     const dlg = el.closest("dialog");
     const scope = dlg && doc.querySelectorAll ? [...doc.querySelectorAll("dialog[open]")].indexOf(dlg) : -1;
-    const r = decide(state, { x: e.clientX, y: e.clientY, key: `${scope}:${controlKey(el)}`, now: Date.now(), rapid: Boolean(el.closest("[data-rapid]")) });
+    const r = decide(state, { x: e.clientX, y: e.clientY, key: `${scope}:${controlKey(el)}`, now: Date.now(), rapid: Boolean(el.closest("[data-rapid]")), nav: Boolean(el.closest(NAV)) });
     state = r.next;
     if (r.swallow) { e.preventDefault(); e.stopImmediatePropagation(); }
   };
