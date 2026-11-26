@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-4KZxpEovU0pZeSJ4bPaW0AQ4SB9G5Zix6bmhx7flOTc='; style-src 'sha256-kG6Mftpi+4Xh56eHkb39X+Vyt/fP9LgjbD0au5zKUkA='; font-src data:; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-+yKetL1OrNrD8VS8ylVTmE1pMOnFB46pKqJC5kRQ0OQ='; style-src 'sha256-kG6Mftpi+4Xh56eHkb39X+Vyt/fP9LgjbD0au5zKUkA='; font-src data:; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
   <meta name="robots" content="noindex, nofollow">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
@@ -4280,7 +4280,7 @@ const __default = Object.freeze({
   mode: "full",
   demoLimits: Object.freeze({}),
   storagePrefix: "unv-wb",
-  version: "1.3.4",
+  version: "1.3.5",
   schemaVersion: 1,
   preview: false,
 });
@@ -8355,7 +8355,6 @@ const __default = {
       const copy = guard(async () => {
         const number = await ctx.nextNumber(prefix(doc.type));
         const rec = await ctx.edition.add(ctx.store, DOCS, duplicateDoc(doc, { number, today: todayIso() }));
-        guard.quiet(`duplicate:${rec.id}`);
         ctx.notify(t("quotes.notify.copied", { number }), "success");
         await go("detail", { docId: rec.id });
       }, `duplicate:${doc.id}`);
