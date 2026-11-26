@@ -7,6 +7,7 @@ import { button, field, h } from "../../../core/ui.js";
 import { LOOP_MAX, MAX, MAX_COST_MINOR, MINUTES, RECORD_LIMITS, STUDENT_COLORS, parseIntText, validate } from "../logic/schema.js";
 import { loopSubjects, subjectsOf } from "../logic/calc.js";
 import { checkGroup, colorIndex, dur, errText, kidDot, kidPicker, loadAll, openForm, radioGroup, selectField, fill, emptyBox } from "./common.js";
+import { icon as iconSvg } from "../../../core/icons.js";
 
 const limitCheck = (max) => (n) => { if (n >= max) throw Object.assign(new Error("limit"), { code: "limit_reached" }); };
 
@@ -142,16 +143,22 @@ export async function mountKids(ctx, root, param) {
     const subs = subjectsOf(data, kid.id);
     const weekly = subs.filter((s) => s.mode === "weekly");
     const loop = subs.filter((s) => s.mode === "loop");
-    const row = (s) => h("li", {}, h("button", { type: "button", class: "item-row", "data-subject": s.id, on: { click: async () => { if (await openSubjectForm(ctx, data, prefs, { student: kid, subject: s })) await reload(); } } },
+    // Ders satiri: ad (+ kaynak / maliyet), gunler (haftalik) ya da Loop isareti, olagan sure, Temel etiketi, duzenle simgesi. Tum satir tiklanir (duzenleme penceresi).
+    const row = (s) => h("li", {}, h("button", { type: "button", class: "item-row sub-row", "data-subject": s.id, on: { click: async () => { if (await openSubjectForm(ctx, data, prefs, { student: kid, subject: s })) await reload(); } } },
       h("span", { class: "item-main" }, h("strong", { text: s.name }),
-        h("span", { class: "muted", text: [s.mode === "weekly" ? s.days.map((d) => t(`hs.day.${d}`)).join(" ") : t("hs.plan.loopTag"), dur(ctx, s.minutes), s.resource, s.costMinor !== null ? formatCurrency(s.costMinor) : ""].filter(Boolean).join(" · ") })),
-      s.core ? h("span", { class: "tag tag-core", text: t("hs.subj.coreShort") }) : null));
+        [s.resource, s.costMinor !== null ? formatCurrency(s.costMinor) : ""].filter(Boolean).length ? h("span", { class: "sub-res", text: [s.resource, s.costMinor !== null ? formatCurrency(s.costMinor) : ""].filter(Boolean).join(" · ") }) : null),
+      s.mode === "weekly"
+        ? h("span", { class: "sub-days" }, ...WEEK_DAYS.map((d) => h("span", { class: s.days.includes(d) ? "on" : "", "aria-hidden": s.days.includes(d) ? undefined : "true", text: t(`hs.day.${d}`) })))
+        : h("span", { class: "loop-order" }, iconSvg("repeat", { size: 16 }), h("span", { text: t("hs.plan.loopTag") })),
+      h("span", { class: "sub-min", text: dur(ctx, s.minutes) }),
+      s.core ? h("span", { class: "tag tag-core", text: t("hs.subj.coreShort") }) : h("span", { class: "tag-gap", "aria-hidden": "true" }),
+      h("span", { class: "sub-edit", "aria-hidden": "true" }, iconSvg("pencil", { size: 18 }))));
     fill(root, head,
-      kidPicker(ctx, { students: data.students, selected: sel, onPick: (id) => { sel = id; paint(); } }),
+      kidPicker(ctx, { students: data.students, selected: sel, cards: true, onPick: (id) => { sel = id; paint(); } }),
       h("section", { class: `card kid-card kid-c${colorIndex(kid.color)}`, id: "kid-detail", "data-kid": kid.id },
         h("div", { class: "kid-head" },
           h("h3", {}, h("span", { class: "kid-name" }, kidDot(kid), h("span", { text: kid.name })), kid.grade ? h("span", { class: "muted kid-grade", text: kid.grade }) : null),
-          button({ id: "kid-edit", label: t("hs.kid.editShort"), glyph: "edit", onClick: async () => { if (await openKidForm(ctx, data, kid)) await reload(); } })),
+          button({ id: "kid-edit", label: t("hs.kid.editShort"), variant: "ghost", glyph: "edit", onClick: async () => { if (await openKidForm(ctx, data, kid)) await reload(); } })),
         h("p", { class: "muted", text: t("hs.kid.loopLine", { n: kid.loopPerDay }) })),
       h("section", { class: "card stack", id: "subject-card" },
         h("div", { class: "kid-head" }, h("h3", { text: t("hs.subj.title") }),

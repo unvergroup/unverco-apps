@@ -5,16 +5,14 @@ import { button, h } from "../../../core/ui.js";
 import { AREAS, ACCESSORIES, TEST_KEYS } from "../logic/schema.js";
 import { calcJob } from "../logic/calc.js";
 import { deviceTitle } from "../views/common.js";
+import { blankDoc, intakeDoc, lastFour as lastFour4 } from "./docs.js";
 
 // ---- ortak parcalar (pickup-receipt.js de kullanir) ----
 export const sec = (title, ...kids) => h("section", { class: "rc-sec" }, title ? h("h3", { text: title }) : null, ...kids);
 export const kv = (rows) => h("dl", { class: "rc-kv" }, rows.filter(([, v]) => v !== "" && v !== null && v !== undefined).flatMap(([k, v]) => [h("dt", { text: k }), h("dd", { text: v })]));
 export const blankLine = () => h("span", { class: "rc-line" });
 export const writeLines = (n) => Array.from({ length: n }, () => h("div", { class: "rc-writeline" }));
-export const lastFour = (customer) => {
-  const d = String(customer?.phoneDigits || customer?.phone || "").replace(/\D/g, "");
-  return d ? `…${d.slice(-4)}` : "";
-};
+export const lastFour = lastFour4;
 export const signBlock = (t) => h("div", { class: "rc-sign" }, h("div", { text: t("repairs.doc.sigCustomer") }), h("div", { text: t("repairs.doc.sigReceived") }), h("div", { text: t("repairs.doc.date") }));
 
 // Test listesi: [{ key, label, value }] -> iki sutunlu liste. value: "works" | "fault" | "untestable" | null
@@ -135,7 +133,7 @@ export function buildBlank(ctx, kind, ct) {
 
 export async function printIntake(ctx, data) {
   const ct = await ctx.ct.get();
-  await ctx.print({ title: data.job.number, node: buildIntake(ctx, data, ct), paper: ct.paper });
+  await ctx.print({ title: data.job.number, node: buildIntake(ctx, data, ct), paper: ct.paper, doc: intakeDoc(ctx, data, ct) });
 }
 
 // Bos form: once liste secilir ("Phone / tablet" ya da "Computer"), sonra basilir.
@@ -157,6 +155,6 @@ export function printBlankForm(ctx) {
   }).then(async (kind) => {
     if (!kind) return;
     const ct = await ctx.ct.get();
-    await ctx.print({ title: t("repairs.top.blankForm"), node: buildBlank(ctx, kind, ct), paper: ct.paper });
+    await ctx.print({ title: t("repairs.top.blankForm"), node: buildBlank(ctx, kind, ct), paper: ct.paper, doc: blankDoc(ctx, kind, ct) });
   });
 }

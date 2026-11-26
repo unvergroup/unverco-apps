@@ -1,5 +1,5 @@
 // Homeschool Planner uygulama baslangici: depo, ayarlar, dil, hash yonlendirici (#/today[/<tarih>], #/plan, #/records, #/library, #/kids[/<id>], #/settings),
-// alt gezinme cubugu (6 simge), dil degistirme, yedek hatirlatma seridi, PWA kurulum / guncelleme bildirimleri.
+// kabuk (masaustu: sol menu 5 ekran + Ayarlar, dil ve tema altta; telefon: ust cubuk dil / tema / Ayarlar, alt gezinme 5 ekran), dil ve tema degistirme, yedek hatirlatma seridi, PWA kurulum / guncelleme bildirimleri.
 // Kabuk ile ekranlar arasindaki sozlesme ctx nesnesidir (store, i18n, money, prefs (okul yili), business, notify, confirm, print, navigate...).
 import config from "./config.js";
 import { StoreError, createDefaultAdapter, createStore } from "./core/store.js";
@@ -18,7 +18,7 @@ import { initPwa } from "./core/pwa.js";
 import { errorKey } from "./core/safe.js";
 import { createSync } from "./core/sync.js";
 import { keyOf, parseRoute } from "./core/route.js";
-import { applyBrand, button, clearToasts, confirmDialog, h, toast } from "./core/ui.js";
+import { button, clearToasts, confirmDialog, h, toast } from "./core/ui.js";
 import { mountToday } from "./modules/homeschool/views/today.js";
 import { mountPlan } from "./modules/homeschool/views/plan.js";
 import { mountRecords } from "./modules/homeschool/views/records.js";
@@ -49,7 +49,6 @@ const safeLocalStorage = () => {
 };
 
 async function main() {
-  applyBrand();
   const ns = storageNamespace(config);
   const settingsKey = `${ns}:settings`;
   const ls = safeLocalStorage();
@@ -163,7 +162,13 @@ async function main() {
   const langSel = document.getElementById("lang-select");
   for (const l of LANGS) langSel.append(h("option", { value: l, lang: l, text: LANG_NAMES[l] })); // her dil kendi adiyla
   langSel.onchange = () => ctx.updateSettings(applyLanguage(ctx.settings, langSel.value)); // para birimi DEGISMEZ
+  document.getElementById("lang-ico").append(iconSvg("globe", { size: 20 }));
   const nav = document.getElementById("main-nav");
+  const themeBtn = document.getElementById("theme-toggle");
+  // Gorunen tema: "system" ayari cihazin tercihine gore. Dugme TEK dokunusla acik <-> koyu degistirir (Ayarlar'daki tema secicisiyle ayni ayar anahtari).
+  const effectiveTheme = () => (ctx.settings.theme === "system" ? (globalThis.matchMedia && globalThis.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : ctx.settings.theme);
+  try { globalThis.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => paintChrome()); } catch { /* eski tarayici: cihaz temasi degisince dugme bir sonraki cizimde guncellenir */ }
+  themeBtn.onclick = () => ctx.updateSettings({ ...ctx.settings, theme: effectiveTheme() === "dark" ? "light" : "dark" });
 
   const paintChrome = () => {
     const { t, lang } = ctx.i18n;
@@ -174,9 +179,15 @@ async function main() {
     langSel.value = lang;
     langSel.setAttribute("aria-label", t("settings.language"));
     nav.setAttribute("aria-label", t("nav.menu"));
-    nav.replaceChildren(...NAV.map((s) => h("a", { class: "nav-link", id: `nav-${s.id}`, href: `#/${s.id}`, "aria-current": route.name === s.id ? "page" : "false" },
-      h("span", { class: "nav-icon" }, iconSvg(s.icon, { size: 24 })),
+    nav.replaceChildren(...NAV.map((s) => h("a", { class: "nav-link", id: `nav-${s.id}`, href: `#/${s.id}`, "aria-current": route.name === s.id ? "page" : "false", "aria-label": s.id === "settings" ? t(s.labelKey) : undefined },
+      h("span", { class: "nav-icon" }, iconSvg(s.icon, { size: 20 })),
       h("span", { class: "nav-text nav-text-short", text: navLabel(t, s) }), h("span", { class: "nav-text nav-text-long", text: t(s.labelKey) }))));
+    const toDark = effectiveTheme() !== "dark"; // dugme gidilecek temayi gosterir (acikken Dark / koyuyken Light)
+    const target = t(toDark ? "settings.theme.dark" : "settings.theme.light");
+    const themeLabel = `${t("settings.theme")}: ${target}`;
+    themeBtn.replaceChildren(iconSvg(toDark ? "moon" : "sun", { size: 20 }), h("span", { class: "theme-text", text: target }));
+    themeBtn.setAttribute("aria-label", themeLabel);
+    themeBtn.title = themeLabel;
     const vol = document.getElementById("volatile-note");
     vol.hidden = !volatile;
     vol.textContent = t("storage.volatile");

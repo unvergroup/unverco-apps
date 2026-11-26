@@ -3,9 +3,12 @@
 // shows) and a scaled preview in the panel. Both come from the same builders, so what is measured is what is printed.
 // Slots: [data-slot="changes"] holds the "Changes since printed" panel (print-diff.js, Sign and Place cards); [data-slot="caterer"] holds
 // the options of the caterer sheet (print-caterer.js; hidden for the other outputs).
+// iPhone / iPad Home Screen app: window.print() does nothing there, so the same printouts are laid out as a PDF (print-pdf.js) and given to
+// the share sheet (core/canvas-doc.js); the user taps Print there. Computers, Android and Safari tabs keep window.print().
 // Writes go through store.transact (savePlan, prints). Text: messages.js guests.print.*. User text only via h() / textContent.
-import { button, confirmDialog, field, h, nextId, select } from "../../core/ui.js";
-import { isStandalone, printDocument } from "../../core/print.js";
+import { button, field, h, nextId, select } from "../../core/ui.js";
+import { needsFileDelivery, printDocument } from "../../core/print.js";
+import { deliverPdf, layoutToPdf } from "../../core/canvas-doc.js";
 import { liveMealId, PLAN_DEFAULTS } from "./logic/schema.js";
 import { resolveCard } from "./logic/cardlayout.js";
 import { catererSheet, missingMeals } from "./logic/counts.js";
@@ -18,6 +21,7 @@ import { buildCaterer, DOC_PAGE, tablesCount } from "./print-caterer.js";
 import { barMmFor, buildSheets, buildTestSheets, fitSheets, fontsReady } from "./print-cards.js";
 import { createChangesPanel } from "./print-diff.js";
 import { buildSign, judgeSign, signGroupsOf, SIGN_PAGE, SIGN_SIZES } from "./print-sign.js";
+import { fitSign, layoutCards, layoutCaterer, layoutTestSheet } from "./print-pdf.js";
 
 export const ROOT_ID = "print-root";
 const OUTPUTS = ["sign", "cards", "caterer"];
@@ -66,7 +70,7 @@ export async function renderPrint(root, env, params = {}) {
     // Nothing seated but guests attending: only the caterer sheet can be printed.
     output: !seated() ? "caterer" : params.section === "cards" || params.section === "cardsChanges" ? "cards" : params.section === "changes" ? "sign" : params.section === "caterer" ? "caterer" : OUTPUTS.includes(lastOutput) ? lastOutput : "sign",
     runId: 0, timer: null, mode: "main", main: [], pending: null, after: null,
-    blocked: false, invalid: new Set(), align: null, prints: await store.list("prints"), changes: null, reprint: [],
+    blocked: false, invalid: new Set(), align: null, signFit: null, cardSizes: null, pdfBusy: false, prints: await store.list("prints"), changes: null, reprint: [],
   };
   const demoText = edition.isDemo ? t("guests.print.demo") : null;
   const tableLabel = (n) => t("guests.table.n", { n });
@@ -156,6 +160,7 @@ export async function renderPrint(root, env, params = {}) {
           button({ label: t("guests.print.switch"), onClick: () => { board24.checked = true; save({ signSize: "24x36" }); } }));
       } else if (v.code === "tooSmall") warnHolder.append(h("p", { class: "field-hint", text: t("guests.print.split") }));
     }
+    S.signFit = { body: res.body ?? 6, cols: res.cols };
     printRoot.dataset.body = String(res.body);
     printRoot.dataset.cols = String(res.cols);
   }
@@ -181,6 +186,7 @@ export async function renderPrint(root, env, params = {}) {
     const fit = fitSheets(built.sheets, spec);
     printRoot.classList.remove("is-measuring");
     S.main = built.sheets;
+    S.cardSizes = fit.sizes;
     S.blocked = false;
     printRoot.dataset.tooLong = String(fit.tooLong.length);
     printRoot.dataset.estimate = String(fit.estimate.length);
@@ -280,24 +286,67 @@ export async function renderPrint(root, env, params = {}) {
   const btnTest = button({ label: t("guests.print.act.test"), onClick: () => doPrint("test") });
   function syncButtons() {
     const busy = layoutEl.dataset.state !== "ready";
-    btnPrint.disabled = busy || S.blocked || S.invalid.size > 0;
+    btnPrint.disabled = busy || S.pdfBusy || S.blocked || S.invalid.size > 0;
     btnMark.disabled = busy || S.blocked || S.invalid.size > 0;
-    btnTest.disabled = busy;
+    btnTest.disabled = busy || S.pdfBusy;
     if (S.changes) S.changes.setBusy(busy || S.blocked || S.invalid.size > 0);
+  }
+
+  const docTitle = (kind) => (kind === "test" ? t("guests.print.doc.test") : kind === "changed" ? t("guests.print.doc.changed")
+    : S.output === "sign" ? `${t("guests.print.doc.sign")} (${t(`guests.print.size.${plan.signSize}`)})` : S.output === "caterer" ? t("guests.print.doc.caterer") : t("guests.print.doc.cards"));
+
+  // What was just printed (or handed to the share sheet): the "Mark as printed" offer and the alignment step, same as after the print dialog.
+  const afterPrinted = (kind) => {
+    if ((kind === "main" || kind === "changed") && S.output !== "caterer") { S.after = S.output; drawAfter(); }
+    if (kind === "test" && S.align) S.align.testPrinted();
+  };
+
+  // The page layout of one printout for the PDF path (print-pdf.js; the measure function is the canvas of the phone).
+  function pdfLayout(kind, ids) {
+    const locale = ctx.i18n.locale;
+    const off = { x: plan.offX100, y: plan.offY100 };
+    if (S.output === "sign" && kind === "main") {
+      const o = { size: plan.signSize, title: plan.signTitle, couple: plan.coupleNames, date: plan.eventDate, groups: signGroupsOf(data.guests, data.tables),
+        tableLabel, unnamed, demoText, body: S.signFit?.body ?? 18, cols: S.signFit?.cols ?? 3 };
+      return (measure) => fitSign(o, measure);
+    }
+    if (S.output === "caterer" && kind === "main") {
+      const o = { paper: docPaper(), couple: plan.coupleNames, date: plan.eventDate, printed: t("guests.print.caterer.printed", { date: ctx.i18n.formatDate(now()) }),
+        sheet: catererSheet(data.guests, data.tables, data.meals), t, tableLabel, demoText };
+      return (measure) => layoutCaterer(o, measure);
+    }
+    if (kind === "test") {
+      const o = { spec: cardSpec(), off, t, layoutName: cardName(t, plan), meals: data.meals.map((m) => ({ label: m.label, slot: m.slot })), nudge: off, demoText, locale };
+      return (measure) => layoutTestSheet(o, measure);
+    }
+    const want = kind === "changed" ? new Set(ids) : null;
+    const all = cardEntries();
+    const entries = want ? all.filter((e) => want.has(e.id)) : all;
+    const o = { spec: cardSpec(), off, entries, sizes: want ? undefined : S.cardSizes ?? undefined, showMeal: plan.showMealOnCards, tableLabel, unnamed, demoText, locale };
+    return (measure) => layoutCards(o, measure);
+  }
+
+  // iPhone Home Screen app: lay the printout out as a PDF (actual size, cut marks and nudge included) and open the share sheet.
+  async function pdfPrint(kind, ids) {
+    if (S.pdfBusy) return;
+    S.pdfBusy = true;
+    syncButtons();
+    try {
+      await fontsReady();
+      const title = docTitle(kind);
+      const bytes = await layoutToPdf(pdfLayout(kind, ids), { title });
+      const result = await deliverPdf({ bytes, filename: title.replace(/[\\/:*?"<>|]+/g, "-"), title });
+      if (result === "downloaded") ctx.notify(t("guests.print.ios.saved"), "info");
+      if (result !== "cancelled" && live()) afterPrinted(kind);
+    } catch (e) { ctx.fail(e); } finally { S.pdfBusy = false; if (live()) syncButtons(); }
   }
 
   // kind: "main" | "test" | "changed" (ids = the guests of the changed-only print)
   function doPrint(kind, ids) {
-    // iPhone Home Screen app: the print window cannot open (iOS limit). Explain the way round instead of doing nothing.
-    if (isStandalone()) {
-      confirmDialog({ title: t("guests.print.ios.title"), message: t("guests.print.ios.text"), confirmLabel: t("common.close"), infoOnly: true });
-      return;
-    }
+    if (needsFileDelivery()) { pdfPrint(kind, ids); return; }
     if (kind === "test") prepareTest(); else if (kind === "changed") prepareChanged(ids); else showMain();
     S.pending = kind;
-    const title = kind === "test" ? t("guests.print.doc.test") : kind === "changed" ? t("guests.print.doc.changed")
-      : S.output === "sign" ? `${t("guests.print.doc.sign")} (${t(`guests.print.size.${plan.signSize}`)})` : S.output === "caterer" ? t("guests.print.doc.caterer") : t("guests.print.doc.cards");
-    printDocument({ title });
+    printDocument({ title: docTitle(kind) });
   }
 
   const onAfter = () => {
@@ -305,8 +354,7 @@ export async function renderPrint(root, env, params = {}) {
     const kind = S.pending;
     S.pending = null;
     showMain();
-    if ((kind === "main" || kind === "changed") && S.output !== "caterer") { S.after = S.output; drawAfter(); }
-    if (kind === "test" && S.align) S.align.testPrinted();
+    afterPrinted(kind);
   };
   const onBefore = () => { if (live() && !S.pending && S.mode !== "main") showMain(); };
   window.addEventListener("afterprint", onAfter);
@@ -440,7 +488,7 @@ export async function renderPrint(root, env, params = {}) {
   function drawControls() {
     const bar = h("div", { class: "print-actions print-actions-bar" }, btnPrint, btnMark, btnTest);
     controls.replaceChildren(...[picker, seated() ? null : h("p", { class: "field-hint", text: t("guests.print.needSeats") }), optionsHolder, catererSlot, afterHolder,
-      bar, h("p", { class: "field-hint", text: t("guests.print.browserNote") })].filter(Boolean));
+      bar, h("p", { class: "field-hint", text: t(needsFileDelivery() ? "guests.print.ios.hint" : "guests.print.browserNote") })].filter(Boolean));
     drawOptions();
     watchBar(bar);
   }

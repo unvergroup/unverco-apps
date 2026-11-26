@@ -1,7 +1,7 @@
 // Cevrimdisi onbellek. Surum numarasi config.js ile ayni olmali.
 // Strateji: once onbellek; yoksa ag; yalniz ayni kaynak (origin) GET istekleri. Uygulama hicbir yere veri gondermez.
 const PRODUCT = "claimtag";
-const VERSION = "1.0.1";
+const VERSION = "1.0.2";
 const CACHE = PRODUCT + "-v" + VERSION;
 const PRECACHE = [
   "./",
@@ -13,6 +13,7 @@ const PRECACHE = [
   "core/backup.js",
   "core/boot-file.js",
   "core/business.js",
+  "core/canvas-doc.js",
   "core/click-guard.js",
   "core/data-actions.js",
   "core/dates.js",
@@ -22,6 +23,7 @@ const PRECACHE = [
   "core/line-items.js",
   "core/money.js",
   "core/number-input.js",
+  "core/pdf.js",
   "core/print.css",
   "core/print.js",
   "core/pwa.js",
@@ -44,6 +46,7 @@ const PRECACHE = [
   "modules/repairs/logic/search.js",
   "modules/repairs/logic/status.js",
   "modules/repairs/logic/templates.js",
+  "modules/repairs/print/docs.js",
   "modules/repairs/print/pickup-receipt.js",
   "modules/repairs/print/receipt.js",
   "modules/repairs/views/board.js",

@@ -390,6 +390,13 @@ export default {
   "hs.license.grant": "Für die private Nutzung und innerhalb deiner Familie oder Klasse, auf beliebig vielen eigenen Geräten.",
   "hs.license.resale": "Weiterverkauf, Weitergabe oder Verbreitung der App-Datei oder ihres Codes ist nicht erlaubt.",
   "hs.license.warranty": "Die App wird 'wie besehen' ohne Gewähr bereitgestellt. ÜNVERCO haftet nicht für verlorene Daten; erstelle eigene Sicherungen.",
-  "hs.license.product": "Dieses Produkt enthält keine Schriften oder Skripte Dritter. Symbole und Grafiken sind eigene Werke.",
-  "hs.about.trademarks": "ÜNVERCO ist eine eingetragene Marke. Andere Namen gehören ihren Inhabern."
+  "hs.license.product": "Dieses Produkt enthält die Schrift Inter (SIL Open Font License 1.1) und Lucide-Symbole (ISC-Lizenz), beide in der Datei eingebettet. Es wird nichts aus dem Internet geladen. Alle übrigen Grafiken sind eigene Werke.",
+  "hs.about.trademarks": "ÜNVERCO ist eine eingetragene Marke. Andere Namen gehören ihren Inhabern.",
+  "hs.how.label": "So funktioniert es",
+  "hs.how.1.t": "Kind hinzufügen",
+  "hs.how.1.d": "Name, Farbe und Klasse.",
+  "hs.how.2.t": "Fach hinzufügen",
+  "hs.how.2.d": "Wochenstunden oder die Rotation.",
+  "hs.how.3.t": "Heute",
+  "hs.how.3.d": "Tippe auf Erledigt. Die Zeit wird erfasst."
 };

@@ -5,6 +5,7 @@ import { button, h } from "../../../core/ui.js";
 import { loopSubjects, nextLoopId, weekPlan } from "../logic/calc.js";
 import { printWeek } from "../print/screens.js";
 import { colorIndex, dur, kidDot, kidPicker, loadAll, noKids, fill } from "./common.js";
+import { icon as iconSvg } from "../../../core/icons.js";
 
 export async function mountPlan(ctx, root, param) {
   const { t, formatDate } = ctx.i18n;
@@ -32,21 +33,28 @@ export async function mountPlan(ctx, root, param) {
     } catch (e) { ctx.fail(e); } finally { busy = false; }
   };
 
+  // Gun sutunlari (masaustunde yan yana, telefonda alt alta); sutun sayisi CSS degiskeni --n (CSSOM, CSP'ye uygun).
+  function weekGrid(kid, days) {
+    const grid = h("div", { class: "week-grid", id: `week-${kid.id}` }, ...days.map((d) => h("div", { class: `week-day${d.date === today ? " is-today" : ""}`, "data-date": d.date },
+      h("h4", { text: formatDate(d.date, { weekday: "short", day: "numeric" }) }),
+      h("ul", {}, ...d.weekly.map((s) => h("li", { text: s.name })), ...d.loop.map((s) => h("li", { class: "is-loop" }, h("span", { text: s.name }), h("span", { class: "loop-ico", role: "img", "aria-label": t("hs.plan.loopTag"), title: t("hs.plan.loopTag") }, iconSvg("repeat", { size: 14 }))))),
+      !d.weekly.length && !d.loop.length ? h("p", { class: "muted", text: "—" }) : null)));
+    grid.style.setProperty("--n", String(Math.min(7, days.length)));
+    return grid;
+  }
+
   function kidWeek(kid) {
     const days = weekPlan(data, kid, monday, prefs).filter((d) => d.school || d.weekly.length);
     const loop = loopSubjects(data, kid.id);
     const next = nextLoopId(data, kid, today);
     return h("section", { class: `card kid-card kid-c${colorIndex(kid.color)}`, "data-kid": kid.id },
       h("div", { class: "kid-head" }, h("h3", {}, h("span", { class: "kid-name" }, kidDot(kid), h("span", { text: kid.name })), kid.grade ? h("span", { class: "muted kid-grade", text: kid.grade }) : null),
-        h("a", { class: "btn", href: `#/kids/${encodeURIComponent(kid.id)}`, id: `plan-edit-${kid.id}`, text: t("hs.plan.editSubjects") })),
+        h("a", { class: "btn btn-ghost", href: `#/kids/${encodeURIComponent(kid.id)}`, id: `plan-edit-${kid.id}` }, iconSvg("pencil", { size: 18, sw: 2 }), h("span", { text: t("hs.plan.editSubjects") }))),
       days.length
-        ? h("div", { class: "week-grid", id: `week-${kid.id}` }, ...days.map((d) => h("div", { class: `week-day${d.date === today ? " is-today" : ""}`, "data-date": d.date },
-          h("h4", { text: formatDate(d.date, { weekday: "short", day: "numeric" }) }),
-          h("ul", {}, ...d.weekly.map((s) => h("li", { text: s.name })), ...d.loop.map((s) => h("li", { class: "is-loop" }, h("span", { class: "tag tag-loop", text: t("hs.plan.loopTag") }), " ", s.name))),
-          !d.weekly.length && !d.loop.length ? h("p", { class: "muted", text: "—" }) : null)))
-        : h("p", { class: "muted", text: t("hs.plan.noSchoolDays") }),
-      h("h4", { text: t("hs.plan.loopOrder") }),
-      h("p", { class: "muted", text: loop.length ? t("hs.plan.loopHint", { n: kid.loopPerDay }) : t("hs.plan.loopEmpty") }),
+        ? weekGrid(kid, days)
+        : h("p", { class: "muted pad", text: t("hs.plan.noSchoolDays") }),
+      h("div", { class: "loop-head" }, h("h4", { text: t("hs.plan.loopOrder") }),
+        h("p", { class: "muted", text: loop.length ? t("hs.plan.loopHint", { n: kid.loopPerDay }) : t("hs.plan.loopEmpty") })),
       loop.length ? h("ol", { class: "loop-list", id: `loop-${kid.id}` }, ...loop.map((s, i) => h("li", { "data-subject": s.id, class: s.id === next ? "is-next" : undefined },
         h("span", { class: "loop-name" }, h("span", { text: s.name }), s.id === next ? h("span", { class: "tag tag-next", text: t("hs.plan.next") }) : null, h("span", { class: "muted", text: dur(ctx, s.minutes) })),
         h("span", { class: "loop-move" },
@@ -62,9 +70,9 @@ export async function mountPlan(ctx, root, param) {
     fill(root, head,
       kidPicker(ctx, { students: data.students, selected: sel, allLabel: t("hs.allKids"), onPick: (id) => { sel = id; paint(); } }),
       h("div", { class: "row toolbar" },
-        button({ id: "plan-prev", icon: "prev", label: t("hs.plan.prevWeek"), onClick: () => { monday = addDays(monday, -7); paint(); } }),
+        button({ id: "plan-prev", icon: "prev", label: "", ariaLabel: t("hs.plan.prevWeek"), onClick: () => { monday = addDays(monday, -7); paint(); } }),
         button({ id: "plan-this", label: t("hs.plan.thisWeek"), onClick: () => { monday = startOfWeek(today, 0); paint(); } }),
-        button({ id: "plan-next", icon: "next", label: t("hs.plan.nextWeek"), onClick: () => { monday = addDays(monday, 7); paint(); } }),
+        button({ id: "plan-next", icon: "next", label: "", ariaLabel: t("hs.plan.nextWeek"), onClick: () => { monday = addDays(monday, 7); paint(); } }),
         button({ id: "plan-print", label: t("hs.plan.print"), glyph: "print", variant: "primary", exportAction: true, onClick: () => printWeek(ctx, { data, prefs, students: kids, monday }) })),
       ...kids.map(kidWeek));
   }

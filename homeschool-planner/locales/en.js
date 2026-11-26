@@ -390,6 +390,13 @@ export default {
   "hs.license.grant": "For personal use and use within your own family or classroom, on any number of your own devices.",
   "hs.license.resale": "Reselling, sharing or redistributing the app file or its code is not allowed.",
   "hs.license.warranty": "The app is provided 'as is', without warranty. ÜNVERCO is not liable for lost data; keep your own backups.",
-  "hs.license.product": "This product contains no third-party fonts or scripts. Icons and artwork are original.",
-  "hs.about.trademarks": "ÜNVERCO is a registered trademark. Other names belong to their owners."
+  "hs.license.product": "This product includes the Inter font (SIL Open Font License 1.1) and Lucide icons (ISC License), both built into the file. Nothing is loaded from the internet. Other artwork is original.",
+  "hs.about.trademarks": "ÜNVERCO is a registered trademark. Other names belong to their owners.",
+  "hs.how.label": "How it works",
+  "hs.how.1.t": "Add a child",
+  "hs.how.1.d": "Name, color and grade.",
+  "hs.how.2.t": "Add a subject",
+  "hs.how.2.d": "Weekly lessons or the loop.",
+  "hs.how.3.t": "Today",
+  "hs.how.3.d": "Tap Done. Time is logged."
 };

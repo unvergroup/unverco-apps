@@ -390,6 +390,13 @@ export default {
   "hs.license.grant": "Pour un usage personnel et au sein de votre famille ou de votre classe, sur tous vos appareils.",
   "hs.license.resale": "Il est interdit de revendre, partager ou redistribuer le fichier de l'application ou son code.",
   "hs.license.warranty": "L'application est fournie 'en l'état', sans garantie. ÜNVERCO n'est pas responsable des données perdues ; gardez vos sauvegardes.",
-  "hs.license.product": "Ce produit ne contient aucune police ni script tiers. Icônes et visuels sont originaux.",
-  "hs.about.trademarks": "ÜNVERCO est une marque déposée. Les autres noms appartiennent à leurs propriétaires."
+  "hs.license.product": "Ce produit inclut la police Inter (SIL Open Font License 1.1) et les icônes Lucide (licence ISC), toutes deux intégrées au fichier. Rien n'est chargé depuis internet. Les autres visuels sont originaux.",
+  "hs.about.trademarks": "ÜNVERCO est une marque déposée. Les autres noms appartiennent à leurs propriétaires.",
+  "hs.how.label": "Comment ça marche",
+  "hs.how.1.t": "Ajoutez un enfant",
+  "hs.how.1.d": "Nom, couleur et classe.",
+  "hs.how.2.t": "Ajoutez une matière",
+  "hs.how.2.d": "Cours hebdomadaires ou la boucle.",
+  "hs.how.3.t": "Aujourd'hui",
+  "hs.how.3.d": "Touchez Fait. Le temps est enregistré."
 };

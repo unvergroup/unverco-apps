@@ -9,8 +9,9 @@ export function printDocument({ title, win = globalThis.window, doc = globalThis
   }
 }
 
-// iPhone / iPad Home Screen app (navigator.standalone === true): window.print() does nothing there, silently. Callers show
-// an explanation window instead. Ordinary browsers and computers never take this path.
-export function isStandalone(win = globalThis.window) {
+// iPhone / iPad Home Screen app (navigator.standalone === true): window.print() does nothing there, silently. Every printout of the app
+// is laid out as a PDF instead and handed to the share sheet (core/canvas-doc.js: canvas -> JPEG -> PDF -> navigator.share), where the
+// user taps "Print". Ordinary browsers and computers never take this path: they keep window.print().
+export function needsFileDelivery(win = globalThis.window) {
   return Boolean(win && win.navigator && win.navigator.standalone === true);
 }

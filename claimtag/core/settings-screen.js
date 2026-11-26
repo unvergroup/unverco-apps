@@ -134,7 +134,7 @@ export async function renderSettings(container, ctx) {
   const passcode = h("input", { type: "checkbox", id: "set-passcode", checked: ct.printPasscodeLine });
   const printing = section({
     id: "set-printing", title: t("repairs.set.printing"),
-    fields: [{ element: paper.element, f: paper, key: "paper", check: () => ({ ok: true, value: paper.input.value }), setError() {} }, { element: h("div", { class: "field" }, h("label", { class: "check", for: "set-passcode" }, passcode, t("repairs.set.passcodeLine")), h("p", { class: "field-hint", text: t("repairs.set.passcodeLineNote") })) }],
+    fields: [{ element: paper.element, f: paper, key: "paper", check: () => ({ ok: true, value: paper.input.value }), setError() {} }, { element: h("p", { class: "field-hint", id: "set-print-hint", text: t("print.phoneHint") }) }, { element: h("div", { class: "field" }, h("label", { class: "check", for: "set-passcode" }, passcode, t("repairs.set.passcodeLine")), h("p", { class: "field-hint", text: t("repairs.set.passcodeLineNote") })) }],
     onSave: (p) => ctx.ct.save({ ...p, printPasscodeLine: passcode.checked }),
   });
 

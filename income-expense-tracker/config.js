@@ -5,7 +5,7 @@ export default Object.freeze({
   demoLimits: Object.freeze({}),
   storagePrefix: "unvercoiet",
   fileSlug: "income-expense-tracker", // indirilen dosya adlarinda kullanilir (CSV, yedek, PDF); appId ic kimliktir
-  version: "1.0.2",
+  version: "1.0.3",
   schemaVersion: 1,
   preview: false,
 });

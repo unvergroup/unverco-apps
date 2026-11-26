@@ -1,6 +1,6 @@
 // Cevrimdisi onbellek (telefon surumu). Onbellek adi: urun + surum; yalniz kendi onekli eski onbellekleri siler.
 const PRODUCT = "unv-wb";
-const VERSION = "1.3.5";
+const VERSION = "1.3.6";
 const CACHE = PRODUCT + "-v" + VERSION;
 const PRECACHE = [
   "./",

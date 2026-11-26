@@ -43,7 +43,7 @@ export function wrapPageFrame(content) {
 
 let cleanupPrev = null;
 
-// iPhone / iPad ana ekran uygulamasi: window.print() orada sessizce hicbir sey yapmaz (iOS siniri); app.js yerine aciklayici pencere gosterir.
+// iPhone / iPad ana ekran uygulamasi: window.print() orada sessizce hicbir sey yapmaz (iOS siniri); app.js belgeyi PDF yapip paylasim sayfasina verir (core/canvas-doc.js).
 export const isStandaloneApp = (nav = globalThis.navigator) => Boolean(nav) && nav.standalone === true;
 
 export const PAPER_IDS = Object.freeze(["letter", "a4", "thermal80"]);

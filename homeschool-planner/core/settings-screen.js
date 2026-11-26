@@ -11,6 +11,7 @@ import { currencyDigits } from "./money.js";
 import { guardWrite } from "./safe.js";
 import { todayIso } from "./dates.js";
 import { button, confirmDialog, field, focusFirstInvalid, h, nextId, select } from "./ui.js";
+import { icon as iconSvg } from "./icons.js";
 import { DATA_COLLECTIONS, RECORD_LIMITS } from "../modules/homeschool/logic/schema.js";
 import { buildSample } from "../modules/homeschool/logic/sample.js";
 import { attendanceCsv, hoursCsv } from "../modules/homeschool/logic/csv.js";
@@ -63,7 +64,7 @@ export async function renderSettings(container, ctx) {
   const autoBox = h("input", { type: "checkbox", id: "set-auto-att", checked: pref.autoAttendance });
   const year = section({
     id: "set-year", title: t("hs.year.title"),
-    intro: [h("p", { class: "legal-note", id: "set-legal", role: "note", text: t("hs.legal") })],
+    intro: [h("p", { class: "legal-note", id: "set-legal", role: "note" }, iconSvg("info", { size: 20 }), h("span", { text: t("hs.legal") }))],
     fields: [
       { f: yName, check: () => ({ ok: true, value: { yearName: yName.input.value } }) },
       { f: yStart, check: () => { const r = checkYear(yStart.input.value, yEnd.input.value); yEnd.setError(""); return r; } },

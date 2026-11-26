@@ -390,6 +390,13 @@ export default {
   "hs.license.grant": "Para uso personal y dentro de tu propia familia o clase, en todos tus dispositivos.",
   "hs.license.resale": "No está permitido revender, compartir ni redistribuir el archivo de la app ni su código.",
   "hs.license.warranty": "La app se ofrece 'tal cual', sin garantía. ÜNVERCO no se hace responsable de datos perdidos; guarda tus copias.",
-  "hs.license.product": "Este producto no contiene fuentes ni scripts de terceros. Iconos y gráficos son originales.",
-  "hs.about.trademarks": "ÜNVERCO es una marca registrada. Otros nombres pertenecen a sus dueños."
+  "hs.license.product": "Este producto incluye la fuente Inter (SIL Open Font License 1.1) e iconos Lucide (licencia ISC), ambos integrados en el archivo. No se carga nada de internet. El resto de los gráficos son originales.",
+  "hs.about.trademarks": "ÜNVERCO es una marca registrada. Otros nombres pertenecen a sus dueños.",
+  "hs.how.label": "Cómo funciona",
+  "hs.how.1.t": "Añade un niño",
+  "hs.how.1.d": "Nombre, color y curso.",
+  "hs.how.2.t": "Añade una materia",
+  "hs.how.2.d": "Clases semanales o el ciclo.",
+  "hs.how.3.t": "Hoy",
+  "hs.how.3.d": "Toca Hecho. El tiempo se registra."
 };

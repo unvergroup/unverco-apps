@@ -5,6 +5,7 @@ import { calcJob } from "../logic/calc.js";
 import { lineNetMinor, lineTaxMinor } from "../../../core/line-items.js";
 import { deviceTitle, deviceLine } from "../views/common.js";
 import { kv, sec, testsGrid } from "./receipt.js";
+import { invoiceDoc, slipDoc } from "./docs.js";
 
 const partName = (t, l) => (l.kind === "part" && l.partType !== "unspecified" ? `${l.name} (${t(`repairs.part.${l.partType}`)})` : l.name);
 
@@ -104,9 +105,9 @@ export function buildInvoice(ctx, data, ct) {
 
 export async function printSlip(ctx, data) {
   const ct = await ctx.ct.get();
-  await ctx.print({ title: data.job.number, node: buildSlip(ctx, data, ct), paper: ct.paper });
+  await ctx.print({ title: data.job.number, node: buildSlip(ctx, data, ct), paper: ct.paper, doc: slipDoc(ctx, data, ct) });
 }
 export async function printInvoice(ctx, data) {
   const ct = await ctx.ct.get();
-  await ctx.print({ title: data.job.number, node: buildInvoice(ctx, data, ct), paper: ct.paper });
+  await ctx.print({ title: data.job.number, node: buildInvoice(ctx, data, ct), paper: ct.paper, doc: invoiceDoc(ctx, data, ct) });
 }

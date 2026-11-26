@@ -8,6 +8,7 @@ import { ATT_KINDS, GRADE_TYPES, LETTERS, MAX, RECORD_LIMITS, parsePercent, vali
 import { attendanceOf, counts, dayStatus, gradeSummary, inYear, progress, schoolDaysFor, subjectTotals, subjectsOf } from "../logic/calc.js";
 import { printAttendance, printPortfolio, printRecord, printSubjects } from "../print/screens.js";
 import { colorIndex, dur, errText, kidDot, kidPicker, legalNote, loadAll, noKids, openForm, progressBar, radioGroup, selectField, fill, emptyBox } from "./common.js";
+import { icon as iconSvg } from "../../../core/icons.js";
 
 const CYCLE = ["", ...ATT_KINDS]; // dokunma dongusu
 
@@ -72,7 +73,7 @@ export async function mountRecords(ctx, root, param) {
         progressBar({ id: `prog-days-${s.id}`, label: t("hs.prog.days"), value: target(p.days, p.targetDays, (n) => formatNumber(n)), pct: p.daysPct }),
         progressBar({ id: `prog-hours-${s.id}`, label: t("hs.prog.hours"), value: target(p.minutes, p.targetMinutes, (m) => dur(ctx, m)), pct: p.hoursPct }),
         progressBar({ id: `prog-core-${s.id}`, label: t("hs.prog.core"), value: target(p.coreMinutes, p.targetCoreMinutes, (m) => dur(ctx, m)), pct: p.corePct }),
-        h("p", { class: "muted", id: `prog-pace-${s.id}`, text: p.targetMinutes > 0 ? (p.perWeekMin === 0 ? t("hs.prog.reached") : p.perWeekMin === null ? t("hs.prog.noDaysLeft") : t("hs.prog.pace", { time: dur(ctx, p.perWeekMin), days: formatNumber(p.remainingDays) })) : t("hs.prog.noTarget") }),
+        h("p", { class: "muted pace-line", id: `prog-pace-${s.id}` }, iconSvg("target", { size: 16 }), h("span", { text: p.targetMinutes > 0 ? (p.perWeekMin === 0 ? t("hs.prog.reached") : p.perWeekMin === null ? t("hs.prog.noDaysLeft") : t("hs.prog.pace", { time: dur(ctx, p.perWeekMin), days: formatNumber(p.remainingDays) })) : t("hs.prog.noTarget") })),
         h("details", { class: "subject-hours" }, h("summary", { text: t("hs.prog.bySubject") }),
           h("ul", { class: "mini-list" }, ...tot.rows.map((r) => h("li", {}, h("span", { text: r.subject.name }), h("span", { class: "muted", text: `${tn("hs.doc.lessonsCount", r.lessons)} · ${dur(ctx, r.minutes)}` }))),
             tot.activities.count ? h("li", {}, h("span", { text: t("hs.act.title") }), h("span", { class: "muted", text: dur(ctx, tot.activities.minutes) })) : null)));
@@ -80,23 +81,23 @@ export async function mountRecords(ctx, root, param) {
     const kidsSel = (all) => (all ? data.students : data.students.filter((s) => s.id === sel));
     fill(body, 
       legalNote(ctx, "rec-legal"),
-      h("p", { class: "muted", id: "rec-year", text: `${prefs.yearName}: ${formatDate(prefs.yearStart, { dateStyle: "medium" })} – ${formatDate(prefs.yearEnd, { dateStyle: "medium" })}` }),
+      h("p", { class: "muted year-line", id: "rec-year" }, iconSvg("calendar-days", { size: 16 }), h("span", { text: `${prefs.yearName}: ${formatDate(prefs.yearStart, { dateStyle: "medium" })} – ${formatDate(prefs.yearEnd, { dateStyle: "medium" })}` })),
       prefs.targetDays || prefs.targetHours ? null : h("p", { class: "banner banner-info", id: "rec-set-target" }, h("span", { text: t("hs.prog.setTarget") }), " ", h("a", { href: "#/settings", text: t("hs.prog.setTargetLink") })),
+      h("div", { class: "kid-grid prog-grid" }, ...cards),
       h("div", { class: "card stack", id: "rec-print" },
         h("h3", { text: t("hs.rec.printTitle") }),
         h("p", { class: "muted", text: t("hs.rec.printHint") }),
         h("div", { class: "row" },
-          button({ id: "rec-print-att", label: t("hs.doc.att.title"), glyph: "print", exportAction: true, onClick: () => printAttendance(ctx, { data, prefs, students: kidsSel(true) }) }),
-          button({ id: "rec-print-subj", label: t("hs.doc.subj.title"), glyph: "print", exportAction: true, onClick: () => printSubjects(ctx, { data, prefs, students: kidsSel(true) }) }),
-          button({ id: "rec-print-record", label: t("hs.doc.record.title"), glyph: "print", exportAction: true, onClick: () => printRecord(ctx, { data, prefs, students: kidsSel(true), school }) })),
+          button({ id: "rec-print-att", label: t("hs.doc.att.title"), glyph: "file-text", exportAction: true, onClick: () => printAttendance(ctx, { data, prefs, students: kidsSel(true) }) }),
+          button({ id: "rec-print-subj", label: t("hs.doc.subj.title"), glyph: "file-text", exportAction: true, onClick: () => printSubjects(ctx, { data, prefs, students: kidsSel(true) }) }),
+          button({ id: "rec-print-record", label: t("hs.doc.record.title"), glyph: "file-text", exportAction: true, onClick: () => printRecord(ctx, { data, prefs, students: kidsSel(true), school }) })),
         h("div", { class: "row" },
           h("label", { for: "rec-port-kid", class: "muted", text: t("hs.doc.port.title") }),
           h("select", { id: "rec-port-kid", class: "status-select", "aria-label": t("hs.kid.pick") }, ...data.students.map((s) => h("option", { value: s.id, text: s.name, selected: s.id === sel }))),
           button({ id: "rec-print-port", label: t("hs.rec.printPortfolio"), glyph: "print", variant: "primary", exportAction: true, onClick: () => {
             const id = document.getElementById("rec-port-kid").value;
             printPortfolio(ctx, { data, prefs, student: data.students.find((s) => s.id === id), school });
-          } }))),
-      h("div", { class: "kid-grid" }, ...cards));
+          } }))));
   }
 
   const cycle = (kid, iso) => async () => {

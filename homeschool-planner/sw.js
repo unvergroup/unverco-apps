@@ -2,7 +2,7 @@
 // Strateji: once onbellek; yoksa ag; yalniz ayni kaynak (origin) GET istekleri. Uygulama hicbir yere veri gondermez.
 // Onbellege tum JS / CSS dosyalari, 5 dil dosyasi, manifest VE simge dosyalari girer (asagidaki PRECACHE listesi).
 const PRODUCT = "unvercohsp";
-const VERSION = "1.0.4";
+const VERSION = "1.1.0";
 const CACHE = PRODUCT + "-v" + VERSION;
 const PRECACHE = [
   "./",
@@ -16,6 +16,9 @@ const PRECACHE = [
   "icon-512-maskable.png",
   "apple-touch-icon-180.png",
   "favicon-32.png",
+  "core/fonts/inter-400.woff",
+  "core/fonts/inter-600.woff",
+  "core/fonts/inter-700.woff",
   "core/backup.js",
   "core/boot-file.js",
   "core/business.js",

@@ -10,7 +10,8 @@ import { backupNow, rescaleStoreForCurrency, restoreNow } from "./core/data-acti
 import { renderSettings } from "./core/settings-screen.js";
 import { createBusinessProfile } from "./core/business.js";
 import * as money from "./core/money.js";
-import { isStandaloneApp, printDocument } from "./core/print.js";
+import { isStandaloneApp, printDocument, printHeaderData } from "./core/print.js";
+import { deliverPdf, docToPdf } from "./core/canvas-doc.js";
 import { initPwa } from "./core/pwa.js";
 import { errorKey } from "./core/safe.js";
 import { createSync } from "./core/sync.js";
@@ -71,15 +72,19 @@ async function main() {
         const { confirmed } = await confirmDialog({ title, message, confirmLabel: confirmLabel ?? ctx.i18n.t("common.delete"), cancelLabel: ctx.i18n.t("common.cancel"), danger });
         return confirmed;
       },
-      // Yazdir: { title, node, paper } -> dukkan basligi eklenir, yazdirma penceresi acilir.
-      print: async ({ title, node, business, paper }) => {
-        if (isStandaloneApp()) { // iPhone ana ekran uygulamasi: yazdirma penceresi acilamaz; nasil yazdirilacagi anlatilir, window.print cagrilmaz
-          const { t } = ctx.i18n;
-          await confirmDialog({ title: t("print.standalone.title"), message: t("print.standalone.text"), notes: [1, 2, 3, 4].map((n) => t(`print.standalone.step${n}`)), confirmLabel: t("common.close"), cancelLabel: "", infoOnly: true });
-          return;
-        }
+      // Yazdir: { title, node, paper, doc } -> dukkan basligi eklenir, yazdirma penceresi acilir.
+      // iPhone ana ekran uygulamasinda (window.print() orada calismaz) ayni belge PDF olarak uretilir ve paylasim sayfasina verilir
+      // (Paylas > Yazdir); paylasim yoksa PDF indirilir. Bilgisayar, Android ve Safari sekmesinde davranis ayni: window.print.
+      print: async ({ title, node, business, paper, doc }) => {
         try {
-          printDocument({ title, node, business: business ?? (await ctx.business.get()), paper });
+          const biz = business ?? (await ctx.business.get());
+          if (doc && isStandaloneApp()) {
+            const bytes = await docToPdf({ doc, header: printHeaderData(biz), paper, title });
+            const slug = String(title || "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+            await deliverPdf({ bytes, filename: ["claimtag", doc.id, slug].filter(Boolean).join("-"), title });
+            return;
+          }
+          printDocument({ title, node, business: biz, paper });
         } catch (e) {
           console.error(e);
           ctx.notify(ctx.i18n.t("print.error"), "error");

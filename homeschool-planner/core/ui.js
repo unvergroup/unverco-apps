@@ -50,17 +50,19 @@ export const nextId = (p = "id") => `${p}-${++uid}`;
 
 // exportAction: bu dugme yazdirir ya da dosya indirir; onizleme kipinde core/preview.js bunu kapatir.
 export function button({ label, variant = "secondary", type = "button", onClick, ariaLabel, disabled, id, exportAction = false, icon, glyph } = {}) {
-  // icon: "back" | "prev" (metinden once) | "next" (sonra); yon simgesini CSS cizer ve RTL'de aynalar (metne ok karakteri yazilmaz)
+  // icon: "back" | "prev" (metinden once) | "next" (sonra): Lucide cift ok; RTL'de aynalanir (.ico-dir). glyph: metinden once herhangi bir simge adi.
+  const before = glyph ? iconSvg(glyph, { size: 18, sw: 2 }) : icon === "prev" || icon === "back" ? iconSvg("chevron-left", { size: 18, sw: 2, cls: "ico-dir" }) : null;
+  const after = icon === "next" ? iconSvg("chevron-right", { size: 18, sw: 2, cls: "ico-dir" }) : null;
   return h("button", {
     id,
     "data-export": exportAction ? "1" : undefined,
     "data-icon": icon,
     type,
-    class: `btn btn-${variant}`,
+    class: `btn btn-${variant}${label ? "" : " btn-icon"}`,
     "aria-label": ariaLabel,
     disabled,
     on: onClick ? { click: onClick } : undefined,
-  }, glyph ? iconSvg(glyph, { size: 18 }) : null, label ? h("span", { text: label }) : null);
+  }, before, label ? h("span", { text: label }) : null, after);
 }
 
 // Sekmeli gezinme (ARIA tablist; ok tuslari, Home/End).
@@ -299,9 +301,10 @@ export function toast(message, { kind = "info", ms, closeLabel = "Close" } = {})
   const drop = (el) => { el.remove(); syncToastSpace(region); };
   for (const old of [...region.children]) if (old.dataset.msg === message) old.remove();
   const timeout = ms ?? (kind === "error" ? null : TOAST_MS[kind] ?? 3500);
-  const el = h("div", { class: `toast toast-${kind}`, role: kind === "error" ? "alert" : null, dataset: { msg: message } }, h("span", { class: "toast-text", text: message }));
+  const glyph = kind === "error" ? "circle-alert" : kind === "warn" ? "triangle-alert" : "circle-check";
+  const el = h("div", { class: `toast toast-${kind}`, role: kind === "error" ? "alert" : null, dataset: { msg: message } }, iconSvg(glyph, { size: 20, cls: "toast-ico" }), h("span", { class: "toast-text", text: message }));
   if (timeout === null || timeout > 5000) {
-    el.append(h("button", { type: "button", class: "toast-close", "aria-label": closeLabel, text: "×", on: { click: () => drop(el) } }));
+    el.append(h("button", { type: "button", class: "toast-close", "aria-label": closeLabel, on: { click: () => drop(el) } }, iconSvg("x", { size: 18, sw: 2 })));
   }
   region.append(el);
   syncToastSpace(region);
@@ -313,16 +316,4 @@ export function toast(message, { kind = "info", ms, closeLabel = "Close" } = {})
 // Ekran icinde gorunen kalici bildirim seridi (toast gecici, bu kalici). kind: "info" | "warn" | "error". Metin YALNIZ textContent.
 export function showNotice(message, { kind = "info", id } = {}) {
   return h("p", { id, class: `banner banner-${kind === "info" ? "info" : kind}`, role: kind === "error" ? "alert" : "status", text: message });
-}
-
-// Homeschool Planner marka renkleri (CSS degiskenleri app.css'te de tanimlidir; burasi tek kaynak sabitidir).
-export const COLORS = Object.freeze({ primary: "#d4af37", accent: "#e9c66b", danger: "#D32F2F" });
-
-// Marka renklerini CSS ozelligi olarak koyar (CSSOM; CSP'ye uygun, satir ici stil metni yok).
-export function applyBrand(root = typeof document !== "undefined" ? document.documentElement : null) {
-  if (!root || !root.style) return false;
-  root.style.setProperty("--primary", COLORS.primary);
-  root.style.setProperty("--accent", COLORS.accent);
-  root.style.setProperty("--danger", COLORS.danger);
-  return true;
 }

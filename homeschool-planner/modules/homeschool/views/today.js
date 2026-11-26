@@ -5,7 +5,8 @@ import { addDays, isIsoDate, todayIso, weekday } from "../../../core/dates.js";
 import { button, field, h } from "../../../core/ui.js";
 import { ATT_KINDS, MINUTES, parseIntText } from "../logic/schema.js";
 import { attendanceOf, dayPlan, dayStatus, subjectsOf } from "../logic/calc.js";
-import { colorIndex, dur, errText, kidName, loadAll, noKids, openForm, selectField, fill } from "./common.js";
+import { colorIndex, dur, errText, kidName, loadAll, noKids, openForm, selectField, fill, ring } from "./common.js";
+import { icon as iconSvg } from "../../../core/icons.js";
 import { openActivityForm } from "./library.js";
 
 export async function mountToday(ctx, root, param) {
@@ -72,6 +73,9 @@ export async function mountToday(ctx, root, param) {
     const rec = attendanceOf(data, s.id, day);
     const total = items.reduce((n, x) => n + (x.log ? x.log.minutes || 0 : 0), 0)
       + data.activities.filter((a) => a.date === day && a.studentIds.includes(s.id)).reduce((n, a) => n + (a.minutes || 0), 0);
+    // Planlanan sure (yalniz halka ve toplam gosterimi): yapilan derste kaydedilen dakika, yapilmayanda dersin olagan suresi, ayrica bugunku gruplar.
+    const planned = items.reduce((n, x) => n + (x.log ? x.log.minutes || 0 : x.subject?.minutes ?? 0), 0)
+      + data.activities.filter((a) => a.date === day && a.studentIds.includes(s.id)).reduce((n, a) => n + (a.minutes || 0), 0);
     const statusSel = h("select", { id: `td-status-${s.id}`, class: "status-select", "aria-label": t("hs.att.label", { name: s.name }), on: { change: (e) => setStatus(s.id, e.target.value) } },
       h("option", { value: "", text: st === "auto" ? t("hs.att.auto") : t("hs.att.none"), selected: !rec }),
       ...ATT_KINDS.map((k) => h("option", { value: k, text: t(`hs.att.${k}`), selected: rec?.kind === k })));
@@ -85,27 +89,29 @@ export async function mountToday(ctx, root, param) {
           "aria-label": done ? t("hs.today.undoAria", { subject: name }) : t("hs.today.doneAria", { subject: name }),
           disabled: !x.subject && !done,
           on: { click: () => (x.subject ? toggleDone(s, x) : act(() => ctx.store.remove("logs", x.log.id))()) },
-        }, h("span", { class: "done-box", "aria-hidden": "true" }), h("span", { class: "done-text", text: done ? t("hs.today.done") : t("hs.today.markDone") })),
+        }, h("span", { class: "done-box", "aria-hidden": "true" }, iconSvg("check", { size: 16, sw: 3 }))),
         h("span", { class: "lesson-main" },
           h("span", { class: "lesson-name", text: name }),
           h("span", { class: "lesson-meta" },
-            x.kind === "loop" ? h("span", { class: "tag tag-loop", text: t("hs.plan.loopTag") }) : null,
+            x.kind === "loop" ? h("span", { class: "tag tag-loop" }, iconSvg("repeat", { size: 12, sw: 2 }), t("hs.plan.loopTag")) : null,
             x.kind === "extra" ? h("span", { class: "tag", text: t("hs.today.extraTag") }) : null,
             x.subject?.core ? h("span", { class: "tag tag-core", text: t("hs.subj.coreShort") }) : null,
             h("span", { class: "muted", text: dur(ctx, done ? x.log.minutes : x.subject?.minutes ?? 0) })),
           done && x.log.note ? h("span", { class: "lesson-note", text: x.log.note }) : null),
-        done ? button({ id: `edit-${s.id}-${sid}`, label: t("hs.log.editShort"), ariaLabel: t("hs.log.editAria", { subject: name }), glyph: "edit", onClick: () => openLogForm(s, { log: x.log }) }) : null);
+        done ? button({ id: `edit-${s.id}-${sid}`, label: "", ariaLabel: t("hs.log.editAria", { subject: name }), variant: "ghost", glyph: "edit", onClick: () => openLogForm(s, { log: x.log }) }) : null);
     });
     return h("section", { class: `card kid-card kid-c${colorIndex(s.color)}`, "data-kid": s.id, "aria-labelledby": `kid-h-${s.id}` },
       h("div", { class: "kid-head" },
         h("h3", { id: `kid-h-${s.id}` }, kidName(s), s.grade ? h("span", { class: "muted kid-grade", text: s.grade }) : null),
-        h("span", { class: "count-pill", id: `td-total-${s.id}`, text: dur(ctx, total) })),
+        h("div", { class: "ring-wrap" },
+          h("strong", { class: "count-pill", id: `td-total-${s.id}`, text: planned > total ? t("hs.doc.ofTarget", { done: dur(ctx, total), target: dur(ctx, planned) }) : dur(ctx, total) }),
+          ring(total, planned))),
       h("div", { class: "row status-row" }, h("label", { for: statusSel.id, class: "muted", text: t("hs.att.day") }), statusSel),
       rows.length ? h("ul", { class: "lesson-list" }, ...rows) : h("p", { class: "muted", text: subjectsOf(data, s.id).length ? t("hs.today.nothing") : t("hs.today.noSubjects") }),
-      h("div", { class: "row" },
+      h("div", { class: "card-foot" },
         subjectsOf(data, s.id).length
-          ? button({ id: `td-extra-${s.id}`, label: t("hs.log.extra"), glyph: "plus", onClick: () => openLogForm(s) })
-          : h("a", { class: "btn", id: `td-subjects-${s.id}`, href: `#/kids/${encodeURIComponent(s.id)}`, text: t("hs.subj.add") })));
+          ? button({ id: `td-extra-${s.id}`, label: t("hs.log.extra"), variant: "ghost", glyph: "plus", onClick: () => openLogForm(s) })
+          : h("a", { class: "btn btn-ghost", id: `td-subjects-${s.id}`, href: `#/kids/${encodeURIComponent(s.id)}`, text: t("hs.subj.add") })));
   }
 
   function paint() {
@@ -115,16 +121,17 @@ export async function mountToday(ctx, root, param) {
         h("p", { class: "page-date", id: "td-date-text", text: formatDate(day, { dateStyle: "full" }) })),
       h("div", { class: "row date-nav" },
         button({ id: "td-prev", ariaLabel: t("hs.today.prev"), icon: "prev", label: "", onClick: () => go(addDays(day, -1)) }),
-        day !== today ? button({ id: "td-today", label: t("hs.today.backToday"), onClick: () => go(today) }) : null,
+        h("input", { type: "date", id: "td-date", class: "date-input", value: day, "aria-label": t("hs.today.pickDate"), on: { change: (e) => { if (isIsoDate(e.target.value)) go(e.target.value); } } }),
         button({ id: "td-next", ariaLabel: t("hs.today.next"), icon: "next", label: "", onClick: () => go(addDays(day, 1)) }),
-        h("input", { type: "date", id: "td-date", class: "date-input", value: day, "aria-label": t("hs.today.pickDate"), on: { change: (e) => { if (isIsoDate(e.target.value)) go(e.target.value); } } })));
+        day !== today ? button({ id: "td-today", label: t("hs.today.backToday"), onClick: () => go(today) }) : null,
+        ));
     if (!data.students.length) { fill(root, head, noKids(ctx)); return; }
     const offDay = !prefs.schoolDays.includes(weekday(day));
     fill(root, ...[head,
       offDay ? h("p", { class: "banner banner-info", id: "td-offday", text: t("hs.today.offDay") }) : null,
       h("div", { class: "row toolbar today-actions" },
-        button({ id: "td-all-school", label: t("hs.today.markAll"), glyph: "check", variant: "primary", onClick: markAll }),
-        button({ id: "td-group", label: t("hs.act.addShort"), glyph: "kids", onClick: async () => { if (await openActivityForm(ctx, data, { date: day })) await reload(); } })),
+        button({ id: "td-all-school", label: t("hs.today.markAll"), glyph: "circle-check-big", variant: "primary", onClick: markAll }),
+        button({ id: "td-group", label: t("hs.act.addShort"), glyph: "users-round", onClick: async () => { if (await openActivityForm(ctx, data, { date: day })) await reload(); } })),
       h("div", { class: "kid-grid" }, ...data.students.map(kidCard))].filter(Boolean));
   }
   paint();
