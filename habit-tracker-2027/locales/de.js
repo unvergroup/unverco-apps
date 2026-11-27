@@ -2,7 +2,7 @@ export default {
   "app.name": "2027 Habit Tracker",
   "app.short": "Gewohnheiten 2027",
   "toast.saved": "Gespeichert: {name}.",
-  "rem.daily": "Gewohnheiten mit X-mal pro Woche oder Monat erinnern täglich, damit du die Tage selbst wählst.",
+  "rem.daily": "Gewohnheiten mit X-mal pro Woche wiederholen sich an X verteilten Tagen (zum Beispiel 3-mal pro Woche: Mo, Mi, Fr). Gewohnheiten mit X-mal pro Monat erinnern einmal pro Woche.",
   "tab.today": "Heute",
   "tab.month": "Monat",
   "tab.year": "Jahr",

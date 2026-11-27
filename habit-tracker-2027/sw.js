@@ -1,7 +1,7 @@
 // 2027 Habit Tracker cevrimdisi onbellek. Surum numarasi config.js ile ayni olmali (tests/files.test.mjs denetler).
 // Strateji: once onbellek; yoksa ag; yalniz ayni kaynak (origin) GET istekleri. Uygulama hicbir yere veri gondermez.
 const PRODUCT = "unverco-habit-2027";
-const VERSION = "1.0.0";
+const VERSION = "1.0.1";
 const CACHE = PRODUCT + "-v" + VERSION;
 const PRECACHE = [
   "./",

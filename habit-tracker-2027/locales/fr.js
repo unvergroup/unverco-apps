@@ -2,7 +2,7 @@ export default {
   "app.name": "2027 Habit Tracker",
   "app.short": "Habitudes 2027",
   "toast.saved": "Enregistré : {name}.",
-  "rem.daily": "Les habitudes prévues X fois par semaine ou par mois reçoivent un rappel chaque jour : vous choisissez les jours.",
+  "rem.daily": "Les habitudes prévues X fois par semaine se répètent sur X jours répartis (par exemple, 3 fois par semaine : lun, mer, ven). Celles prévues X fois par mois reçoivent un rappel par semaine.",
   "tab.today": "Jour",
   "tab.month": "Mois",
   "tab.year": "Année",

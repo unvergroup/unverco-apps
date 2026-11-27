@@ -23,21 +23,33 @@ export function foldLine(line) {
 
 const stamp = (d) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
 
-export function rruleFor(habit) {
+// "Haftada X kez": kullanici gun secmez; hatirlatma haftaya yayilmis X gune duser (her gun hatirlatma gelmez).
+const SPREAD = { 1: [1], 2: [1, 4], 3: [1, 3, 5], 4: [1, 2, 4, 5], 5: [1, 2, 3, 4, 5], 6: [1, 2, 3, 4, 5, 6], 7: [0, 1, 2, 3, 4, 5, 6] };
+
+/** Hatirlatmanin dustugu hafta gunleri (0 = Pazar); gun listesi olmayan planlarda null. */
+export function reminderDays(habit) {
   const s = habit.schedule ?? {};
-  if (s.type === "days" && Array.isArray(s.days) && s.days.length) return `FREQ=WEEKLY;BYDAY=${[...s.days].sort().map((d) => BYDAY[d]).join(",")}`;
-  return "FREQ=DAILY";
+  if (s.type === "days" && Array.isArray(s.days) && s.days.length) return [...s.days].sort();
+  if (s.type === "weekly") return SPREAD[Math.min(Math.max(Number.parseInt(s.times, 10) || 1, 1), 7)];
+  return null;
+}
+
+/** RRULE: belirli gunler ve haftada X kez -> FREQ=WEEKLY;BYDAY; ayda X kez -> FREQ=WEEKLY (haftada bir); gunluk -> FREQ=DAILY. */
+export function rruleFor(habit) {
+  const days = reminderDays(habit);
+  if (days) return `FREQ=WEEKLY;BYDAY=${days.map((d) => BYDAY[d]).join(",")}`;
+  return habit.schedule?.type === "monthly" ? "FREQ=WEEKLY" : "FREQ=DAILY";
 }
 
 /**
  * habits: hatirlatma saati olan etkin aliskanliklar alinir. today: "yyyy-mm-dd" (yerel). alarmText: VALARM aciklamasi.
  * UID <habitId>@habit-tracker.unverco: ayni aliskanlik yeniden iceri alininca ayni etkinlik guncellenir.
  */
-/** days tipinde DTSTART ilk planli gune (bugun ya da sonrasi) hizalanir; digerlerinde bugun. */
+/** BYDAY'li kurallarda DTSTART ilk planli gune (bugun ya da sonrasi) hizalanir; digerlerinde bugun. */
 export function firstDate(habit, today) {
-  const s = habit.schedule ?? {};
-  if (s.type !== "days" || !Array.isArray(s.days) || !s.days.length) return today;
-  for (let i = 0; i < 7; i++) { const d = addDays(today, i); if (s.days.includes(weekday(d))) return d; }
+  const days = reminderDays(habit);
+  if (!days) return today;
+  for (let i = 0; i < 7; i++) { const d = addDays(today, i); if (days.includes(weekday(d))) return d; }
   return today;
 }
 const SAFE_ID = /^[A-Za-z0-9_-]{1,64}$/;

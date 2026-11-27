@@ -237,6 +237,9 @@ export function todayRow(habit, days, today, weekStart = 1) {
   return { bucket, status, value: e && !e.rest ? e.value | 0 : 0, unitDone, times, streak, unitWord: type === "weekly" ? "week" : type === "monthly" ? "month" : "day", comebackNow };
 }
 
+/** Today "N left": Due bolumundeki satir sayisi (halka rozeti, alt satir ve DUE TODAY basligi bunu kullanir). rows: todayRow ciktilari. */
+export const leftToday = (rows) => rows.filter((r) => r.bucket === "due").length;
+
 /** Isaret sonrasi bildirim: bu degisiklik yeni bir geri donus yarattiysa numarasi, yoksa 0. */
 export function comebackCreated(habit, before, after, today, weekStart = 1) {
   const a = comebacks(unitOutcomes(habit, before, today, weekStart)).count;

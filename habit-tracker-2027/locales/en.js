@@ -2,7 +2,7 @@ export default {
   "app.name": "2027 Habit Tracker",
   "app.short": "2027 Habits",
   "toast.saved": "Saved: {name}.",
-  "rem.daily": "Habits planned X times a week or month get a daily reminder, so you choose the days.",
+  "rem.daily": "Habits planned X times a week repeat on X spread-out days (for example, 3 times a week: Mon, Wed, Fri). Habits planned X times a month get one reminder a week.",
   "tab.today": "Today",
   "tab.month": "Month",
   "tab.year": "Year",

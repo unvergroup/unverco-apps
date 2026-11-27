@@ -212,7 +212,7 @@ h2 { margin: 0; font: 700 var(--fs-lg)/var(--lh-lg) var(--font-display); letter-
 .main-wrap { min-width: 0; }
 .main { padding: var(--s-4) var(--s-4) 120px; max-width: 1120px; margin: 0 auto; outline: none; }
 .sidebar { display: none; }
-.tabbar { position: fixed; left: 10px; right: 10px; bottom: max(10px, env(safe-area-inset-bottom)); z-index: 10; display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px; gap: 2px; border-radius: 26px; }
+.tabbar { position: fixed; left: 10px; right: 10px; bottom: max(10px, var(--sab)); z-index: 10; display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px; gap: 2px; border-radius: 26px; }
 .tab { min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border-radius: 20px; color: var(--text-3); font-size: 11px; font-weight: 600; letter-spacing: .01em; text-decoration: none; min-width: 0; }
 .tab span { max-width: 100%; text-align: center; line-height: 12px; overflow-wrap: anywhere; }
 @media (max-width: 400px) { .tab { font-size: 10.5px; padding: 0 1px; } .tabbar { left: 6px; right: 6px; padding: 4px; } }
@@ -412,7 +412,7 @@ body[data-screen="welcome"] .shell { display: block; }
 .ios { display: flex; gap: var(--s-3); padding: var(--s-4); border-radius: var(--r-lg); margin-top: var(--s-4); background: rgba(62,230,255,.07); border: 1px solid rgba(62,230,255,.28); font-size: var(--fs-sm); line-height: 20px; color: var(--text-2); }
 .ios svg { color: var(--accent-text); }
 .ios b { color: var(--text); }
-.w-dock { position: fixed; left: 8px; right: 8px; bottom: 8px; padding: 14px 16px max(12px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 4px; border-radius: 26px; z-index: 5; box-shadow: var(--shadow-2); }
+.w-dock { position: fixed; left: 8px; right: 8px; bottom: 8px; padding: 14px 16px max(12px, var(--sab)); display: flex; flex-direction: column; gap: 4px; border-radius: 26px; z-index: 5; box-shadow: var(--shadow-2); }
 [data-theme="light"] .w-dock { background: rgba(255,255,255,.9); border-color: rgba(60,50,140,.16); }
 .w-dock-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 0 var(--s-4); }
 .w-steps { display: none; gap: var(--s-5); margin-top: var(--s-8); }
@@ -620,7 +620,7 @@ body[data-screen="welcome"] .shell { display: block; }
 .about-logo { width: 140px; }
 
 /* =================== Bildirim =================== */
-#toast-region { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(96px + env(safe-area-inset-bottom)); z-index: 60; display: grid; gap: 8px; width: min(520px, calc(100vw - 24px)); pointer-events: none; }
+#toast-region { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(96px + var(--sab)); z-index: 60; display: grid; gap: 8px; width: min(520px, calc(100vw - 24px)); pointer-events: none; }
 @media (min-width: 1024px) { #toast-region { bottom: 24px; } }
 .toast { pointer-events: auto; display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 16px; border-radius: var(--r-lg); background: rgba(20,23,62,.96); color: #F3F4FF; border: 1px solid rgba(255,255,255,.16); box-shadow: var(--shadow-2); font-weight: 600; }
 [data-theme="light"] .toast { background: #14163A; }
@@ -636,4 +636,24 @@ body[data-screen="welcome"] .shell { display: block; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .btn:active { transform: none; }
+}
+
+/* =================== Guvenli alan (cihaz turu H1, 27 Kasim 2026) ===================
+   viewport-fit=cover + black-translucent: sayfa durum cubugu / ev cubugu altina uzanir. Degerler tek yerde;
+   e2e bu degiskenleri 47/34 px yaparak iPhone'u oykunur (Chromium'da env() hep 0). */
+:root { --sat: env(safe-area-inset-top, 0px); --sab: env(safe-area-inset-bottom, 0px); --sal: env(safe-area-inset-left, 0px); --sar: env(safe-area-inset-right, 0px); }
+.shell { padding-left: var(--sal); padding-right: var(--sar); }
+.main { padding-top: max(var(--s-4), var(--sat)); }
+.welcome { padding-top: max(var(--s-6), var(--sat)); }
+.w-dock { left: calc(8px + var(--sal)); right: calc(8px + var(--sar)); }
+/* Pencere guvenli alanin icinde ortalanir (durum cubugu / ev cubugu altina uzanmaz) */
+.dialog { inset: var(--sat) var(--sar) var(--sab) var(--sal); max-height: calc(100vh - 24px - var(--sat) - var(--sab)); }
+@media (min-width: 1024px) {
+  .main { padding-top: max(var(--s-8), var(--sat)); }
+  .sidebar { top: max(16px, var(--sat)); margin-top: max(16px, var(--sat)); height: calc(100vh - 32px - var(--sat)); }
+  .welcome { padding-top: max(var(--s-10), var(--sat)); }
+}
+/* Year (tablet/masaustu): ay basligi 44 px dokunma hedefi (cihaz turu C1) */
+@media (min-width: 768px) {
+  .hrow .ml { display: flex; align-items: center; min-height: 44px; }
 }

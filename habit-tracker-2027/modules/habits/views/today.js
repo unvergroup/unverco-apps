@@ -3,7 +3,7 @@
 import { h } from "../../../core/ui.js";
 import { icon } from "../../../core/icons.js";
 import { addDays, monthKey, weekStartOf, yearOf } from "../logic/dates.js";
-import { bestStreak, comebackCreated, dayScore, habitDays, isPeriodic, targetOf, todayRow, unitOutcomes, yearStats } from "../logic/calc.js";
+import { bestStreak, comebackCreated, dayScore, habitDays, isPeriodic, leftToday, targetOf, todayRow, unitOutcomes, yearStats } from "../logic/calc.js";
 import { backupNudge, SNOOZE_MS } from "../logic/nudge.js";
 import { actionSheet, durationText, iconBtn, ring, sectionH, streakText, textBtn, tile, topbar } from "./common.js";
 import { backupNow } from "./data-actions.js";
@@ -102,7 +102,7 @@ export async function mountToday(ctx, root) {
     const doneRows = rows.filter((x) => x.r.bucket === "done");
     const notDue = rows.filter((x) => x.r.bucket === "notDue");
     const list = h("div", { class: "today-list" },
-      sectionH(t("today.due"), i18n.tn("today.left", due.length), "h-due"),
+      sectionH(t("today.due"), i18n.tn("today.left", leftToday(rows.map((x) => x.r))), "h-due"),
       due.length ? h("div", { class: "row-gap", id: "list-due" }, due.map(rowEl)) : h("p", { class: "muted list-empty", id: "list-due", text: t("today.allDone") }),
       doneRows.length ? sectionH(t("today.doneH"), String(doneRows.length), "h-done") : null,
       doneRows.length ? h("div", { class: "row-gap", id: "list-done" }, doneRows.map(rowEl)) : null,
@@ -118,8 +118,8 @@ export async function mountToday(ctx, root) {
     }));
     let restWeek = 0;
     for (const x of rows) for (let i = 0; i < 7; i++) { const e = x.days.get(addDays(ws0, i)); if (e && e.rest) restWeek++; }
-    const left = score.total - score.done;
-    const heroLine = score.total === 0 ? t("today.nothing") : left === 0 ? t("today.allSet") : i18n.tn("today.toGo", left);
+    const left = leftToday(rows.map((x) => x.r)); // DUE TODAY basligiyla ayni tanim (cihaz turu C3)
+    const heroLine = score.total === 0 && left === 0 ? t("today.nothing") : left === 0 ? t("today.allSet") : i18n.tn("today.toGo", left);
     const hero = h("section", { class: "hero glass", id: "hero", "aria-labelledby": "day-score" },
       h("div", { class: "ring-wrap ring-glow hero-ring" }, ring(score.pct ?? 0, { cls: "ring-hero" }), h("div", { class: "ring-label", "aria-hidden": "true" }, h("div", { class: "score-big" }, String(Math.round(score.pct ?? 0)), h("small", { text: "%" })))),
       h("div", { class: "hero-text" },

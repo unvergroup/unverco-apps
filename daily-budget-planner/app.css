@@ -669,3 +669,35 @@ ul.list.card { padding: 2px 16px; }
   .item.bill .date { width: 40px; }
   .item.bill .amt { font-size: 14px; }
 }
+
+/* ================= Guvenli alan (cihaz turu B2, 27 Kasim 2026) =================
+   viewport-fit=cover + black-translucent: sayfa durum cubugu / ev cubugu altina uzanir. Degerler tek yerde;
+   e2e bu degiskenleri 47/34 px yaparak iPhone'u oykunur (Chromium'da env() hep 0). */
+:root { --sat: env(safe-area-inset-top, 0px); --sab: env(safe-area-inset-bottom, 0px); --sal: env(safe-area-inset-left, 0px); --sar: env(safe-area-inset-right, 0px); }
+.main { padding-top: max(12px, var(--sat)); padding-bottom: calc(var(--nav-h) + 40px + var(--sab)); padding-left: max(16px, var(--sal)); padding-right: max(16px, var(--sar)); }
+.bottomnav { bottom: calc(10px + var(--sab)); left: calc(10px + var(--sal)); right: calc(10px + var(--sar)); }
+#toast-region { bottom: calc(var(--nav-h) + 24px + var(--sab)); }
+.sheet { padding-bottom: calc(22px + var(--sab)); padding-left: max(18px, var(--sal)); padding-right: max(18px, var(--sar)); }
+/* Ortalanmis pencere guvenli alanin icinde ortalanir (durum cubugu altina uzanmaz) */
+dialog.dlg { inset: var(--sat) var(--sar) var(--sab) var(--sal); max-height: calc(100vh - 24px - var(--sat) - var(--sab)); }
+@media (max-width: 767px) {
+  dialog.dlg.sheet { inset: 0; padding-bottom: calc(22px + var(--sab)); padding-left: max(18px, var(--sal)); padding-right: max(18px, var(--sar)); max-height: calc(94vh - var(--sat)); }
+}
+body.bare .main { padding-top: max(16px, var(--sat)); padding-bottom: calc(40px + var(--sab)); padding-left: max(16px, var(--sal)); padding-right: max(16px, var(--sar)); }
+@media (min-width: 768px) {
+  .sidebar { top: max(16px, var(--sat)); bottom: max(16px, var(--sab)); left: calc(16px + var(--sal)); }
+  .main { margin-left: calc(var(--sidebar) + 32px + var(--sal)); padding-top: max(22px, var(--sat)); padding-right: max(32px, var(--sar)); padding-bottom: calc(40px + var(--sab)); padding-left: 8px; }
+  .topbar { top: max(22px, var(--sat)); right: max(32px, var(--sar)); }
+  #toast-region { bottom: calc(24px + var(--sab)); }
+  .sheet { padding: 18px 22px 22px; }
+  dialog.dlg.sheet { transform: none; } /* pencere inset + margin:auto ile guvenli alanda ortalanir; eski .sheet kaydirmasi iptal */
+  body.bare .main { margin: 0 auto; }
+}
+
+/* ================= Yedek hatirlatma karti (cihaz turu B1) =================
+   Metin sutunu sikismaz: simge + metin ilk satirda, dugmeler sigmazsa alt satira sarar. */
+.banner-card { flex-wrap: wrap; row-gap: 10px; }
+.banner-card > svg, .banner-card > .ico { flex: none; }
+.banner-card p { flex: 1 1 calc(100% - 40px); min-width: 0; overflow-wrap: break-word; }
+.banner-card .btn { flex: 0 1 auto; }
+@media (min-width: 380px) { #backup-strip #backup-now { margin-left: 32px; } } /* dugmeler metin hizasinda (simge 20 + bosluk 12) */

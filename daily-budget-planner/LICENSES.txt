@@ -1,4 +1,4 @@
-ÜNVERCO Daily Budget Planner 1.0.0 — third-party licenses
+ÜNVERCO Daily Budget Planner 1.0.1 — third-party licenses
 ==========================================================
 
 The app code, texts and the ÜNVERCO name and logo belong to ÜNVER GROUP GLOBAL PAZARLAMA A.Ş. The logo may not be reused.

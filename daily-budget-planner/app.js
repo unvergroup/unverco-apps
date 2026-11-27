@@ -53,6 +53,7 @@ async function main() {
   const bottomnav = document.getElementById("bottomnav");
   const banners = document.getElementById("banners");
   let route = parseRoute(location.hash);
+  let keepUndo = false; // islemin kendi yonlendirmesi (Delete all -> setup, geri yukle -> today) Undo bildirimini korur
   let shown = 0;
 
   const ctx = {
@@ -61,7 +62,7 @@ async function main() {
     logoSrc: (on = document.documentElement.dataset.theme) => document.getElementById(on === "light" || on === "paper" ? "logo-blue" : "logo-gold").src,
     appIconSrc: () => document.getElementById("appicon-src").src,
     today: () => todayIso(new Date()),
-    navigate: (to) => { if (location.hash === `#/${to}`) show(parseRoute(location.hash)); else location.hash = `#/${to}`; },
+    navigate: (to) => { if (location.hash === `#/${to}`) show(parseRoute(location.hash)); else { keepUndo = true; location.hash = `#/${to}`; } },
     refresh: () => show(route, { keepFocus: true }),
     notify: (msg, kind = "info", opts = {}) => toast(msg, { kind, closeLabel: ctx.i18n.t("common.close"), ...opts }),
     fail: (e) => {
@@ -170,7 +171,10 @@ async function main() {
 
   window.addEventListener("hashchange", async () => {
     const next = parseRoute(location.hash);
-    await show(next); // bildirimler (Geri al dahil) ekran degisince de kalir; kendiliginden kapanir
+    // Kullanici ekran degistirince Undo bildirimi kapanir (yeni ekranda Today sayisini ortmesin; cihaz turu C4).
+    if (!keepUndo) document.querySelectorAll("#undo-last, #qa-undo").forEach((b) => b.closest(".toast")?.remove());
+    keepUndo = false;
+    await show(next);
     document.getElementById("main").focus({ preventScroll: true });
     window.scrollTo(0, 0);
   });
