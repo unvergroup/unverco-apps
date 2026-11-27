@@ -59,16 +59,19 @@ def main():
     res = Results(ENV_SIM, "macos", out / "results.json")
     dev = pick_device(a.device)
     label = f"{dev['name']} (iOS {dev['ios']} simülatör)"
-    t0 = time.time()
-    sh(f"xcrun simctl boot {dev['udid']}", check=False); sh(f"xcrun simctl bootstatus {dev['udid']} -b", timeout=900)
-    print(f"ALTYAPI-SURE simulator acilis: {time.time()-t0:.0f} sn", flush=True)
     log = open(out / "appium.log", "w")
     srv = subprocess.Popen(["appium", "--port", "4723", "--log-no-colors"], stdout=log, stderr=subprocess.STDOUT)
     try:
-        for _ in range(60):
+        for _ in range(300):
             try: urllib.request.urlopen("http://127.0.0.1:4723/status", timeout=2); break
             except Exception: time.sleep(1)
         else: raise RuntimeError("Appium sunucusu baslamadi")
+        print("ALTYAPI-SURE Appium sunucusu hazir", flush=True)
+        t0 = time.time()
+        sh(f"xcrun simctl boot {dev['udid']}", check=False); sh(f"xcrun simctl bootstatus {dev['udid']} -b", timeout=900)
+        print(f"ALTYAPI-SURE simulator acilis: {time.time()-t0:.0f} sn", flush=True)
+        log = open(out / "appium.log", "w")
+        srv = subprocess.Popen(["appium", "--port", "4723", "--log-no-colors"], stdout=log, stderr=subprocess.STDOUT)
         from appium import webdriver
         from appium.options.ios import XCUITestOptions
         o = XCUITestOptions()

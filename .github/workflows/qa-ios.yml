@@ -82,6 +82,7 @@ jobs:
       - name: iOS Simulatoru + Mobile Safari (Appium)
         id: appium
         continue-on-error: true
+        timeout-minutes: 20
         run: python qa/ios/appium_run.py --out qa-out/ios-sim
       - name: WDA onbellegini kaydet
         if: always()
@@ -91,6 +92,7 @@ jobs:
           key: wda-${{ runner.os }}-${{ runner.arch }}-${{ steps.ver.outputs.k }}-${{ github.run_id }}
       - name: Yedek - simctl openurl + ekran goruntusu (yalniz Appium kurulamadiysa)
         if: ${{ steps.appium.outcome == 'failure' }}
+        timeout-minutes: 8
         run: |
           echo "[ALTYAPI] Appium yolu basarisiz, yedek simctl denetimi calisiyor"
           python qa/ios/run_sim.py --out qa-out/ios-sim-yedek
