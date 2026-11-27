@@ -12,8 +12,8 @@ PAPERS = [("Letter", {"format": "Letter"}), ("A4", {"format": "A4"}), ("8.5x10.8
 
 
 class Runner:
-    def __init__(self, pw, engine, out, res, base):
-        self.pw, self.engine, self.out, self.res, self.base = pw, engine, pathlib.Path(out), res, base
+    def __init__(self, pw, engine, out, res, server):
+        self.pw, self.engine, self.out, self.res, self.server, self.base = pw, engine, pathlib.Path(out), res, server, server.url
         self.br = getattr(pw, engine).launch()
         self.shots = self.out / "screenshots"
         self.shots.mkdir(parents=True, exist_ok=True)
@@ -28,7 +28,7 @@ class Runner:
         return c
 
     def attach_logs(self, pg, logs):
-        pg.on("console", lambda m: logs.append(f"console.{m.type}: {m.text}") if m.type == "error" else None)
+        pg.on("console", lambda m: logs.append(f"console.{m.type}: {m.text} @ {(m.location or {}).get('url', '')}:{(m.location or {}).get('lineNumber', '')}") if m.type == "error" else None)
         pg.on("pageerror", lambda e: logs.append(f"pageerror: {e}"))
         pg.on("response", lambda r: logs.append(f"HTTP {r.status} {r.url}") if r.status >= 400 else None)
         pg.on("requestfailed", lambda r: logs.append(f"requestfailed {r.url} {r.failure}") if "net::ERR_INTERNET_DISCONNECTED" not in str(r.failure) and not self.offline_now else None)
@@ -135,7 +135,13 @@ class Runner:
         eng, pname, aid, cfg = self.engine, prof["name"], app["name"], app["persistence"]
         try:
             for s in cfg["steps"]:
-                self.step(pg, s, last)
+                try:
+                    self.step(pg, s, last)
+                except Exception as e:
+                    self.res.add(eng, pname, aid, "Ana eylem erişilebilir", KALDI, f"{cfg['label']}: {short_err(e)}", None, repro)
+                    self.res.add(eng, pname, aid, "Veri kalıcılığı", ATLANDI, "ana eylem yapılamadığı için sınanamadı", None, repro)
+                    return
+            self.res.add(eng, pname, aid, "Ana eylem erişilebilir", GECTI, "", None, repro)
             before = pg.inner_text(cfg["probe"]).strip()
             pg.reload(wait_until="load")
             pg.wait_for_selector(cfg["ready"], state="attached", timeout=8000)
@@ -155,7 +161,7 @@ class Runner:
             pg.wait_for_timeout(600)
             controlled = pg.evaluate("!!navigator.serviceWorker.controller")
             self.offline_now = True
-            ctx.set_offline(True)
+            self.server.stop()  # gercek cevrimdisi: sunucu kapali, tek kaynak service worker onbellegi
             pg.reload(wait_until="load", timeout=15000)
             pg.wait_for_selector(app["offline"]["ready"], state="attached", timeout=10000)
             res = self.layout(pg, app)
@@ -163,17 +169,14 @@ class Runner:
             p = self.shots / f"{eng}-{prof['id']}-{app['id']}-cevrimdisi.png"
             pg.screenshot(path=str(p), scale="css")
             self.res.add(eng, pname, aid, "Çevrimdışı açılış", GECTI if ok else KALDI,
-                         "" if ok else "ağ kapalıyken ana ekran boş", str(p.relative_to(self.out)), repro)
+                         "" if ok else "sunucu kapalıyken ana ekran boş", str(p.relative_to(self.out)), repro)
             if not controlled:
                 self.res.rows[-1]["detail"] += " (not: sayfa sw denetiminde değildi)"
         except Exception as e:
-            self.res.add(eng, pname, aid, "Çevrimdışı açılış", KALDI, f"ağ kapalıyken açılamadı: {str(e).splitlines()[0][:200]}", None, repro)
+            self.res.add(eng, pname, aid, "Çevrimdışı açılış", KALDI, f"sunucu kapalıyken açılamadı: {str(e).splitlines()[0][:200]}", None, repro)
         finally:
             self.offline_now = False
-            try:
-                ctx.set_offline(False)
-            except Exception:
-                pass
+            self.server.start()
 
     def printing(self, pg, ctx, app, prof, repro, last):
         eng, pname, aid = self.engine, prof["name"], app["name"]
@@ -219,8 +222,8 @@ def main():
     res = Results(a.env, a.runner, out / "results.json")
     t0 = time.time()
     try:
-        with sync_playwright() as pw, static_server() as base:
-            r = Runner(pw, a.engine, out, res, base)
+        with sync_playwright() as pw, static_server(obj=True) as server:
+            r = Runner(pw, a.engine, out, res, server)
             for prof in profs:
                 for app in apps:
                     r.run_app(prof, app)

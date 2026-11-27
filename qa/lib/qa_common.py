@@ -16,6 +16,7 @@ GECTI, KALDI, ATLANDI, UYARI = "GEÇTİ", "KALDI", "ATLANDI", "UYARI"
 CHECK_ONCELIK = {
     "Ana yolculuk": "P0",
     "Boş ekran": "P0",
+    "Ana eylem erişilebilir": "P0",
     "Veri kalıcılığı": "P0",
     "Konsol hataları": "P1",
     "Çevrimdışı açılış": "P1",
@@ -84,21 +85,46 @@ class Results:
         self.outfile.write_text(json.dumps(self.rows, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
-@contextlib.contextmanager
-def static_server(port=8000, bind="127.0.0.1"):
-    """Depo kokunu `python -m http.server` ile sunar (canli siteye bagimlilik yok)."""
-    p = subprocess.Popen([sys.executable, "-m", "http.server", str(port), "--bind", bind, "--directory", str(REPO)],
-                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    try:
+class Server:
+    """Depo kokunu `python -m http.server` ile sunar (canli siteye bagimlilik yok). stop()/start(): gercek cevrimdisi sinama."""
+    def __init__(self, port=8000, bind="127.0.0.1"):
+        self.port, self.bind, self.p = port, bind, None
+
+    def start(self):
+        self.p = subprocess.Popen([sys.executable, "-m", "http.server", str(self.port), "--bind", self.bind, "--directory", str(REPO)],
+                                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         for _ in range(50):
             try:
-                urllib.request.urlopen(f"http://127.0.0.1:{port}/", timeout=1)
-                break
+                urllib.request.urlopen(f"http://127.0.0.1:{self.port}/", timeout=1)
+                return self
             except Exception:
                 time.sleep(0.2)
-        yield f"http://127.0.0.1:{port}/"
+        raise RuntimeError("yerel sunucu başlamadı")
+
+    def stop(self):
+        if self.p:
+            self.p.terminate()
+            self.p.wait()
+            self.p = None
+        for _ in range(20):  # port kapandi mi
+            try:
+                urllib.request.urlopen(f"http://127.0.0.1:{self.port}/", timeout=0.5)
+                time.sleep(0.2)
+            except Exception:
+                return
+
+    @property
+    def url(self):
+        return f"http://127.0.0.1:{self.port}/"
+
+
+@contextlib.contextmanager
+def static_server(port=8000, bind="127.0.0.1", obj=False):
+    sv = Server(port, bind).start()
+    try:
+        yield sv if obj else sv.url
     finally:
-        p.terminate()
+        sv.stop()
 
 
 def short_err(e):

@@ -1,0 +1,92 @@
+name: qa-android
+# Android QA: Android emulatoru (KVM) + Chrome. Ortam turu "Emulator". Gercek cihaz testi YOKTUR.
+# Standart ubuntu-latest runner (herkese acik depoda ucretsiz); larger runner KULLANILMAZ.
+on:
+  push:
+    paths:
+      - 'habit-tracker-2027/**'
+      - 'daily-budget-planner/**'
+      - 'qa/**'
+      - '.github/workflows/qa-android.yml'
+  pull_request:
+    paths:
+      - 'habit-tracker-2027/**'
+      - 'daily-budget-planner/**'
+      - 'qa/**'
+  workflow_dispatch:
+    inputs:
+      app_ref:
+        description: 'Uygulama klasorlerini bu commit/etiketten al (bos=bu commit). Android 9 hatasini yakalama kaniti: 19ff9a6 (1.0.2)'
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qa-android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: android-api${{ matrix.api }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [28, 34]
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Uygulama surumunu sec
+        if: ${{ github.event.inputs.app_ref != '' }}
+        run: git checkout "${{ github.event.inputs.app_ref }}" -- habit-tracker-2027 daily-budget-planner
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install websocket-client pillow
+      - name: KVM etkinlestir
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Android emulatoru + Chrome (API ${{ matrix.api }})
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          target: google_apis_playstore
+          arch: x86_64
+          disable-animations: true
+          emulator-boot-timeout: 900
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: bash qa/android/emulator-script.sh ${{ matrix.api }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-android-api${{ matrix.api }}
+          path: qa-out/
+          retention-days: 14
+
+  rapor:
+    needs: android
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { pattern: qa-android-api*, path: qa-in }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Rapor (GEÇTİ/KALDI tablosu job özetine yazılır)
+        run: |
+          python qa/report/make_report.py --in qa-in --out qa-rapor --title "Android QA raporu" > /dev/null
+          cat qa-rapor/mobil-uyumluluk-raporu.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-android-rapor
+          path: |
+            qa-rapor/
+            qa-in/
+          retention-days: 14
+      - name: Kapı
+        run: python qa/report/make_report.py --in qa-in --out qa-rapor --gate --summary /dev/null > /dev/null

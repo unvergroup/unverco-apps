@@ -1,0 +1,96 @@
+name: qa-ios
+# iOS QA (macos-latest, standart runner; herkese acik depoda ucretsiz).
+#  (a) Playwright WebKit + iPhone profilleri  -> ortam turu "Masaustu taklidi"
+#  (b) Gercek iOS Simulatoru + Mobile Safari  -> ortam turu "Gercek motor/simulator"
+# Gercek cihaz testi YOKTUR.
+on:
+  push:
+    paths:
+      - 'habit-tracker-2027/**'
+      - 'daily-budget-planner/**'
+      - 'qa/**'
+      - '.github/workflows/qa-ios.yml'
+  pull_request:
+    paths:
+      - 'habit-tracker-2027/**'
+      - 'daily-budget-planner/**'
+      - 'qa/**'
+  workflow_dispatch:
+    inputs:
+      app_ref:
+        description: 'Uygulama klasorlerini bu commit/etiketten al (bos=bu commit)'
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qa-ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  webkit-iphone:
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Uygulama surumunu sec
+        if: ${{ github.event.inputs.app_ref != '' }}
+        run: git checkout "${{ github.event.inputs.app_ref }}" -- habit-tracker-2027 daily-budget-planner
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: |
+          pip install playwright==1.63.0 pypdf pillow
+          python -m playwright install webkit
+      - run: python qa/selftest.py webkit
+      - run: python qa/web/run_web.py --engine webkit --profiles iphone --runner macos-latest --out qa-out/ios-webkit
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: qa-ios-webkit, path: qa-out/, retention-days: 14 }
+
+  simulator:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Uygulama surumunu sec
+        if: ${{ github.event.inputs.app_ref != '' }}
+        run: git checkout "${{ github.event.inputs.app_ref }}" -- habit-tracker-2027 daily-budget-planner
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install selenium pillow
+      - name: Ortam bilgisi
+        run: |
+          sw_vers; xcodebuild -version; xcrun simctl list runtimes
+      - name: iOS Simulatoru + Mobile Safari
+        run: python qa/ios/run_sim.py --out qa-out/ios-sim
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: qa-ios-sim, path: qa-out/, retention-days: 14 }
+
+  rapor:
+    needs: [webkit-iphone, simulator]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { pattern: qa-ios-*, path: qa-in }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Rapor (GEÇTİ/KALDI tablosu job özetine yazılır)
+        run: |
+          python qa/report/make_report.py --in qa-in --out qa-rapor --title "iOS QA raporu" > /dev/null
+          cat qa-rapor/mobil-uyumluluk-raporu.md
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-ios-rapor
+          path: |
+            qa-rapor/
+            qa-in/
+          retention-days: 14
+      - name: Kapı
+        run: python qa/report/make_report.py --in qa-in --out qa-rapor --gate --summary /dev/null > /dev/null
