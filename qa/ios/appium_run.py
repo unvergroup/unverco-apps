@@ -87,10 +87,11 @@ def main():
         ua = d.execute_script("return navigator.userAgent"); print("UA:", ua, flush=True)
         with static_server(8000, obj=True) as server:
             drv = Drv(d)
-            for orient, prof in (("PORTRAIT", label), ("LANDSCAPE", label + " yatay")):
+            # Yatay tur ayri origin'de (localhost): 127.0.0.1'deki kayitli veri/service worker yatay turu etkilemesin
+            for orient, prof, base in (("PORTRAIT", label, server.url), ("LANDSCAPE", label + " yatay", server.url.replace("127.0.0.1", "localhost"))):
                 d.orientation = orient; time.sleep(2)
                 for app in apps:
-                    run_generic(drv, app, server.url, res, "Mobile Safari (Appium)", prof, out / "screenshots",
+                    run_generic(drv, app, base, res, "Mobile Safari (Appium)", prof, out / "screenshots",
                                 offline_note="", console_note="safariConsole günlüğü okunamadı", server=server)
         try: d.quit()
         except Exception: pass
