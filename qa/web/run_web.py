@@ -72,7 +72,7 @@ class Runner:
         self.attach_logs(pg, logs)
         agg = {}  # denetim -> [(durum, ayrinti)]
         last = [0.0]
-        journey_err, shot_first = None, None
+        journey_err, shot_first, nshots = None, None, 0
 
         def add_agg(label, summ):
             for k, (st, d) in summ.items():
@@ -89,10 +89,12 @@ class Runner:
                         add_agg(s["label"], summarize_checks(self.layout(pg, app)))
                     if s.get("shot"):
                         p = self.shots / f"{tag}-{s['shot']}.png"
-                        pg.screenshot(path=str(p))
-                        shot_first = shot_first or p
+                        pg.screenshot(path=str(p), scale="css")
+                        nshots += 1
+                        if nshots == 2 or shot_first is None:
+                            shot_first = p
                 except Exception as e:
-                    journey_err = f"'{s.get('label')}' adimi: {str(e).splitlines()[0][:200]}"
+                    journey_err = f"'{s.get('label')}' adimi: {short_err(e)}"
                     p = self.shots / f"{tag}-HATA.png"
                     try:
                         pg.screenshot(path=str(p))
@@ -143,7 +145,7 @@ class Runner:
             self.res.add(eng, pname, aid, "Veri kalıcılığı", GECTI if ok else KALDI,
                          "" if ok else f"{cfg['label']}: yenileme öncesi/sonrası metin farklı. önce={before[:120]!r} sonra={after[:120]!r}", None, repro)
         except Exception as e:
-            self.res.add(eng, pname, aid, "Veri kalıcılığı", KALDI, f"{cfg['label']}: {str(e).splitlines()[0][:200]}", None, repro)
+            self.res.add(eng, pname, aid, "Veri kalıcılığı", KALDI, f"{cfg['label']}: {short_err(e)}", None, repro)
 
     def offline(self, ctx, pg, app, prof, repro):
         eng, pname, aid = self.engine, prof["name"], app["name"]
@@ -159,7 +161,7 @@ class Runner:
             res = self.layout(pg, app)
             ok = not res["blank"]["blank"]
             p = self.shots / f"{eng}-{prof['id']}-{app['id']}-cevrimdisi.png"
-            pg.screenshot(path=str(p))
+            pg.screenshot(path=str(p), scale="css")
             self.res.add(eng, pname, aid, "Çevrimdışı açılış", GECTI if ok else KALDI,
                          "" if ok else "ağ kapalıyken ana ekran boş", str(p.relative_to(self.out)), repro)
             if not controlled:

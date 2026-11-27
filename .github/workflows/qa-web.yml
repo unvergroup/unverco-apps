@@ -51,7 +51,7 @@ jobs:
           python-version: '3.12'
       - name: Playwright kur
         run: |
-          pip install playwright==1.49.1 pypdf
+          pip install playwright==1.63.0 pypdf pillow
           python -m playwright install --with-deps ${{ matrix.engine }}
       - name: Denetimlerin kendi testi
         run: python qa/selftest.py ${{ matrix.engine }}
@@ -78,7 +78,9 @@ jobs:
         with:
           python-version: '3.12'
       - name: Rapor uret (GEÇTİ/KALDI tablosu job özetine yazılır)
-        run: python qa/report/make_report.py --in qa-in --out qa-rapor --title "Web QA raporu (Playwright)"
+        run: |
+          python qa/report/make_report.py --in qa-in --out qa-rapor --title "Web QA raporu (Playwright)" > /dev/null
+          cat qa-rapor/mobil-uyumluluk-raporu.md
       - uses: actions/upload-artifact@v4
         if: always()
         with:

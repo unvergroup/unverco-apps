@@ -26,6 +26,21 @@ CHECK_ONCELIK = {
 }
 
 
+def img_stats(path):
+    """Ekran goruntusu bos mu? (kuantize renk sayisi, baskin rengin orani). PIL yoksa None."""
+    try:
+        from PIL import Image
+        im = Image.open(path).convert("RGB")
+        im.thumbnail((200, 400))
+        q = im.quantize(colors=64).convert("RGB")
+        cols = q.getcolors(100000) or []
+        total = sum(c for c, _ in cols) or 1
+        top = max((c for c, _ in cols), default=0) / total
+        return {"renk": len(cols), "baskin_oran": round(top, 2), "boyut": Image.open(path).size}
+    except Exception:
+        return None
+
+
 def load_apps(only=None):
     apps = json.loads((QA / "apps.json").read_text(encoding="utf-8"))["apps"]
     return [a for a in apps if not only or a["id"] in only or a["dir"] in only]
@@ -55,6 +70,11 @@ class Results:
         row = dict(env=self.env, runner=self.runner, engine=engine, profile=profile, app=app, check=check,
                    status=status, detail=detail, shot=shot, repro=repro)
         self.rows.append(row)
+        if shot and check in ("Ana yolculuk", "Çevrimdışı açılış"):
+            st = img_stats(self.outfile.parent / shot)
+            if st:
+                row["goruntu"] = st
+                print(f"    EKRAN {shot} renk={st['renk']} baskin_oran={st['baskin_oran']} boyut={st['boyut']}", flush=True)
         print(f"[{status}] {engine} | {profile} | {app} | {check}" + (f" :: {detail[:300]}" if detail and status != GECTI else ""), flush=True)
         self.save()
         return row
@@ -81,6 +101,15 @@ def static_server(port=8000, bind="127.0.0.1"):
         p.terminate()
 
 
+def short_err(e):
+    t = str(e)
+    if "outside of the viewport" in t:
+        return "düğme görünüm alanının dışında kalıyor, kaydırılsa da erişilemiyor (" + t.splitlines()[0][:120] + ")"
+    if "not visible" in t or "element is not visible" in t:
+        return "düğme görünmüyor (" + t.splitlines()[0][:120] + ")"
+    return t.splitlines()[0][:200]
+
+
 def repro_text(app, profile_name, engine, env, extra=""):
     steps = " -> ".join(s.get("label", "") for s in app["journey"] if s.get("label"))
     return (f"Ortam: {env} / {engine} / {profile_name}. Depoyu klonla, kokte `python -m http.server 8000` calistir, "
@@ -94,6 +123,6 @@ def summarize_checks(res):
     out["Boş ekran"] = (KALDI if b["blank"] else GECTI, f"ana alan bulundu={b['mainFound']} metin={b['textLen']} gorunen={b['visible']}" if b["blank"] else "")
     o = res["overflow"]
     out["Yatay taşma"] = (KALDI if o["overflow"] else GECTI, f"scrollWidth {o['scrollWidth']} > {o['innerWidth']}; " + "; ".join(o["offenders"]) if o["overflow"] else "")
-    out["Kırpılmış metin"] = (UYARI if res["clipped"] else GECTI, "; ".join(res["clipped"]))
-    out["Dokunma hedefi 44px"] = (UYARI if res["small"] else GECTI, f"{len(res['small'])} hedef: " + "; ".join(res["small"][:8]))
+    out["Kırpılmış metin"] = (UYARI if res["clipped"] else GECTI, "; ".join(res["clipped"]) if res["clipped"] else "")
+    out["Dokunma hedefi 44px"] = (UYARI if res["small"] else GECTI, (f"{len(res['small'])} hedef: " + "; ".join(res["small"][:8])) if res["small"] else "")
     return out
