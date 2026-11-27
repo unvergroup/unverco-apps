@@ -1,0 +1,16 @@
+name: qa-macos-olcum
+# Gecici: hangi macOS etiketi hizli runner aliyor? (olcum)
+on: { workflow_dispatch: {} }
+permissions: { contents: read }
+jobs:
+  merhaba:
+    strategy:
+      fail-fast: false
+      matrix:
+        label: [macos-15, macos-26, macos-latest, macos-15-intel, macos-14]
+    runs-on: ${{ matrix.label }}
+    timeout-minutes: 10
+    steps:
+      - run: |
+          sw_vers; uname -m; xcodebuild -version; xcrun simctl list runtimes
+          xcrun simctl list devices available | head -40
