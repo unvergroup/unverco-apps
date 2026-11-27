@@ -105,6 +105,7 @@ def run_generic(drv, app, base, res, engine, profile, shots_dir, *, offline_note
         res.add(engine, profile, app["name"], "Veri kalıcılığı", ATLANDI, "yolculuk tamamlanmadı", None, repro)
     else:
         try:
+            pre = drv.js(TEXT_JS, cfg["probe"]) or ""
             for s in cfg["steps"]:
                 try:
                     do_step(drv, s, last)
@@ -114,6 +115,11 @@ def run_generic(drv, app, base, res, engine, profile, shots_dir, *, offline_note
                     raise StopIteration
             res.add(engine, profile, app["name"], "Ana eylem erişilebilir", GECTI, "", None, repro)
             before = drv.js(TEXT_JS, cfg["probe"]) or ""
+            for _ in range(12):  # yavas cihazda ekran guncellemesi gecikebilir: metin degisene kadar bekle
+                if before != pre:
+                    break
+                time.sleep(0.5)
+                before = drv.js(TEXT_JS, cfg["probe"]) or ""
             drv.reload()
             time.sleep(1.5)
             poll(drv, cfg["ready"], True, 12)

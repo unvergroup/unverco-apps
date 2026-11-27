@@ -9,6 +9,8 @@ from playwright.sync_api import sync_playwright
 
 PRINT_STUB = ("window.__printed = 0; window.print = function () { window.__printed += 1; };"
               "document.addEventListener('securitypolicyviolation', function (e) { console.error('CSP ihlali: ' + e.violatedDirective + ' engellenen=' + e.blockedURI + ' ornek=' + (e.sample || '') + ' kaynak=' + e.sourceFile + ':' + e.lineNumber); }, true);")
+LEGACY_STUB = ("delete window.structuredClone; delete Object.hasOwn; delete Array.prototype.at; delete Array.prototype.findLast; delete Array.prototype.findLastIndex;"
+               "delete String.prototype.at; delete Element.prototype.replaceChildren;")
 PAPERS = [("Letter", {"format": "Letter"}), ("A4", {"format": "A4"}), ("8.5x10.8in", {"width": "8.5in", "height": "10.8in"})]
 
 
@@ -26,6 +28,8 @@ class Runner:
             kw["is_mobile"] = True
         c = self.br.new_context(**kw)
         c.add_init_script(PRINT_STUB)
+        if prof.get("legacy"):
+            c.add_init_script(LEGACY_STUB)
         return c
 
     def attach_logs(self, pg, logs):
@@ -150,6 +154,7 @@ class Runner:
     def persistence(self, ctx, pg, app, prof, repro, last):
         eng, pname, aid, cfg = self.engine, prof["name"], app["name"], app["persistence"]
         try:
+            pre = pg.inner_text(cfg["probe"]).strip()
             for s in cfg["steps"]:
                 try:
                     self.step(pg, s, last)
@@ -159,6 +164,11 @@ class Runner:
                     return
             self.res.add(eng, pname, aid, "Ana eylem erişilebilir", GECTI, "", None, repro)
             before = pg.inner_text(cfg["probe"]).strip()
+            for _ in range(12):  # ekran guncellemesi gecikebilir: metin degisene kadar bekle
+                if before != pre:
+                    break
+                pg.wait_for_timeout(500)
+                before = pg.inner_text(cfg["probe"]).strip()
             pg.reload(wait_until="load")
             pg.wait_for_selector(cfg["ready"], state="attached", timeout=8000)
             pg.wait_for_timeout(500)
@@ -241,6 +251,8 @@ def main():
         with sync_playwright() as pw, static_server(obj=True) as server:
             r = Runner(pw, a.engine, out, res, server)
             for prof in profs:
+                if prof.get("engines") and a.engine not in prof["engines"]:
+                    continue
                 for app in apps:
                     r.run_app(prof, app)
             r.br.close()
