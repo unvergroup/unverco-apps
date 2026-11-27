@@ -222,6 +222,7 @@ async function main() {
 
   applyTheme();
   await show(route);
+  if (globalThis.__unvercoBoot) globalThis.__unvercoBoot.ready();
   if (adapter.takeCorrupted && adapter.takeCorrupted().length) ctx.notify(i18n.t("storage.corrupt"), "error");
 
   pwa = initPwa({
@@ -232,6 +233,7 @@ async function main() {
 
 main().catch((e) => {
   console.error(e);
+  if (globalThis.__unvercoBoot) globalThis.__unvercoBoot.fail();
   const text = getMessages(document.documentElement.lang)["error.start"] ?? "Something went wrong while starting the app. Reload the page and try again.";
   document.getElementById("panel")?.replaceChildren(h("p", { class: "banner banner-error", role: "alert", text }));
 });

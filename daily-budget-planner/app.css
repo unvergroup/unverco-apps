@@ -131,7 +131,7 @@ body {
 }
 /* Yumuşak radyal ışık */
 .aura {
-  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: -1; pointer-events: none;
   background:
     radial-gradient(60% 45% at 50% 8%, var(--glow-mint), transparent 70%),
     radial-gradient(55% 50% at 100% 60%, var(--glow-teal), transparent 70%),
@@ -156,7 +156,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
 }
 .glass::before { /* üst kenar parlaması */
-  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; border-radius: inherit; pointer-events: none;
   padding: 1px;
   background: linear-gradient(180deg, var(--glass-edge-hi), transparent 38%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -201,9 +201,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* Halka göstergesi */
 .hero { display: flex; flex-direction: column; align-items: center; padding: 18px 16px 16px; text-align: center; }
 .ring { position: relative; width: 272px; height: 272px; }
-.ring svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring svg { position: absolute; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
 .ring .track { stroke: var(--glass-3); }
-.ring .inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.ring .inner { position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .ring .lbl { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-2); font-weight: 650; }
 .ring .big { font-family: var(--font-display); font-size: var(--fs-hero); font-weight: 750; letter-spacing: -.02em; line-height: 1.05; margin: 4px 0 6px; color: var(--text-1); text-shadow: 0 0 28px rgba(76,240,184,.35); }
 .ring .big sup { font-size: .5em; vertical-align: .62em; margin-right: 2px; color: var(--gold-text); text-shadow: none; }
@@ -267,7 +267,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .period-head .tot small { color: var(--text-2); font-size: 12px; }
 .cover { margin: 12px 0 6px; }
 .cover .bar { height: 10px; border-radius: 6px; background: var(--glass-3); overflow: hidden; position: relative; }
-.cover .bar i { position: absolute; inset: 0 auto 0 0; border-radius: 6px; background: var(--grad-mint); }
+.cover .bar i { position: absolute; top: 0; right: auto; bottom: 0; left: 0; border-radius: 6px; background: var(--grad-mint); }
 .cover .bar i.over { background: linear-gradient(90deg, var(--coral), #ffb19f); }
 .cover p { margin: 6px 0 0; font-size: 14px; color: var(--text-2); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 .cover p b { color: var(--text-1); }
@@ -304,7 +304,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .fund { display: flex; gap: 16px; align-items: center; padding: 16px; margin-bottom: 12px; }
 .goal { position: relative; width: 104px; height: 104px; flex: none; }
 .goal svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-.goal .t { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; font-weight: 750; font-size: 22px; line-height: 1; }
+.goal .t { position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: grid; place-items: center; text-align: center; font-weight: 750; font-size: 22px; line-height: 1; }
 .goal .t small { display: block; font-size: 11px; color: var(--text-2); font-weight: 600; letter-spacing: .08em; margin-top: 3px; }
 .fund .tx { flex: 1; min-width: 0; }
 .fund h3 { margin: 0; font-size: 17px; }
@@ -315,7 +315,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .empty b { color: var(--text-1); display: block; font-size: 15px; }
 
 /* Quick add alt penceresi */
-.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 30; backdrop-filter: blur(3px); }
+.scrim { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: var(--scrim); z-index: 30; backdrop-filter: blur(3px); }
 .sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; border-radius: 30px 30px 0 0; padding: 10px 18px 22px; background: linear-gradient(180deg, rgba(14,46,52,.92), rgba(6,22,28,.96)); border: 1px solid var(--glass-edge); border-bottom: 0; box-shadow: 0 -20px 60px -20px rgba(76,240,184,.35); }
 .sheet .grab { width: 44px; height: 5px; border-radius: 3px; background: var(--glass-edge-hi); margin: 0 auto 10px; }
 .sheet .head { display: flex; justify-content: space-between; align-items: center; }
@@ -687,9 +687,9 @@ ul.list.card { padding: 2px 16px; }
 #toast-region { bottom: calc(var(--nav-h) + 24px + var(--sab)); }
 .sheet { padding-bottom: calc(22px + var(--sab)); padding-left: max(18px, var(--sal)); padding-right: max(18px, var(--sar)); }
 /* Ortalanmis pencere guvenli alanin icinde ortalanir (durum cubugu altina uzanmaz) */
-dialog.dlg { inset: var(--sat) var(--sar) var(--sab) var(--sal); max-height: calc(100vh - 24px - var(--sat) - var(--sab)); }
+dialog.dlg { top: var(--sat); right: var(--sar); bottom: var(--sab); left: var(--sal); max-height: calc(100vh - 24px - var(--sat) - var(--sab)); }
 @media (max-width: 767px) {
-  dialog.dlg.sheet { inset: 0; padding-bottom: calc(22px + var(--sab)); padding-left: max(18px, var(--sal)); padding-right: max(18px, var(--sar)); max-height: calc(94vh - var(--sat)); }
+  dialog.dlg.sheet { top: 0; right: 0; bottom: 0; left: 0; padding-bottom: calc(22px + var(--sab)); padding-left: max(18px, var(--sal)); padding-right: max(18px, var(--sar)); max-height: calc(94vh - var(--sat)); }
 }
 body.bare .main { padding-top: max(16px, var(--sat)); padding-bottom: calc(40px + var(--sab)); padding-left: max(16px, var(--sal)); padding-right: max(16px, var(--sar)); }
 @media (min-width: 768px) {
@@ -709,3 +709,7 @@ body.bare .main { padding-top: max(16px, var(--sat)); padding-bottom: calc(40px 
 .banner-card p { flex: 1 1 calc(100% - 40px); min-width: 0; overflow-wrap: break-word; }
 .banner-card .btn { flex: 0 1 auto; }
 @media (min-width: 380px) { #backup-strip #backup-now { margin-left: 32px; } } /* dugmeler metin hizasinda (simge 20 + bosluk 12) */
+
+/* iOS 15.4 oncesi <dialog> bilinmeyen eleman: acik/kapali gorunum */
+dialog:not([open]) { display: none; }
+dialog[open] { display: block; }

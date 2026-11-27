@@ -183,6 +183,7 @@ async function main() {
   try { globalThis.matchMedia("(prefers-color-scheme: light)").addEventListener("change", () => { if (ctx.prefs && ctx.prefs.theme === "system") show(route, { keepFocus: true }); }); } catch { /* eski tarayici */ }
 
   await show(route);
+  if (globalThis.__unvercoBoot) globalThis.__unvercoBoot.ready();
   if (adapter.volatile) ctx.notify(ctx.i18n.t("storage.volatile"), "error");
   // Tek dosya paketi (paketleyici config'e "edition" ekler) servis calisani kaydetmez: yaninda sw.js yoktur, http'de de sessizce atlanir.
   if (!config.edition) initPwa({ onUpdate: () => ctx.notify(ctx.i18n.t("pwa.update"), "info", { timeout: 0, action: { label: ctx.i18n.t("pwa.refresh"), run: () => location.reload() } }) });
@@ -190,6 +191,7 @@ async function main() {
 
 main().catch((e) => {
   console.error(e);
+  if (globalThis.__unvercoBoot) globalThis.__unvercoBoot.fail();
   const text = getMessages(document.documentElement.lang)["err.start"] ?? "Something went wrong while starting the app. Reload the page and try again.";
   document.getElementById("screen")?.replaceChildren(h("p", { class: "banner-card glass", role: "alert", text }));
 });
