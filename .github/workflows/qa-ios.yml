@@ -68,9 +68,9 @@ jobs:
         run: |
           sw_vers; xcodebuild -version; xcrun simctl list runtimes
           echo "k=$(xcodebuild -version | tr -d '\n ' )-appium2" >> "$GITHUB_OUTPUT"
-      - name: Appium 2 + XCUITest surucusu
+      - name: Appium + XCUITest surucusu
         run: |
-          npm install -g appium@2
+          npm install -g appium
           appium driver install xcuitest
           appium driver list --installed
       - name: WebDriverAgent onbellegi (derleme ciktisi)
