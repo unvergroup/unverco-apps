@@ -1,6 +1,6 @@
 ÜNVERCO App Tester
 Copyright (c) 2026 ÜNVER GROUP GLOBAL PAZARLAMA A.Ş. (ÜNVERCO). All rights reserved.
-This app is licensed for personal use by the buyer. Do not share, resell or redistribute the file.
+This app is licensed to the buyer for their own use (one person or one business). Do not share, resell or redistribute the files.
 
 Third-party notices
 ===================
