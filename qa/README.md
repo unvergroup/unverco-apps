@@ -53,7 +53,7 @@ Bu bir gevsetme degil spec'in kendisidir: Chrome surumu 80'in altindaysa `run_an
 - `concurrency`: yeni **push** yalnizca **ayni workflow'un eski push/PR kosusunu** iptal eder (eski commit'in sonucu degersiz, macOS kuyrugu yigilmaz).
   `workflow_dispatch` kosulari (telefon-test.sh, elle) benzersiz grupta: hicbir push onu iptal etmez; farkli workflow'lar birbirini iptal etmez.
 - Tetikleyici yollar dar: yalniz uygulama klasorleri ve ilgili `qa/**` yollari.
-- Android: AVD + snapshot `actions/cache` ile saklanir (`avd-v1-api<N>-...`); ilk kosu onbellegi olusturur, sonrakiler snapshot'tan acilir. API 28/34 matris, paralel.
+- Android: AVD+snapshot onbellegi (`actions/cache`, reactivecircus onerisi) denendi: ~1 dk kazandirdi (API34 3dk47 -> 2dk51, API28 3dk08 -> 2dk37) ama 3 kosunun 2'sinde snapshot acilisinda `device offline`/exit 137 ile betik hic kosmadi. **Guvenilirlik icin kapatildi** (soguk acilis, `-no-snapshot`). API 28/34 matris, paralel; pip onbellegi acik.
 - Playwright tarayicilari `actions/cache` ile saklanir; pip bagimliliklari `qa/requirements-*.txt` ile onbelleklenir.
 - Her is kendi logunda tam raporu basar; `telefon-test.sh` artifact indirmeden okur (artifact indirme bazi ortamlarda engelli).
 - iOS runner etiketi `macos_runner` girdisiyle (`QA_MACOS=macos-15|macos-14`) secilebilir.

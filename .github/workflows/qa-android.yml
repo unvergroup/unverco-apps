@@ -65,37 +65,8 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      # AVD onbellegi (reactivecircus onerisi): ilk kosuda AVD + anlik goruntu (snapshot) uretilip actions/cache'e yazilir,
-      # sonraki kosularda soguk acilis (~2-3 dk) yerine snapshot'tan hizli acilis olur.
-      - name: AVD onbellegi (geri yukle)
-        id: avd-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-v1-api${{ matrix.api }}-playstore-x86_64-pixel5
-      - name: AVD ve snapshot olustur (yalniz onbellek yoksa)
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api }}
-          target: google_apis_playstore
-          arch: x86_64
-          profile: pixel_5
-          force-avd-creation: false
-          disable-animations: false
-          emulator-boot-timeout: 900
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: echo "AVD snapshot uretildi"
-      - name: AVD onbellegi (kaydet)
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-v1-api${{ matrix.api }}-playstore-x86_64-pixel5
+      # AVD/snapshot onbellegi DENENDI ve KAPATILDI: snapshot'tan acilista 3 kosunun 2'sinde "device offline" / exit 137 ile
+      # emulator-script.sh hic kosmadi (calisma 46039994731 ve 46044310690); kazanc ~1 dk idi. Guvenilirlik > hiz: soguk acilis.
       - name: Android emulatoru + Chrome (API ${{ matrix.api }})
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -103,10 +74,9 @@ jobs:
           target: google_apis_playstore
           arch: x86_64
           profile: pixel_5
-          force-avd-creation: false
           disable-animations: true
           emulator-boot-timeout: 900
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
           script: bash qa/android/emulator-script.sh ${{ matrix.api }}
       - name: Rapor (artifact'siz, log'a tam metin)
         if: always()
