@@ -12,6 +12,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ID="t$(date +%s)$$"; T0=$(date +%s); D="$(mktemp -d)"
 declare -A FILE=([web]=qa-web.yml [android]=qa-android.yml [ios]=qa-ios.yml)
 declare -A RUN=()
+mkdir -p "$D"; echo "${ONLY//,/ }" > "$D/secilen"
 log() { printf '[%s] %s\n' "$(date +%H:%M:%S)" "$*" >&2; }
 for t in gh jq python3; do command -v $t >/dev/null || { echo "Eksik arac: $t" >&2; exit 2; }; done
 
@@ -43,7 +44,9 @@ while :; do
     id=${RUN[$k]}
     st=$(gh api "repos/$REPO/actions/runs/$id" --jq '[.status,.conclusion]|@tsv' 2>/dev/null) || { alldone=0; continue; }
     status=${st%%$'\t'*}
-    if [ "$status" = completed ]; then DONE[$k]=1; log "bitti: $k (${st//$'\t'/ }) $((el/60))dk"; continue; fi
+    if [ "$status" = completed ]; then DONE[$k]=1; log "bitti: $k (${st//$'\t'/ }) $((el/60))dk"
+      [ "$el" -lt 120 ] && [ "${st##*$'\t'}" = cancelled ] && echo "altyapı: koşu başlar başlamaz iptal edildi (runner etiketi $( [ "$k" = ios ] && echo "$MACOS" || echo ubuntu-latest ) artık desteklenmiyor olabilir)" >> "$D/$k.not"
+      continue; fi
     alldone=0
     # kuyruk denetimi: bir is QLIMIT sn'den uzun suredir hic baslamadiysa altyapi sorunu
     q=$(gh api "repos/$REPO/actions/runs/$id/jobs?per_page=30" --jq "[.jobs[]|select(.status==\"queued\" or .status==\"waiting\")]|length" 2>/dev/null || echo 0)

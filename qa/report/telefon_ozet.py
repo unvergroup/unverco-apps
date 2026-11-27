@@ -41,7 +41,9 @@ def main(d):
     d = pathlib.Path(d)
     tablo, kaldi, notlar, bilgi = [], [], [], []
     product_fail = infra = False
+    sec = (d / "secilen").read_text().split() if (d / "secilen").exists() else [k for k, _ in WF]
     for key, name in WF:
+        if key not in sec: continue
         runf = d / f"{key}.run.json"
         if not runf.exists():
             notlar.append(f"{name}: çalıştırma bulunamadı/tetiklenemedi (altyapı)"); infra = True; continue
@@ -60,7 +62,10 @@ def main(d):
                 if c["KALDI"]: product_fail = True
             elif j["conclusion"] in ("cancelled", "skipped") or j["status"] != "completed":
                 sonuc = "ALTYAPI"; infra = True
-                if not any(name in n and j["name"] in n for n in notlar):
+                if not j.get("runner_name") and j["conclusion"] == "cancelled" and (sure or 0) >= 600:
+                    et = "macOS kuyruğu" if key == "ios" else "runner kuyruğu"
+                    notlar.append(f"{name}/{j['name']}: altyapı: {et} — iş {sure//60} dk kuyrukta kaldı, hiç runner atanmadı (GitHub 15 dk'da iptal etti); ürün hatası değil")
+                if not any(j["name"] in n for n in notlar):
                     notlar.append(f"{name}/{j['name']}: tamamlanmadı (durum={j['status']}/{j['conclusion']})")
             else:
                 sonuc = "ALTYAPI" if j["conclusion"] != "success" else "GEÇTİ"
