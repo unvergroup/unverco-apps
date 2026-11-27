@@ -70,8 +70,6 @@ def main():
         t0 = time.time()
         sh(f"xcrun simctl boot {dev['udid']}", check=False); sh(f"xcrun simctl bootstatus {dev['udid']} -b", timeout=900)
         print(f"ALTYAPI-SURE simulator acilis: {time.time()-t0:.0f} sn", flush=True)
-        log = open(out / "appium.log", "w")
-        srv = subprocess.Popen(["appium", "--port", "4723", "--log-no-colors"], stdout=log, stderr=subprocess.STDOUT)
         from appium import webdriver
         from appium.options.ios import XCUITestOptions
         o = XCUITestOptions()
@@ -81,18 +79,46 @@ def main():
         o.set_capability("appium:wdaLaunchTimeout", 600000); o.set_capability("appium:wdaConnectionTimeout", 600000)
         o.set_capability("appium:newCommandTimeout", 600); o.set_capability("appium:safariIgnoreFraudWarning", True)
         o.set_capability("appium:autoAcceptAlerts", True)
-        t1 = time.time()
-        d = webdriver.Remote("http://127.0.0.1:4723", options=o)
-        print(f"ALTYAPI-SURE Appium oturumu (WDA derleme/baslatma): {time.time()-t1:.0f} sn", flush=True)
+        # Onbellekte derlenmis WDA varsa yeniden derleme (xcodebuild) yapma: ~9 dk -> ~1 dk
+        prebuilt = bool(list(pathlib.Path(a.wda_cache).glob("Build/Products/*.xctestrun")))
+        print(f"ALTYAPI WDA onbellek: {'var, derlemesiz baslatma' if prebuilt else 'yok, derlenecek'}", flush=True)
+
+        def oturum(hazir):
+            o.set_capability("appium:usePrebuiltWDA", hazir)
+            t1 = time.time()
+            dd = webdriver.Remote("http://127.0.0.1:4723", options=o)
+            print(f"ALTYAPI-SURE Appium oturumu (usePrebuiltWDA={hazir}): {time.time()-t1:.0f} sn", flush=True)
+            return dd
+
+        try:
+            d = oturum(prebuilt)
+        except Exception as e:
+            if not prebuilt: raise
+            print(f"ALTYAPI derlemesiz baslatma olmadi ({type(e).__name__}); derleyerek yeniden deneniyor", flush=True)
+            d = oturum(False)
         ua = d.execute_script("return navigator.userAgent"); print("UA:", ua, flush=True)
         with static_server(8000, obj=True) as server:
-            drv = Drv(d)
             # Yatay tur ayri origin'de (localhost): 127.0.0.1'deki kayitli veri/service worker yatay turu etkilemesin
-            for orient, prof, base in (("PORTRAIT", label, server.url), ("LANDSCAPE", label + " yatay", server.url.replace("127.0.0.1", "localhost"))):
-                d.orientation = orient; time.sleep(2)
-                for app in apps:
-                    run_generic(drv, app, base, res, "Mobile Safari (Appium)", prof, out / "screenshots",
+            turlar = [(orient, prof, base, app) for orient, prof, base in
+                      (("PORTRAIT", label, server.url), ("LANDSCAPE", label + " yatay", server.url.replace("127.0.0.1", "localhost")))
+                      for app in apps]
+            yeniden = 1  # WDA baglantisi koparsa oturum bir kez yeniden kurulur, yarim kalan tur tekrarlanir
+            i = 0
+            while i < len(turlar):
+                orient, prof, base, app = turlar[i]
+                try:
+                    if d.orientation != orient: d.orientation = orient; time.sleep(2)
+                    run_generic(Drv(d), app, base, res, "Mobile Safari (Appium)", prof, out / "screenshots",
                                 offline_note="", console_note="safariConsole günlüğü okunamadı", server=server)
+                    i += 1
+                except Exception as e:
+                    baglanti = any(k in repr(e) for k in ("RemoteDisconnected", "Connection aborted", "ConnectionRefused", "invalid session", "Max retries"))
+                    if not (baglanti and yeniden > 0): raise
+                    yeniden -= 1
+                    print(f"[ALTYAPI] WDA baglantisi koptu ({type(e).__name__}); oturum yeniden kuruluyor, tur tekrarlanacak", flush=True)
+                    try: d.quit()
+                    except Exception: pass
+                    d = oturum(bool(list(pathlib.Path(a.wda_cache).glob("Build/Products/*.xctestrun"))))
         try: d.quit()
         except Exception: pass
         (out / "meta.json").write_text(json.dumps({"engine": "ios-simulator-appium", "cihaz": dev["name"], "ios": dev["ios"], "ua": ua}, ensure_ascii=False))

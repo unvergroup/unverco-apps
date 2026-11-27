@@ -3,28 +3,8 @@ name: qa-ios
 #  (a) Playwright WebKit + iPhone profilleri  -> ortam turu "Masaustu taklidi"
 #  (b) Gercek iOS Simulatoru + Mobile Safari  -> ortam turu "Gercek motor/simulator"
 # Gercek cihaz testi YOKTUR.
+# Yalniz elle/qa/telefon-test.sh ile tetiklenir: kisitli macOS kuyrugunda ayni degisiklik icin iki kosu olmasin.
 on:
-  push:
-    paths:
-      - 'habit-tracker-2027/**'
-      - 'daily-budget-planner/**'
-      - 'qa/apps.json'
-      - 'qa/profiles.json'
-      - 'qa/lib/**'
-      - 'qa/report/**'
-      - 'qa/ios/**'
-      - 'qa/requirements-web.txt'
-      - '.github/workflows/qa-ios.yml'
-  pull_request:
-    paths:
-      - 'habit-tracker-2027/**'
-      - 'daily-budget-planner/**'
-      - 'qa/apps.json'
-      - 'qa/profiles.json'
-      - 'qa/lib/**'
-      - 'qa/report/**'
-      - 'qa/ios/**'
-      - 'qa/requirements-web.txt'
   workflow_dispatch:
     inputs:
       app_ref:
@@ -92,7 +72,7 @@ jobs:
           key: wda-${{ runner.os }}-${{ runner.arch }}-${{ steps.ver.outputs.k }}-${{ github.run_id }}
       - name: Yedek - simctl openurl + ekran goruntusu (yalniz Appium kurulamadiysa)
         if: ${{ steps.appium.outcome == 'failure' }}
-        timeout-minutes: 8
+        timeout-minutes: 4
         run: |
           echo "[ALTYAPI] Appium yolu basarisiz, yedek simctl denetimi calisiyor"
           python qa/ios/run_sim.py --out qa-out/ios-sim-yedek

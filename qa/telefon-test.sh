@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Tek komut telefon QA: web (Playwright 3 motor, 11 profil) + Android emulatoru (API 28/34) + iOS (WebKit + simulator).
+# Tek komut telefon QA: web (Playwright 3 motor, 11 profil) + Android emulatoru (API 34) + iOS (WebKit + simulator).
 # Kullanim:  qa/telefon-test.sh [--hizli] [app_ref]
 #   Varsayilan: web + Android + iOS Simulatoru (Appium + Mobile Safari, macos-15). --hizli: yalniz web + Android.
 #   app_ref  (istege bagli) uygulama klasorlerini bu commit/etiketten al (bos = main'in guncel hali)
