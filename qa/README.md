@@ -3,11 +3,15 @@
 ## Tek komut
 
 ```bash
-qa/telefon-test.sh            # main'in guncel hali
-qa/telefon-test.sh 627f280    # uygulama klasorlerini bu commit/etiketten sina
+qa/telefon-test.sh              # web + Android (~5 dk), main'in guncel hali
+qa/telefon-test.sh --ios        # + iOS Simulatoru ve iOS WebKit isi (macOS kuyrugu 0-15+ dk, isteğe bağlı)
+qa/telefon-test.sh 627f280      # uygulama klasorlerini bu commit/etiketten sina
 ```
 
-Komut web + Android + iOS workflow'larini REST ile tetikler, run kimliklerini bulur, bitene kadar yoklar (en fazla 25 dk) ve
+**iPhone kapsami:** varsayilan kosuda iPhone, web iste **WebKit iPhone profilleriyle** (iPhone 13/14/15/16, yatay; Masaustu taklidi) saglanir.
+Gercek iOS Simulatoru yalnizca `--ios` ile kosar; macOS kuyrugu 15 dk'yi asarsa cikis kodu 2 DEGIL, "iOS atlandi: macOS kuyrugu" bilgisi verilir.
+
+Komut web + Android (+ istenirse iOS) workflow'larini REST ile tetikler, run kimliklerini bulur, bitene kadar yoklar (en fazla 25 dk) ve
 **artifact'a ihtiyac duymadan** (yalniz `gh run view --log`) tek tablo basar: is bazinda sure, GEÇTİ/KALDI/UYARI/ATLANDI sayisi ve [KALDI] satirlari.
 Gereken: `gh` (giris yapmis), `jq`, `python3`. Ortam degiskenleri: `QA_REF`, `QA_ONLY=web,android`, `QA_TIMEOUT`, `QA_QUEUE_LIMIT`, `QA_MACOS`.
 
@@ -28,6 +32,13 @@ macOS kuyrugu 15 dk'yi (`QA_QUEUE_LIMIT`) asarsa o kosu iptal edilir ve "ALTYAPI
 | iOS Playwright WebKit (iPhone profilleri) | ~9 dk (macOS) |
 | iOS Simulatoru + Mobile Safari | ~2,5 dk (acilis 41 sn) |
 | macOS kuyrugu | degisken: 0-10+ dk (ucretsiz havuz); toplam sure buna bagli |
+
+### Taban alti tarayici (Chrome 80 / iOS 14 tabani)
+
+Urunlerin spec tabani Chrome/WebView 80 ve iOS 14'tur. Taban altindaki tarayicida (ornegin Android 9 emulatorundeki Chrome 69) beklenen sonuc
+uygulamanin acilmasi degil, 5 dilli `#boot-warning` uyarisinin (`role=alert`, dolu metin) en gec ~6 sn icinde gorunmesidir.
+Bu bir gevsetme degil spec'in kendisidir: Chrome surumu 80'in altindaysa `run_android.py` Ana yolculuk / Bos ekran / Konsol yerine tek denetim kosar:
+**"Eski tarayici uyarisi gorunur"** (P0). Uyari gorunmezse KALDI. Kanit: ekran goruntusu piksel istatistigi + DOM metni log'a yazilir.
 
 ### Ortam turu etiketleri
 

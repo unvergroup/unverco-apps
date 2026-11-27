@@ -135,6 +135,38 @@ def screencap(path):
     pathlib.Path(path).write_bytes(data)
 
 
+TABAN_CHROME = 80
+UYARI_JS = """function(){var b=document.querySelector('#boot-warning');if(!b)return null;var r=b.getBoundingClientRect();
+return {role:b.getAttribute('role'),text:(b.textContent||'').trim(),w:Math.round(r.width),h:Math.round(r.height),
+vis:getComputedStyle(b).display!=='none'&&getComputedStyle(b).visibility!=='hidden'}}"""
+
+
+def taban_alti_denetimi(drv, app, base, res, out, shots, api, label, ver):
+    p = shots / f"android-api{api}-{app['id']}-eski-tarayici-uyarisi.png"
+    repro = repro_text(app, label, "Chrome " + (ver.get("Browser") or ""), ENV_EMU) + " Beklenen: en geç 6 sn içinde #boot-warning uyarısı."
+    drv.get(f"{base}{app['dir']}/")
+    t0, info, gec = time.time(), None, None
+    while time.time() - t0 < 12:
+        try:
+            info = drv.js(UYARI_JS)
+        except Exception:
+            info = None
+        if info and info.get("vis") and info.get("role") == "alert" and info.get("text"):
+            gec = time.time() - t0; break
+        time.sleep(0.4)
+    time.sleep(1)
+    screencap(p)
+    st = img_stats(p)
+    print("    EKRAN", p.name, st, flush=True)
+    print("    UYARI DOM:", json.dumps(info, ensure_ascii=False), f"gorunme={gec}", flush=True)
+    ok = gec is not None and gec <= 6.5
+    detay = (f"uyarı {gec:.1f} sn'de göründü; metin={info['text'][:90]!r}; kutu={info['w']}x{info['h']}; görüntü renk={st and st['renk']} baskın_oran={st and st['baskin_oran']}"
+             if ok else (f"uyarı {gec:.1f} sn'de göründü (>6 sn)" if gec is not None else f"#boot-warning görünmedi (DOM={info}); ekran boş/uygulama açılmadı"))
+    res.add("Chrome (Android)", label, app["name"], "Eski tarayıcı uyarısı görünür", GECTI if ok else KALDI, "" if ok else detay,
+            p.relative_to(out).as_posix(), repro)
+    if ok: print("    KANIT:", detay, flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="qa-out/android")
@@ -200,7 +232,16 @@ def main():
                 except Exception as e:
                     print("enable", dom, e, flush=True)
             drv = AndroidDrv(cdp, screencap)
+            m_ver = re.search(r"/(\d+)\.", ver.get("Browser") or "")
+            chrome_major = int(m_ver.group(1)) if m_ver else 999
+            taban_alti = chrome_major < TABAN_CHROME
+            meta["chrome_major"] = chrome_major; meta["taban_alti"] = taban_alti
             for app in apps:
+                if taban_alti:
+                    # Spec tabani Chrome/WebView 80: bunun altinda beklenen sonuc uygulamanin acilmasi DEGIL,
+                    # #boot-warning (role=alert, dolu metin) uyarisinin <= 6 sn icinde gorunmesidir.
+                    taban_alti_denetimi(drv, app, base, res, out, shots, a.api, label, ver)
+                    continue
                 # 1) ilk acilis: ekran goruntusuyle "bos ekran mi" karari
                 p = shots / f"android-api{a.api}-{app['id']}-acilis.png"
                 drv.get(f"{base}{app['dir']}/")

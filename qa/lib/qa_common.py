@@ -15,6 +15,7 @@ GECTI, KALDI, ATLANDI, UYARI = "GEÇTİ", "KALDI", "ATLANDI", "UYARI"
 # Denetim adi -> (oncelik, durum kuralı). P0 en yuksek.
 CHECK_ONCELIK = {
     "Ana yolculuk": "P0",
+    "Eski tarayıcı uyarısı görünür": "P0",
     "Boş ekran": "P0",
     "Ana eylem erişilebilir": "P0",
     "Veri kalıcılığı": "P0",

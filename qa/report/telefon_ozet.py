@@ -33,7 +33,7 @@ def parse_log(path):
         job, txt = p[0], TS.sub("", p[2]).rstrip()
         m = ROW.match(txt)
         if m: rows[job].append((m.group(1), m.group(2)))
-        elif txt.startswith("[ALTYAPI]") or txt.startswith("ALTYAPI-SURE"): alt[job].append(txt)
+        elif txt.startswith(("[ALTYAPI]", "ALTYAPI-SURE", "KANIT:", "UYARI DOM:")): alt[job].append(txt)
     return rows, alt
 
 
@@ -51,7 +51,9 @@ def main(d):
         jobs = json.loads((d / f"{key}.jobs.json").read_text()) if (d / f"{key}.jobs.json").exists() else []
         rows, alt = parse_log(d / f"{key}.log")
         extra = [l.strip() for l in (d / f"{key}.not").read_text().splitlines()] if (d / f"{key}.not").exists() else []
-        for n in extra: notlar.append(f"{name}: {n}"); infra = True
+        for n in extra:
+            if key == "ios" and ("macOS kuyruğu" in n or "günlük okunamadı" in n): bilgi.append(f"{name}: {n}"); continue
+            notlar.append(f"{name}: {n}"); infra = True
         for j in jobs:
             if j["name"] in ("rapor",): continue
             r = rows.get(j["name"], [])
@@ -61,12 +63,13 @@ def main(d):
                 sonuc = "KALDI" if c["KALDI"] else "GEÇTİ"
                 if c["KALDI"]: product_fail = True
             elif j["conclusion"] in ("cancelled", "skipped") or j["status"] != "completed":
-                sonuc = "ALTYAPI"; infra = True
-                if not j.get("runner_name") and j["conclusion"] == "cancelled" and (sure or 0) >= 600:
-                    et = "macOS kuyruğu" if key == "ios" else "runner kuyruğu"
-                    notlar.append(f"{name}/{j['name']}: altyapı: {et} — iş {sure//60} dk kuyrukta kaldı, hiç runner atanmadı (GitHub 15 dk'da iptal etti); ürün hatası değil")
-                if not any(j["name"] in n for n in notlar):
-                    notlar.append(f"{name}/{j['name']}: tamamlanmadı (durum={j['status']}/{j['conclusion']})")
+                kuyruk = not j.get("runner_name") and j["conclusion"] == "cancelled" and (sure or 0) >= 600
+                if kuyruk and key == "ios":
+                    sonuc = "ATLANDI"   # ürün hatası da altyapı hatası da sayılmaz
+                    bilgi.append(f"iOS atlandı: macOS kuyruğu — {j['name']} {sure//60} dk kuyrukta kaldı, runner atanmadı (ürün hatası değil)")
+                else:
+                    sonuc = "ALTYAPI"; infra = True
+                    notlar.append(f"{name}/{j['name']}: " + (f"runner kuyruğu ({sure//60} dk)" if kuyruk else f"tamamlanmadı (durum={j['status']}/{j['conclusion']})"))
             else:
                 sonuc = "ALTYAPI" if j["conclusion"] != "success" else "GEÇTİ"
                 if j["conclusion"] != "success":
