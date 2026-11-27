@@ -6,13 +6,21 @@ on:
     paths:
       - 'habit-tracker-2027/**'
       - 'daily-budget-planner/**'
-      - 'qa/**'
+      - 'qa/apps.json'
+      - 'qa/profiles.json'
+      - 'qa/lib/**'
+      - 'qa/report/**'
+      - 'qa/android/**'
       - '.github/workflows/qa-android.yml'
   pull_request:
     paths:
       - 'habit-tracker-2027/**'
       - 'daily-budget-planner/**'
-      - 'qa/**'
+      - 'qa/apps.json'
+      - 'qa/profiles.json'
+      - 'qa/lib/**'
+      - 'qa/report/**'
+      - 'qa/android/**'
   workflow_dispatch:
     inputs:
       app_ref:

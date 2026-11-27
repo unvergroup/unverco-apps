@@ -60,6 +60,40 @@ class AndroidDrv:
         return out
 
 
+def dismiss_fre():
+    """Chrome ilk calistirma ekranlarini (Accept & continue / No thanks / Skip / Next) uiautomator ile gecer."""
+    import xml.etree.ElementTree as ET
+    labels = re.compile(r"accept|no thanks|skip|next|continue|got it|not now|yes, i'm in|no, thanks|more", re.I)
+    for i in range(8):
+        act = adb("shell", "dumpsys", "activity", "activities", check=False)
+        top = "\n".join(l for l in act.splitlines() if "ResumedActivity" in l)
+        if "firstrun" not in top.lower() and "FirstRun" not in top and "signin" not in top.lower() and "Welcome" not in top:
+            print("FRE yok/bitti:", top.strip()[:160], flush=True)
+            return
+        adb("shell", "uiautomator", "dump", "/sdcard/ui.xml", check=False, timeout=60)
+        xml = adb("shell", "cat", "/sdcard/ui.xml", check=False)
+        try:
+            root = ET.fromstring(xml[xml.index("<?xml"):] if "<?xml" in xml else xml)
+        except Exception as e:
+            print("ui dump okunamadi", e, flush=True)
+            time.sleep(2)
+            continue
+        cand = []
+        for n in root.iter("node"):
+            txt = (n.get("text") or "") + " " + (n.get("content-desc") or "") + " " + (n.get("resource-id") or "")
+            if n.get("clickable") == "true" and labels.search(txt):
+                b = re.findall(r"\d+", n.get("bounds", ""))
+                if len(b) == 4:
+                    x1, y1, x2, y2 = map(int, b)
+                    cand.append((("negative" in txt.lower() or "no thanks" in txt.lower() or "skip" in txt.lower()) * -1, -y1, (x1 + x2) // 2, (y1 + y2) // 2, txt.strip()))
+        print("FRE adim", i, "aday:", [c[4][:40] for c in cand], flush=True)
+        if cand:
+            cand.sort()
+            c = cand[0]
+            adb("shell", "input", "tap", str(c[2]), str(c[3]), check=False)
+        time.sleep(3)
+
+
 def diag():
     """DevTools acilmadiginda nedeni loga yazar."""
     for cmd in (["shell", "cat", "/proc/net/unix"], ["shell", "ps", "-A"], ["shell", "dumpsys", "activity", "activities"], ["shell", "cat", "/data/local/tmp/chrome-command-line"],
@@ -90,8 +124,8 @@ def fallback_screens(apps, base, res, out, shots, api, label, meta):
         time.sleep(15)
         screencap(p)
         blank, ncol, top = blank_from_png(p)
-        res.add("Chrome (Android)", label, app["name"], "Boş ekran (görüntü analizi)", KALDI if blank else GECTI,
-                f"içerik alanında renk={ncol}, baskın oran={top}" if blank else "", p.relative_to(out).as_posix(), repro_text(app, label, "Chrome", ENV_EMU))
+        res.add("Chrome (Android)", label, app["name"], "Boş ekran (görüntü analizi)", KALDI if blank else UYARI,
+                f"içerik alanında renk={ncol}, baskın oran={top}" if blank else "DevTools yok: yalnız görüntü analizi; ekranın uygulama olduğu doğrulanamadı (Chrome ilk çalıştırma ekranı olabilir)", p.relative_to(out).as_posix(), repro_text(app, label, "Chrome", ENV_EMU))
     (out / "meta.json").write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")
     return 0
 
@@ -126,7 +160,7 @@ def main():
         print("ORTAM", meta, flush=True)
         label = f"Android {release} (API {sdk}) emülatör"
         # Chrome ilk acilis ekranlarini kapat (derlenmis ucreti olmayan resmi bayraklar)
-        adb("shell", "sh", "-c", "echo '_ --disable-fre --no-default-browser-check --no-first-run --disable-notifications' > /data/local/tmp/chrome-command-line", check=False)
+        adb("shell", "echo '_ --disable-fre --no-default-browser-check --no-first-run' > /data/local/tmp/chrome-command-line; chmod 755 /data/local/tmp/chrome-command-line", check=False)
         adb("shell", "am", "set-debug-app", "--persistent", CHROME, check=False)
         adb("shell", "pm", "grant", CHROME, "android.permission.POST_NOTIFICATIONS", check=False)
         adb("shell", "am", "force-stop", CHROME, check=False)
@@ -137,6 +171,8 @@ def main():
             ver = None
             time.sleep(5)
             screencap(shots / "chrome-acilis-hemen.png")
+            dismiss_fre()
+            screencap(shots / "chrome-fre-sonrasi.png")
             for _ in range(30):
                 try:
                     ver = http_json("http://127.0.0.1:9222/json/version")
