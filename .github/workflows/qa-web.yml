@@ -7,13 +7,25 @@ on:
     paths:
       - 'habit-tracker-2027/**'
       - 'daily-budget-planner/**'
-      - 'qa/**'
+      - 'qa/apps.json'
+      - 'qa/profiles.json'
+      - 'qa/lib/**'
+      - 'qa/report/**'
+      - 'qa/web/**'
+      - 'qa/selftest.py'
+      - 'qa/fixtures/**'
       - '.github/workflows/qa-web.yml'
   pull_request:
     paths:
       - 'habit-tracker-2027/**'
       - 'daily-budget-planner/**'
-      - 'qa/**'
+      - 'qa/apps.json'
+      - 'qa/profiles.json'
+      - 'qa/lib/**'
+      - 'qa/report/**'
+      - 'qa/web/**'
+      - 'qa/selftest.py'
+      - 'qa/fixtures/**'
   workflow_dispatch:
     inputs:
       apps:

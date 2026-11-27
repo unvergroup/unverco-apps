@@ -29,10 +29,19 @@ class Runner:
         return c
 
     def attach_logs(self, pg, logs):
-        pg.on("console", lambda m: logs.append(f"console.{m.type}: {m.text} @ {(m.location or {}).get('url', '')}:{(m.location or {}).get('lineNumber', '')}") if m.type == "error" else None)
+        def on_console(m):
+            if m.type != "error":
+                return
+            loc = m.location or {}
+            t = m.text
+            # Playwright WebKit denetcisi (web-inspector://) sayfaya satir ici <style> ekler; urunun CSP ihlali degildir.
+            if str(loc.get("url", "")).startswith("web-inspector://") or (self.engine == "webkit" and ("Refused to apply a stylesheet" in t or ("CSP ihlali: style-src-elem" in t and "kaynak=:" in t))):
+                return
+            logs.append(f"console.error: {t} @ {loc.get('url', '')}:{loc.get('lineNumber', '')}")
+        pg.on("console", on_console)
         pg.on("pageerror", lambda e: logs.append(f"pageerror: {e}"))
         pg.on("response", lambda r: logs.append(f"HTTP {r.status} {r.url}") if r.status >= 400 else None)
-        pg.on("requestfailed", lambda r: logs.append(f"requestfailed {r.url} {r.failure}") if "net::ERR_INTERNET_DISCONNECTED" not in str(r.failure) and not self.offline_now else None)
+        pg.on("requestfailed", lambda r: logs.append(f"requestfailed {r.url} {r.failure}") if not self.offline_now else None)
 
     offline_now = False
 
@@ -59,7 +68,13 @@ class Runner:
             pg.wait_for_timeout(s["sleep"])
 
     def layout(self, pg, app):
-        return pg.evaluate(CHECKS_JS, {"main": app["main"]})
+        r = pg.evaluate(CHECKS_JS, {"main": app["main"]})
+        for _ in range(4):  # gec cizim payi: bos gorunuyorsa yeniden bak
+            if not r["blank"]["blank"]:
+                break
+            pg.wait_for_timeout(1000)
+            r = pg.evaluate(CHECKS_JS, {"main": app["main"]})
+        return r
 
     def run_app(self, prof, app):
         eng, pname, aid = self.engine, prof["name"], app["name"]

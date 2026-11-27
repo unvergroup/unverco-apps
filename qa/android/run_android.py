@@ -165,7 +165,8 @@ def main():
         adb("shell", "pm", "grant", CHROME, "android.permission.POST_NOTIFICATIONS", check=False)
         adb("shell", "am", "force-stop", CHROME, check=False)
         adb("forward", "tcp:9222", "localabstract:chrome_devtools_remote", check=False)
-        with static_server(8000) as base:
+        with static_server(8000, obj=True) as server:
+            base = server.url
             adb("reverse", "tcp:8000", "tcp:8000")
             adb("shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", "about:blank", CHROME)
             ver = None
@@ -217,7 +218,7 @@ def main():
                     print("görüntü analizi:", e, flush=True)
                 # 2) tam yolculuk + denetimler
                 run_generic(drv, app, base, res, "Chrome (Android)", label, shots,
-                            offline_note="emülatörde ağ kapatma adbsiz yapılamıyor; çevrimdışı açılış Playwright işlerinde sınanır")
+                            offline_note="çevrimdışı sınanamadı", server=server)
             cdp.close()
     except Exception:
         traceback.print_exc()

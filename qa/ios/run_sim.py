@@ -78,7 +78,7 @@ class SeleniumDrv:
     def shot(self, path): self.d.save_screenshot(path)
     def console_errors(self): return None
 
-def method_b(dev, apps, base, res, out, label):
+def method_b(dev, apps, base, res, out, label, server=None):
     from selenium import webdriver
     sh(f"xcrun simctl shutdown {dev['udid']}", check=False)
     sh("sudo safaridriver --enable", check=False)
@@ -94,7 +94,7 @@ def method_b(dev, apps, base, res, out, label):
         print("UA:", ua, flush=True)
         for app in apps:
             run_generic(SeleniumDrv(d), app, base, res, "Mobile Safari (WebDriver)", label, out / "screenshots",
-                        offline_note="simülatörde ağ kapatılamaz; çevrimdışı açılış Playwright WebKit işinde sınanır",
+                        offline_note="çevrimdışı sınanamadı", server=server,
                         console_note="Safari WebDriver konsol günlüğünü vermez")
         return ua
     finally:
@@ -109,7 +109,8 @@ def main():
     res = Results(ENV_SIM, "macos-latest", out / "results.json")
     meta = {"engine": "ios-simulator", "yontem_A_simctl": "calismadi", "yontem_B_safaridriver": "calismadi"}
     ok_any = False
-    with static_server(8000) as base:
+    with static_server(8000, obj=True) as server:
+        base = server.url
         dev = pick_device()
         label = f"{dev['name']} (iOS {dev['ios']} simülatör)"
         meta.update(cihaz=dev["name"], ios=dev["ios"])
@@ -118,7 +119,7 @@ def main():
         except Exception:
             traceback.print_exc(); meta["yontem_A_hata"] = traceback.format_exc()[-300:]
         try:
-            ua = method_b(dev, apps, base, res, out, label); meta["yontem_B_safaridriver"] = "calisti"; meta["safari_ua"] = ua; ok_any = True
+            ua = method_b(dev, apps, base, res, out, label, server); meta["yontem_B_safaridriver"] = "calisti"; meta["safari_ua"] = ua; ok_any = True
         except Exception:
             traceback.print_exc(); meta["yontem_B_hata"] = traceback.format_exc()[-400:]
     (out / "meta.json").write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")

@@ -1,7 +1,7 @@
 """Surucu-bagimsiz yolculuk kosucusu (iOS Safari/Selenium ve Android Chrome/DevTools icin).
 Surucu arayuzu: get(url), reload(), js(expr_or_fn, arg=None) -> deger, shot(path), console_errors() -> liste|None,
 click_js varsayilan olarak js ile yapilir; Selenium surucusu gercek tik icin click(selector) tanimlar."""
-import json, pathlib, time
+import json, pathlib, re, time
 from qa_common import *  # noqa
 
 PICK_JS = "(function(sels){for(var i=0;i<sels.length;i++){var e=document.querySelector(sels[i]);if(e){var r=e.getBoundingClientRect();if(r.width>0&&r.height>0)return sels[i];}}return null;})"
@@ -45,12 +45,12 @@ def do_step(drv, s, last):
         time.sleep(s["sleep"] / 1000)
 
 
-def run_generic(drv, app, base, res, engine, profile, shots_dir, *, offline_note, desktop=False, console_note=None):
+def run_generic(drv, app, base, res, engine, profile, shots_dir, *, offline_note, desktop=False, console_note=None, server=None):
     """Ana yolculuk + yerlesim denetimleri + kalicilik (+ konsol varsa). res: Results."""
     shots_dir = pathlib.Path(shots_dir)
     shots_dir.mkdir(parents=True, exist_ok=True)
     out_dir = res.outfile.parent
-    tag = f"{engine}-{profile}-{app['id']}".replace(" ", "_")
+    tag = re.sub(r"[^A-Za-z0-9_.-]+", "_", f"{engine}-{profile}-{app['id']}")
     repro = repro_text(app, profile, engine, res.env, "Cihazda aynı adresi (bilgisayarın yerel sunucusu) Safari/Chrome ile açın.")
     agg, journey_err, last, nshots, shot_main = {}, None, [0.0], 0, None
     rel = lambda p: str(pathlib.Path(p).relative_to(out_dir)) if p else None
@@ -58,7 +58,13 @@ def run_generic(drv, app, base, res, engine, profile, shots_dir, *, offline_note
     time.sleep(2.0)
 
     def layout():
-        return drv.js(CHECKS_JS, {"main": app["main"]})
+        r = drv.js(CHECKS_JS, {"main": app["main"]})
+        for _ in range(4):  # yavas cihazda ekran gec cizilebilir: bos gorunuyorsa yeniden bak
+            if not r["blank"]["blank"]:
+                break
+            time.sleep(1.0)
+            r = drv.js(CHECKS_JS, {"main": app["main"]})
+        return r
 
     def add_agg(label, summ):
         for k, (st, d) in summ.items():
@@ -126,5 +132,31 @@ def run_generic(drv, app, base, res, engine, profile, shots_dir, *, offline_note
     else:
         errs = sorted(set(e for e in errs if "favicon" not in e))
         res.add(engine, profile, app["name"], "Konsol hataları", KALDI if errs else GECTI, " | ".join(errs)[:1500], None, repro)
-    res.add(engine, profile, app["name"], "Çevrimdışı açılış", ATLANDI, offline_note, None, repro)
+    if server is not None and not journey_err:
+        try:
+            drv.reload()
+            time.sleep(1.0)
+            ctl = False
+            for _ in range(30):
+                if drv.js("(function(){return !!(navigator.serviceWorker && navigator.serviceWorker.controller);})"):
+                    ctl = True
+                    break
+                time.sleep(0.5)
+            server.stop()  # gercek cevrimdisi: sunucu kapali; tek kaynak service worker onbellegi
+            try:
+                drv.reload()
+                time.sleep(2.0)
+                poll(drv, app["offline"]["ready"], True, 12)
+                r = layout()
+                ok = not r["blank"]["blank"]
+                p = shots_dir / f"{tag}-cevrimdisi.png"
+                drv.shot(str(p))
+                res.add(engine, profile, app["name"], "Çevrimdışı açılış", GECTI if ok else KALDI,
+                        ("" if ok else "sunucu kapalıyken ana ekran boş") + ("" if ctl else " (not: sayfa service worker denetiminde değildi)"), rel(p), repro)
+            finally:
+                server.start()
+        except Exception as e:
+            res.add(engine, profile, app["name"], "Çevrimdışı açılış", KALDI, f"sunucu kapalıyken açılamadı: {str(e).splitlines()[0][:200]}", None, repro)
+    else:
+        res.add(engine, profile, app["name"], "Çevrimdışı açılış", ATLANDI, offline_note if not journey_err else "yolculuk tamamlanmadı", None, repro)
     res.add(engine, profile, app["name"], "Yazdırma sayfa sayısı", ATLANDI, "mobil tarayıcıdan PDF sayfa sayısı ölçülemez; gerçek cihaz yazdırma penceresi gerekir", None, repro)
