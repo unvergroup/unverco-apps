@@ -1,0 +1,361 @@
+{
+  "_aciklama": "Yeni uygulama eklemek: apps listesine bir nesne ekleyin (qa/README.md). Adim turleri: goto (#/yol), click, wait, waitGone, sleep(ms), shot, check(true=yerlesim denetimi). rapid:true tik korumasini beklemeden tiklar.",
+  "apps": [
+    {
+      "id": "habit",
+      "name": "2027 Habit Tracker",
+      "dir": "habit-tracker-2027",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Karsilama ekrani",
+          "wait": "#w-start",
+          "check": true,
+          "shot": "01-karsilama"
+        },
+        {
+          "label": "Ornek yil yukle",
+          "click": "#w-sample"
+        },
+        {
+          "label": "Bugun ekrani",
+          "wait": "#hero",
+          "sleep": 500,
+          "check": true,
+          "shot": "02-bugun"
+        },
+        {
+          "label": "Ay ekrani",
+          "click": [
+            "#tab-month",
+            "#nav-month"
+          ],
+          "sleep": 700,
+          "check": true,
+          "shot": "03-ay"
+        },
+        {
+          "label": "Yil ekrani",
+          "click": [
+            "#tab-year",
+            "#nav-year"
+          ],
+          "sleep": 700,
+          "check": true,
+          "shot": "04-yil"
+        },
+        {
+          "label": "Aliskanliklar ekrani",
+          "click": [
+            "#tab-habits",
+            "#nav-habits"
+          ],
+          "wait": "#habit-list",
+          "check": true,
+          "shot": "05-aliskanliklar"
+        },
+        {
+          "label": "Daha fazla ekrani",
+          "click": [
+            "#tab-more",
+            "#nav-more"
+          ],
+          "sleep": 700,
+          "check": true,
+          "shot": "06-daha-fazla"
+        },
+        {
+          "label": "Bugune don",
+          "click": [
+            "#tab-today",
+            "#nav-today"
+          ],
+          "wait": "#hero"
+        }
+      ],
+      "persistence": {
+        "label": "Bir aliskanligi isaretle, sayfayi yenile",
+        "steps": [
+          {
+            "click": "[id^=chk-]"
+          },
+          {
+            "sleep": 800
+          }
+        ],
+        "probe": "#hero",
+        "ready": "#hero"
+      },
+      "offline": {
+        "ready": "#hero"
+      },
+      "print": [
+        {
+          "label": "Yili yazdir, Letter belge",
+          "steps": [
+            {
+              "goto": "#/year"
+            },
+            {
+              "wait": "#y-print"
+            },
+            {
+              "click": "#y-print"
+            },
+            {
+              "sleep": 1300
+            }
+          ],
+          "pages": 1,
+          "papers": [
+            "Letter",
+            "8.5x10.8in"
+          ]
+        },
+        {
+          "label": "Yili yazdir, Letter belge A4 kagida (uyumsuz kagit)",
+          "steps": [
+            {
+              "goto": "#/year"
+            },
+            {
+              "wait": "#y-print"
+            },
+            {
+              "click": "#y-print"
+            },
+            {
+              "sleep": 1300
+            }
+          ],
+          "pages": 1,
+          "papers": [
+            "A4"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "budget",
+      "name": "Daily Budget Planner",
+      "dir": "daily-budget-planner",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#screen",
+      "journey": [
+        {
+          "label": "Kurulum ekrani",
+          "wait": "#setup-sample",
+          "check": true,
+          "shot": "01-kurulum"
+        },
+        {
+          "label": "Ornek veriyle basla",
+          "click": "#setup-sample"
+        },
+        {
+          "label": "Bugun ekrani",
+          "wait": "#spendable",
+          "sleep": 500,
+          "check": true,
+          "shot": "02-bugun"
+        },
+        {
+          "label": "Faturalar ekrani",
+          "click": [
+            "#bn-bills",
+            "#nav-bills"
+          ],
+          "sleep": 800,
+          "check": true,
+          "shot": "03-faturalar"
+        },
+        {
+          "label": "Butce ekrani",
+          "click": [
+            "#bn-budget",
+            "#nav-budget"
+          ],
+          "sleep": 800,
+          "check": true,
+          "shot": "04-butce"
+        },
+        {
+          "label": "Hareketler ekrani",
+          "click": [
+            "#bn-activity",
+            "#nav-activity"
+          ],
+          "sleep": 800,
+          "check": true,
+          "shot": "05-hareketler"
+        },
+        {
+          "label": "Bugune don",
+          "click": [
+            "#bn-today",
+            "#nav-today"
+          ],
+          "wait": "#spendable"
+        }
+      ],
+      "persistence": {
+        "label": "Hizli harcama ekle, sayfayi yenile",
+        "steps": [
+          {
+            "click": [
+              "#fab-add",
+              "#side-add"
+            ]
+          },
+          {
+            "wait": "#qa"
+          },
+          {
+            "click": "#qa-key-1",
+            "rapid": true
+          },
+          {
+            "click": "#qa-key-2",
+            "rapid": true
+          },
+          {
+            "click": "#qa-key-5",
+            "rapid": true
+          },
+          {
+            "click": "#qa-key-0",
+            "rapid": true
+          },
+          {
+            "click": "#qa-env-eatingOut"
+          },
+          {
+            "waitGone": "#qa"
+          },
+          {
+            "sleep": 800
+          }
+        ],
+        "probe": "#screen",
+        "ready": "#spendable"
+      },
+      "offline": {
+        "ready": "#spendable"
+      },
+      "print": [
+        {
+          "label": "Donem plani, Letter belge",
+          "steps": [
+            {
+              "goto": "#/print/plan"
+            },
+            {
+              "wait": "#print-go"
+            },
+            {
+              "select": [
+                "#print-paper",
+                "letter"
+              ]
+            },
+            {
+              "click": "#print-go"
+            },
+            {
+              "sleep": 1300
+            }
+          ],
+          "pages": 1,
+          "papers": [
+            "Letter",
+            "8.5x10.8in"
+          ]
+        },
+        {
+          "label": "Donem plani, A4 belge",
+          "steps": [
+            {
+              "goto": "#/print/plan"
+            },
+            {
+              "wait": "#print-go"
+            },
+            {
+              "select": [
+                "#print-paper",
+                "a4"
+              ]
+            },
+            {
+              "click": "#print-go"
+            },
+            {
+              "sleep": 1300
+            }
+          ],
+          "pages": 1,
+          "papers": [
+            "A4"
+          ]
+        },
+        {
+          "label": "Donem plani, Letter belge A4 kagida (uyumsuz kagit)",
+          "steps": [
+            {
+              "goto": "#/print/plan"
+            },
+            {
+              "wait": "#print-go"
+            },
+            {
+              "select": [
+                "#print-paper",
+                "letter"
+              ]
+            },
+            {
+              "click": "#print-go"
+            },
+            {
+              "sleep": 1300
+            }
+          ],
+          "pages": 1,
+          "papers": [
+            "A4"
+          ]
+        },
+        {
+          "label": "Donem plani, A4 belge Letter kagida (uyumsuz kagit)",
+          "steps": [
+            {
+              "goto": "#/print/plan"
+            },
+            {
+              "wait": "#print-go"
+            },
+            {
+              "select": [
+                "#print-paper",
+                "a4"
+              ]
+            },
+            {
+              "click": "#print-go"
+            },
+            {
+              "sleep": 1300
+            }
+          ],
+          "pages": 1,
+          "papers": [
+            "Letter"
+          ]
+        }
+      ]
+    }
+  ]
+}

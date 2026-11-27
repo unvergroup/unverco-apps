@@ -1,0 +1,91 @@
+name: qa-web
+# Web QA: Playwright Chromium + Firefox + WebKit, tum cihaz profilleri, iki pilot uygulama.
+# Ortam turu: "Masaustu taklidi" (gercek tarayici motoru, taklit edilmis mobil gorunum). Gercek cihaz testi YOKTUR.
+# Herkese acik depoda standart runner ucretsizdir.
+on:
+  push:
+    paths:
+      - 'habit-tracker-2027/**'
+      - 'daily-budget-planner/**'
+      - 'qa/**'
+      - '.github/workflows/qa-web.yml'
+  pull_request:
+    paths:
+      - 'habit-tracker-2027/**'
+      - 'daily-budget-planner/**'
+      - 'qa/**'
+  workflow_dispatch:
+    inputs:
+      apps:
+        description: 'Uygulama kimlikleri (virgullu, bos=hepsi): habit,budget'
+        default: ''
+      app_ref:
+        description: 'Uygulama klasorlerini bu commit/etiketten al (bos=bu commit). Ornek: 19ff9a6'
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qa-web-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web:
+    name: web-${{ matrix.engine }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Uygulama surumunu sec (isteğe bağlı)
+        if: ${{ github.event.inputs.app_ref != '' }}
+        run: git checkout "${{ github.event.inputs.app_ref }}" -- habit-tracker-2027 daily-budget-planner
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Playwright kur
+        run: |
+          pip install playwright==1.49.1 pypdf
+          python -m playwright install --with-deps ${{ matrix.engine }}
+      - name: Denetimlerin kendi testi
+        run: python qa/selftest.py ${{ matrix.engine }}
+      - name: Web QA
+        run: python qa/web/run_web.py --engine ${{ matrix.engine }} --apps "${{ github.event.inputs.apps }}" --out qa-out/web-${{ matrix.engine }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-web-${{ matrix.engine }}
+          path: qa-out/
+          retention-days: 14
+
+  rapor:
+    needs: web
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: qa-web-*
+          path: qa-in
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Rapor uret (GEÇTİ/KALDI tablosu job özetine yazılır)
+        run: python qa/report/make_report.py --in qa-in --out qa-rapor --title "Web QA raporu (Playwright)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-web-rapor
+          path: |
+            qa-rapor/
+            qa-in/
+          retention-days: 14
+      - name: Kapı (KALDI varsa kırmızı)
+        run: python qa/report/make_report.py --in qa-in --out qa-rapor --gate --summary /dev/null > /dev/null
