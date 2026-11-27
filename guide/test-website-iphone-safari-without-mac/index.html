@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to test a website on iPhone Safari and Android Chrome without a Mac (GitHub Actions guide)</title>
+<meta name="description" content="Test your website or PWA in iPhone Safari (iOS Simulator) and Android Chrome (Android emulator) on GitHub Actions without owning a Mac or the phones. Free steps for public repositories, a working example workflow, costs and limits.">
+<link rel="canonical" href="https://unvergroup.github.io/unverco-apps/guide/test-website-iphone-safari-without-mac/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to test a website on iPhone Safari and Android Chrome without a Mac">
+<meta property="og:description" content="iOS Simulator and Android emulator on GitHub Actions: steps, a working example workflow, costs and what simulators still miss.">
+<meta property="og:url" content="https://unvergroup.github.io/unverco-apps/guide/test-website-iphone-safari-without-mac/">
+<meta property="og:image" content="https://unvergroup.github.io/unverco-apps/guide/test-website-iphone-safari-without-mac/panel-ship.jpg">
+<meta name="robots" content="index, follow">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "headline": "How to test a website on iPhone Safari and Android Chrome without a Mac",
+      "datePublished": "2026-11-28",
+      "dateModified": "2026-11-28",
+      "inLanguage": "en",
+      "author": { "@type": "Organization", "name": "ÜNVERCO" },
+      "publisher": { "@type": "Organization", "name": "ÜNVERCO" },
+      "mainEntityOfPage": "https://unvergroup.github.io/unverco-apps/guide/test-website-iphone-safari-without-mac/",
+      "about": ["iOS Simulator", "Mobile Safari", "Android emulator", "GitHub Actions", "PWA testing", "mobile web testing"]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "ÜNVERCO App Tester",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web browser; runs in GitHub Actions",
+      "description": "A test kit and report panel for websites, web apps and PWAs. Runs desktop browser emulation, an Android emulator and the iOS Simulator in the buyer's own GitHub account and writes a pass or fail report with a fix prompt for every failure. Simulators and emulators, not physical phones.",
+      "featureList": [
+        "Four GitHub Actions workflows: one-button App Tester, plus desktop browsers, Android emulator and iOS Simulator on their own",
+        "Pass or fail verdict (SHIP, DON'T SHIP, INCOMPLETE) with steps to reproduce each failure",
+        "Ready-to-paste fix prompts for an AI coding assistant",
+        "Offline report panel in English, Spanish, French, German and Portuguese"
+      ],
+      "publisher": { "@type": "Organization", "name": "ÜNVERCO" },
+      "url": "https://www.etsy.com/listing/4627175488",
+      "sameAs": ["https://www.etsy.com/listing/4627175488"]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "How can I test my website on iPhone Safari without a Mac?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Use GitHub Actions. It offers macOS machines where you can boot the iOS Simulator, open your site in Mobile Safari, take screenshots and run checks. You need a GitHub account and a web address for your site, not a Mac or an iPhone. Public repositories use free standard runners; in private repositories the macOS minutes come from your GitHub plan." } },
+        { "@type": "Question", "name": "Is WebKit on Linux the same as iPhone Safari?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. It is the same engine family, but developers report differences from iOS Safari in viewport units, safe-area insets and keyboard behavior. Desktop device emulation changes the user agent, screen size and touch support, not the engine. Use the iOS Simulator for iPhone checks." } },
+        { "@type": "Question", "name": "Can I test a PWA on iPhone and Android without owning the phones?",
+          "acceptedAnswer": { "@type": "Answer", "text": "You can test how it loads and behaves in the iOS Simulator and an Android emulator, including a main journey you describe. Home screen installation, push notifications and hardware features are not covered by simulators; test those on a physical phone." } },
+        { "@type": "Question", "name": "How much does it cost to run iPhone tests on GitHub Actions?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Standard GitHub-hosted runners are free in public repositories. In private repositories, usage comes from your plan: when we checked on November 28, 2026, GitHub Free included $12 of Actions usage a month (about 2,000 standard Linux minutes), and macOS minutes cost $0.062 each, about 10 times a Linux minute. Check GitHub's current prices." } },
+        { "@type": "Question", "name": "What can simulator testing not catch?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Simulators and emulators are not physical phones. They cannot show real hardware behavior, network conditions, camera, sensors or push notifications, and they do not test native apps. A pass means the checks that ran passed." } }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root { --ink:#10172A; --soft:#4A5675; --blue:#1D66E0; --line:#DDE4F2; --bg:#FBFCFF; --gold:#9A7A1E; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.65 -apple-system, "Segoe UI", Inter, Roboto, Arial, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+  header.top { font-size: 14px; color: var(--soft); margin-bottom: 18px; }
+  h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.5px; }
+  h2 { font-size: 24px; margin: 40px 0 10px; line-height: 1.25; }
+  h3 { font-size: 19px; margin: 26px 0 6px; }
+  p, li { max-width: 70ch; }
+  .lead { font-size: 19px; color: #1f2a44; }
+  .box { background: #EEF3FF; border: 1px solid #D3DEF7; border-radius: 12px; padding: 14px 18px; margin: 18px 0; }
+  .warn { background: #FFF8E6; border-color: #F1DCA2; }
+  pre { background: #0E1530; color: #E9EEFF; border-radius: 12px; padding: 16px; overflow-x: auto; font-size: 13.5px; line-height: 1.5; }
+  code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.92em; }
+  p code, li code { background: #EEF3FF; padding: 1px 5px; border-radius: 4px; }
+  figure { margin: 18px 0; }
+  .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+  .shots img { width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--line); background: #050816; }
+  figcaption { font-size: 14px; color: var(--soft); margin-top: 6px; }
+  a { color: var(--blue); }
+  .cta { display: inline-block; background: var(--blue); color: #fff; text-decoration: none; padding: 14px 22px; border-radius: 12px; font-weight: 700; min-height: 44px; }
+  .small { font-size: 14px; color: var(--soft); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { text-align: left; border-bottom: 1px solid var(--line); padding: 8px 6px; vertical-align: top; }
+  footer { margin-top: 48px; border-top: 1px solid var(--line); padding-top: 16px; font-size: 13px; color: var(--soft); }
+</style>
+</head>
+<body>
+<main>
+<header class="top">ÜNVERCO guides · Updated November 28, 2026</header>
+
+<h1>How to test a website on iPhone Safari and Android Chrome without a Mac</h1>
+
+<p class="lead"><strong>Short answer:</strong> you cannot run Safari on Windows or Linux, but GitHub Actions can lend you a macOS machine that includes the iOS Simulator, and the simulator runs Mobile Safari. A workflow can boot an iPhone, open your site, take a screenshot and run checks. Android Chrome works the same way with an Android emulator on a Linux runner. You do not need to own a Mac, an iPhone or an Android phone. In public repositories the standard runners are free.</p>
+
+<div class="box warn">Simulators and emulators are not physical phones. They catch most layout and script problems, but not hardware, push notifications or every phone maker's changes. Treat a pass as "the checks that ran passed".</div>
+
+<h2>Why a desktop browser is not enough</h2>
+<p>Device emulation in desktop browsers and test tools changes the user agent, the screen size, the viewport and touch support. It does not change the browser engine. A WebKit build on Linux is the same engine family as Safari, but it is not iOS Safari either. The problems that show up only on iPhone are well known:</p>
+<ul>
+  <li><code>100vh</code> includes the browser toolbar, so the bottom of a full-height screen is hidden. Dynamic viewport units (<code>100dvh</code>) usually fix it.</li>
+  <li>Content sits under the notch or the home bar when safe-area insets (<code>env(safe-area-inset-*)</code>) are missing.</li>
+  <li>The page zooms in when you tap a text field whose font is smaller than 16 px.</li>
+  <li>Date inputs look and behave differently.</li>
+  <li>Buttons smaller than 44 × 44 px are hard to tap.</li>
+</ul>
+
+<h2>The free route: 5 steps with GitHub Actions</h2>
+<ol>
+  <li><strong>Put your project in a GitHub repository.</strong> Standard GitHub-hosted runners are free in public repositories.</li>
+  <li><strong>Add a workflow that runs on a macOS runner.</strong> Apple's command line tools can boot a simulator (<code>xcrun simctl boot</code>), open your address in Safari (<code>xcrun simctl openurl</code>) and take a screenshot (<code>xcrun simctl io … screenshot</code>). To tap and type through your pages, add a WebDriver tool such as Appium.</li>
+  <li><strong>Add a second workflow for Android.</strong> The community action <code>reactivecircus/android-emulator-runner</code> starts an emulator on a Linux runner.</li>
+  <li><strong>Add a quick desktop layer.</strong> Playwright with Chromium, Firefox and WebKit and phone-sized screens is fast and catches many layout problems, as long as you remember it is not the iPhone engine.</li>
+  <li><strong>Decide what counts as a failure.</strong> Good first checks: sideways scrolling on a phone, tap targets under 44 px, text fields small enough to trigger zoom, a main journey (open the site, tap Start, expect the welcome screen) and, for PWAs, whether the page opens offline.</li>
+</ol>
+
+<h3>A minimal iPhone Safari workflow you can copy</h3>
+<p>Save this as <code>.github/workflows/iphone-safari-smoke.yml</code>, change the address, then open <strong>Actions</strong> and run it. It boots an available iPhone simulator, opens your site in Mobile Safari and uploads a screenshot. We ran exactly this file on GitHub on November 27, 2026 (UTC) before publishing it here.</p>
+<pre><code>name: iPhone Safari smoke test
+on:
+  workflow_dispatch:
+jobs:
+  ios:
+    runs-on: macos-15
+    steps:
+      - name: Boot an iPhone simulator
+        run: |
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys; d=json.load(sys.stdin)['devices']; print(next(x['udid'] for r in d.values() for x in r if x['name'].startswith('iPhone')))")
+          xcrun simctl boot "$UDID"
+          xcrun simctl bootstatus "$UDID" -b
+          echo "UDID=$UDID" >> "$GITHUB_ENV"
+      - name: Open your site in Mobile Safari and take a screenshot
+        run: |
+          xcrun simctl openurl "$UDID" "https://example.com"
+          sleep 20
+          xcrun simctl io "$UDID" screenshot iphone-safari.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iphone-safari-screenshot
+          path: iphone-safari.png</code></pre>
+<p class="small">This only shows the page; it does not tap or check anything. Real checks (journeys, overflow, tap targets, console errors) need a WebDriver session, which is where most of the setup time goes.</p>
+
+<h2>How long and how much</h2>
+<table>
+  <tr><th>Question</th><th>What we measured or read</th></tr>
+  <tr><td>Time</td><td>On our own repository on November 27, 2026, a full run with desktop browsers, an Android 14 emulator and the iOS Simulator in parallel took about 10 to 13 minutes (web about 1 minute, Android about 2.5 minutes, iOS Simulator about 9 to 12 minutes). A web-only check took about 2 minutes. The first iOS run is the slowest. Your project will differ.</td></tr>
+  <tr><td>Public repository</td><td>Standard GitHub-hosted runners are free.</td></tr>
+  <tr><td>Private repository</td><td>When we checked GitHub's documentation on November 28, 2026, GitHub Free included $12 of Actions usage a month (about 2,000 standard Linux minutes). macOS minutes cost $0.062 each, about 10 times a Linux minute. Check GitHub's current prices before you rely on these numbers.</td></tr>
+</table>
+
+<h2>What this will still miss</h2>
+<p>Simulators and emulators do not show real hardware, real network conditions, camera, sensors or push notifications. Android phones from different makers add their own changes. A PWA added to a home screen can behave differently from the same page in a browser tab. None of this tests native apps. Before an important launch, open your most important screens on a physical phone if you can borrow one.</p>
+
+<h2>Frequently asked questions</h2>
+<h3>How can I test my website on iPhone Safari without a Mac?</h3>
+<p>Use GitHub Actions: boot the iOS Simulator on a GitHub-hosted macOS runner and open your site in Mobile Safari, as in the example above. You need a GitHub account and a web address for your site, not a Mac or an iPhone.</p>
+<h3>Is WebKit on Linux the same as iPhone Safari?</h3>
+<p>No. It is the same engine family, but iOS Safari differs in viewport units, safe-area insets and keyboard behavior. Use the iOS Simulator for iPhone checks and keep the desktop layer for speed.</p>
+<h3>Can I test a PWA on iPhone and Android without owning the phones?</h3>
+<p>Yes for loading, layout, journeys and offline start. Home screen installation, push notifications and hardware features need a physical phone.</p>
+<h3>What can simulator testing not catch?</h3>
+<p>Hardware, real networks, camera, sensors, push notifications and native apps. A pass means the checks that ran passed, not that the app works on every phone.</p>
+
+<h2>A ready-made kit, if you would rather not build this (disclosure: we sell it)</h2>
+<p>Setting all of this up takes time, and it breaks when runner images change. We packaged our own setup as <strong>ÜNVERCO App Tester</strong>: four GitHub Actions workflows (one button for everything, plus each environment on its own), one settings file for your app, a report with a clear verdict (SHIP, DON'T SHIP or INCOMPLETE), a ready-to-paste fix prompt for your AI coding assistant for every failure, and a small offline panel to read the results in five languages. The tests run in your own GitHub account. It does not test native apps and it does not change your code. If you enjoy building it yourself, the steps above are enough to start, and they cost nothing in a public repository.</p>
+<div class="shots">
+  <figure><img src="panel-ship.jpg" width="585" height="1266" loading="lazy" alt="The App Tester report panel on a phone showing a SHIP verdict with passed, failed, warning and skipped counts. Sample data."><figcaption>Release verdict (sample data)</figcaption></figure>
+  <figure><img src="panel-failure.jpg" width="585" height="1266" loading="lazy" alt="A failure card for the iOS Simulator in landscape with environment, device profile, screenshot file name and steps to reproduce. Sample data."><figcaption>A failure with its details</figcaption></figure>
+  <figure><img src="panel-fix-prompt.jpg" width="585" height="1266" loading="lazy" alt="An AI fix prompt opened on a failure card with a Copy fix prompt button. Sample data."><figcaption>Fix prompt for your assistant</figcaption></figure>
+</div>
+<p><a class="cta" href="https://www.etsy.com/listing/4627175488">See ÜNVERCO App Tester on Etsy</a></p>
+<p class="small">The Etsy app cannot download digital files. After buying, open etsy.com in a web browser and go to Your account &gt; Purchases.</p>
+
+<footer>
+  <p>This guide and the kit were made with help from AI tools; the workflow above was run on GitHub before publishing, and the panel images are real screenshots with sample data.</p>
+  <p>Android and Chrome are trademarks of Google LLC. iPhone, Safari and macOS are trademarks of Apple Inc., registered in the U.S. and other countries and regions. Firefox is a trademark of the Mozilla Foundation. GitHub is a trademark of GitHub, Inc. Not affiliated with or endorsed by Apple, Google, Mozilla or GitHub.</p>
+</footer>
+</main>
+</body>
+</html>
