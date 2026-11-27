@@ -273,10 +273,9 @@ export function yearStats(habits, idx, year, today, weekStart = 1) {
   return { score: den ? (num * 100) / den : null, best, current: cur, comebacks: cbs, restDays, rows };
 }
 
-/** Year ekraninin varsayilan yili (spec §5). */
+/** Year ekraninin varsayilan yili (spec §5): her zaman bugunun yili; kullanici sectiyse o. */
 export function defaultYear(today, viewYear = null) {
   if (Number.isInteger(viewYear)) return viewYear;
-  if (today >= "2026-12-01" && today <= "2026-12-31") return 2027;
   return yearOf(today);
 }
 

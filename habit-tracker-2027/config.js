@@ -4,6 +4,6 @@ export default Object.freeze({
   mode: "full",
   storagePrefix: "unverco-habit-2027",
   fileSlug: "habit-tracker", // indirilen dosya adlarinda (yedek, CSV, PDF)
-  version: "1.0.3",
+  version: "1.0.4",
   schemaVersion: 1,
 });
