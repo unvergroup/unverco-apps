@@ -3,8 +3,6 @@ name: App Tester - Web
 # Environment type: "Desktop emulation" (real browser engines, emulated phone screens). Real devices are not used.
 # Free for public repositories (standard runners).
 on:
-  push:
-    branches: [app-tester-e2e]
   workflow_dispatch:
   workflow_call:
     inputs:
