@@ -7,7 +7,8 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "lib"))
 from qa_common import *  # noqa
 from playwright.sync_api import sync_playwright
 
-PRINT_STUB = "window.__printed = 0; window.print = function () { window.__printed += 1; };"
+PRINT_STUB = ("window.__printed = 0; window.print = function () { window.__printed += 1; };"
+              "document.addEventListener('securitypolicyviolation', function (e) { console.error('CSP ihlali: ' + e.violatedDirective + ' engellenen=' + e.blockedURI + ' ornek=' + (e.sample || '') + ' kaynak=' + e.sourceFile + ':' + e.lineNumber); }, true);")
 PAPERS = [("Letter", {"format": "Letter"}), ("A4", {"format": "A4"}), ("8.5x10.8in", {"width": "8.5in", "height": "10.8in"})]
 
 

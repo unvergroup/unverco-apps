@@ -60,6 +60,42 @@ class AndroidDrv:
         return out
 
 
+def diag():
+    """DevTools acilmadiginda nedeni loga yazar."""
+    for cmd in (["shell", "cat", "/proc/net/unix"], ["shell", "ps", "-A"], ["shell", "dumpsys", "activity", "activities"], ["shell", "cat", "/data/local/tmp/chrome-command-line"],
+                ["logcat", "-d", "-t", "300"]):
+        try:
+            o = adb(*cmd, check=False, timeout=60)
+            if cmd[1] == "cat" and "unix" in cmd[2]:
+                o = "\n".join(l for l in o.splitlines() if "devtools" in l.lower() or "chrome" in l.lower())
+            elif cmd[1] == "ps":
+                o = "\n".join(l for l in o.splitlines() if "chrome" in l.lower())
+            elif cmd[1] == "dumpsys":
+                o = "\n".join(l for l in o.splitlines() if "mResumedActivity" in l or "topResumedActivity" in l)
+            elif cmd[0] == "logcat":
+                o = "\n".join(l for l in o.splitlines() if re.search(r"chrome|AndroidRuntime|FATAL|ActivityManager", l, re.I))[-3500:]
+            print("DIAG", " ".join(cmd), "->", o[-3500:], flush=True)
+        except Exception as e:
+            print("DIAG hata", cmd, e, flush=True)
+
+
+def fallback_screens(apps, base, res, out, shots, api, label, meta):
+    """DevTools yok: adb ile URL ac, ekran goruntusunden 'bos ekran mi' karari ver."""
+    meta["yontem"] = "yalniz adb + ekran goruntusu (DevTools soketi acilamadi)"
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "ios"))
+    from run_sim import blank_from_png
+    for app in apps:
+        p = shots / f"android-api{api}-{app['id']}-acilis.png"
+        adb("shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", f"{base}{app['dir']}/", CHROME)
+        time.sleep(15)
+        screencap(p)
+        blank, ncol, top = blank_from_png(p)
+        res.add("Chrome (Android)", label, app["name"], "Boş ekran (görüntü analizi)", KALDI if blank else GECTI,
+                f"içerik alanında renk={ncol}, baskın oran={top}" if blank else "", p.relative_to(out).as_posix(), repro_text(app, label, "Chrome", ENV_EMU))
+    (out / "meta.json").write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")
+    return 0
+
+
 def screencap(path):
     data = adb("exec-out", "screencap", "-p", binary=True)
     pathlib.Path(path).write_bytes(data)
@@ -99,7 +135,9 @@ def main():
             adb("reverse", "tcp:8000", "tcp:8000")
             adb("shell", "am", "start", "-a", "android.intent.action.VIEW", "-d", "about:blank", CHROME)
             ver = None
-            for _ in range(60):
+            time.sleep(5)
+            screencap(shots / "chrome-acilis-hemen.png")
+            for _ in range(30):
                 try:
                     ver = http_json("http://127.0.0.1:9222/json/version")
                     break
@@ -107,7 +145,8 @@ def main():
                     adb("forward", "tcp:9222", "localabstract:chrome_devtools_remote", check=False)
                     time.sleep(2)
             if not ver:
-                raise RuntimeError("Chrome DevTools soketine ulaşılamadı")
+                diag()
+                return fallback_screens(apps, base, res, out, shots, a.api, label, meta)
             meta["chrome_tarayici"] = ver.get("Browser")
             meta["user_agent"] = ver.get("User-Agent")
             print("CHROME", ver, flush=True)

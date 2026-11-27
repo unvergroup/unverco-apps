@@ -55,6 +55,7 @@ jobs:
           api-level: ${{ matrix.api }}
           target: google_apis_playstore
           arch: x86_64
+          profile: pixel_5
           disable-animations: true
           emulator-boot-timeout: 900
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
