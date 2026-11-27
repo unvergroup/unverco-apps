@@ -269,9 +269,11 @@ function keepClear() {
   const region = document.getElementById("toast-region");
   if (!region || !region.children.length) return;
   const g = region.getBoundingClientRect();
+  if (g.top < window.innerHeight / 2) return; // ust kenardaki bildirim alttaki girdiyi ortmez; kaydirma gerekmez
   let need = 0;
   for (const el of [document.activeElement, lastPressed]) {
     if (!el || el === document.body || !el.isConnected || region.contains(el)) continue;
+    if (el.closest && el.closest("[data-keep-pos]")) continue; // Today satirlari: sayfa kaymaz (cihaz turu 2: kayma ikinci dokunusu baska satira dusuruyordu)
     const box = el.closest ? el.closest(GROUP) : null;
     for (const node of box && box.getBoundingClientRect().height <= 200 ? [el, box] : [el]) {
       const r = node.getBoundingClientRect();

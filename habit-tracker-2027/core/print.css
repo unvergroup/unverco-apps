@@ -1,9 +1,10 @@
-/* Yazdirma: yalniz #print-root'taki sayfa goruntuleri basilir; kagit her zaman beyaz (koyu tema sizmaz). */
+/* Yazdirma: yalniz #print-root'taki sayfa goruntuleri basilir; kagit her zaman beyaz (koyu tema sizmaz).
+   Cihaz turu 2 (27 Kasim 2026, iPhone 15 Pro): goruntu kagidin TAM yuksekligindeydi (11 in) ve body min-height:100vh vardi; iOS'ta yazdirma alani
+   kagittan bir damla kucuk olunca altbilgi 2. sayfaya tasti ("Pages 1-2"). Simdi: goruntu kagit icine SIGAR (en cok 10.65 in, oran korunur;
+   Letter ve A4'te ayni), baskida 100vh/min-height/guvenli alan dolgusu/fixed yok, sayfa sonu yalniz sayfalar ARASINDA. */
 @page { margin: 0; }
-body[data-paper="letter"] { --pw: 8.5in; --ph: 11in; }
-body[data-paper="a4"] { --pw: 210mm; --ph: 297mm; }
-html, body { background: #fff !important; color: #000 !important; }
+html, body { background: #fff !important; color: #000 !important; margin: 0 !important; padding: 0 !important; height: auto !important; min-height: 0 !important; overflow: visible !important; background-image: none !important; }
 body > *:not(#print-root) { display: none !important; }
-#print-root { display: block !important; position: static !important; }
-.print-page { display: block; width: var(--pw, 8.5in); height: var(--ph, 11in); page-break-after: always; break-after: page; }
+#print-root { display: block !important; position: static !important; margin: 0; padding: 0; }
+.print-page { display: block; width: auto; height: auto; max-width: 100%; max-height: 10.65in; margin: 0 auto; page-break-after: always; break-after: page; page-break-inside: avoid; break-inside: avoid; }
 .print-page:last-child { page-break-after: auto; break-after: auto; }

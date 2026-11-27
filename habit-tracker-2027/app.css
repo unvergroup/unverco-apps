@@ -620,8 +620,9 @@ body[data-screen="welcome"] .shell { display: block; }
 .about-logo { width: 140px; }
 
 /* =================== Bildirim =================== */
-#toast-region { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(96px + var(--sab)); z-index: 60; display: grid; gap: 8px; width: min(520px, calc(100vw - 24px)); pointer-events: none; }
-@media (min-width: 1024px) { #toast-region { bottom: 24px; } }
+/* Cihaz turu 2: alttaki bildirim alttaki satirin dugmesini ortuyordu (Android + iPhone); telefonda ust kenarda durur, satir dugmelerini ortmez. */
+#toast-region { position: fixed; left: 50%; transform: translateX(-50%); top: calc(12px + var(--sat)); z-index: 60; display: grid; gap: 8px; width: min(520px, calc(100vw - 24px)); pointer-events: none; }
+@media (min-width: 1024px) { #toast-region { top: auto; bottom: 24px; } }
 .toast { pointer-events: auto; display: flex; align-items: center; gap: 10px; padding: 10px 12px 10px 16px; border-radius: var(--r-lg); background: rgba(20,23,62,.96); color: #F3F4FF; border: 1px solid rgba(255,255,255,.16); box-shadow: var(--shadow-2); font-weight: 600; }
 [data-theme="light"] .toast { background: #14163A; }
 .toast-ico { color: var(--neon-emerald); }

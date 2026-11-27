@@ -537,10 +537,13 @@ body.bare .main { margin: 0 auto; max-width: 620px; padding: 16px 16px 40px; }
 @media print {
   body[data-paper="letter"] #print-root { page: letter; }
   body[data-paper="a4"] #print-root { page: a4; }
-  html, body { background: #fff !important; }
+  /* Cihaz turu 2 (27 Kasim 2026, iPhone 15 Pro): "Pages 1-2". Goruntu kagidin TAM yuksekligindeydi ve body min-height:100vh vardi; yazdirma alani
+     kagittan bir damla kucuk olunca altbilgi 2. sayfaya tasti. Simdi goruntu kagit icine SIGAR (en cok 10.65 in, oran korunur; Letter ve A4'te ayni),
+     baskida vh/min-height/guvenli alan dolgusu yok, sayfa sonu kurali yok. e2e/yazdirma_tek_sayfa_e2e.py */
+  html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; height: auto !important; min-height: 0 !important; overflow: visible !important; }
   body.printing > *:not(#print-root) { display: none !important; }
-  body.printing #print-root { display: block !important; }
-  .print-page { display: block; width: 100%; height: auto; }
+  body.printing #print-root { display: block !important; margin: 0; padding: 0; }
+  .print-page { display: block; width: auto; height: auto; max-width: 100%; max-height: 10.65in; margin: 0 auto; break-inside: avoid; page-break-inside: avoid; }
 }
 .summary .right { text-align: right; }
 .mint { color: var(--mint); }
@@ -645,7 +648,12 @@ img.logo-lg { height: 56px; width: auto; display: block; }
 /* Telefon ust cubugu: logo okunur (>= 76 px), uygulama adi gerekirse iki satira sarar */
 @media (max-width: 767px) {
   .topbar .brand { flex: 1 1 auto; }
-  .brand .brandlogo { height: 37px; width: auto; }
+  /* Cihaz turu 2 (27 Kasim 2026, iPhone 15 Pro 390 px): simge logonun "U" harfine biniyordu. Yalniz yerlesim: bosluk 14 px, simge ve logo flex ile ezilmez,
+     logo sabit oranli sabit boyut (Safari genislik:auto'yu esnek kutuda farkli cozebiliyor) ve simgenin golgesinin ustunde (e2e/logo_yerlesim_e2e.py). */
+  .topbar .brand { gap: 14px; }
+  .topbar .brand .appicon { flex: none; }
+  .topbar .brand > div { flex: 1 1 auto; min-width: 0; }
+  .brand .brandlogo { height: 37px; width: 77px; aspect-ratio: 480 / 230; flex: none; position: relative; z-index: 1; }
   .topbar .brand span { white-space: normal; font-size: 14px; line-height: 1.2; }
   .topbar .actions { flex: none; display: flex; gap: 8px; }
 }

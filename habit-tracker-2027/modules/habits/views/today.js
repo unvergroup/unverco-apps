@@ -76,7 +76,7 @@ export async function mountToday(ctx, root) {
         ctrl = h("button", { type: "button", role: "checkbox", class: `check hc-${habit.color}`, id: `chk-${habit.id}`, "aria-checked": done ? "true" : "false", "aria-label": name, on: { click: () => act(habit, () => ctx.repo.toggleCheck(habit, today)) } }, icon("check", { size: 24, sw: 2.5 }));
       }
       const more = h("button", { type: "button", class: "more", id: `more-${habit.id}`, "aria-label": t("row.menu", { name }), on: { click: () => menu(habit, r) } }, icon("dots", { size: 20 }));
-      const el = h("div", { class: `habit glass${done ? " done" : ""}${r.status === "rest" ? " rest" : ""}`, id: `row-${habit.id}`, "data-habit": habit.id, "data-status": r.status },
+      const el = h("div", { class: `habit glass${done ? " done" : ""}${r.status === "rest" ? " rest" : ""}`, id: `row-${habit.id}`, "data-habit": habit.id, "data-keep-pos": "1", "data-status": r.status },
         tile(habit),
         h("div", { class: "habit-body" }, h("div", { class: "habit-name", text: name }), sub ? h("div", { class: "habit-sub" }, sub) : null, bar),
         more, ctrl,
