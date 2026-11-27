@@ -97,9 +97,11 @@ Profiller (`profiles.json`): iPhone 13/14/15/16, iPhone 15 yatay, Android 360x64
 |---|---|---|---|
 | `qa-web.yml` | ubuntu-latest | Playwright Chromium + Firefox + WebKit, tüm profiller, iki uygulama | Masaüstü taklidi |
 | `qa-ios.yml` | macos-latest | (a) Playwright WebKit, iPhone profilleri (b) iOS Simülatörü + Mobile Safari (simctl + safaridriver/Selenium) | Masaüstü taklidi / Gerçek motor/simülatör |
-| `qa-android.yml` | ubuntu-latest (KVM) | Android 9 (API 28) ve Android 14 (API 34) emülatörü + Chrome (adb + Chrome DevTools) | Emülatör |
+| `qa-android.yml` | ubuntu-latest (KVM) | Android 14 (API 34) emülatörü + Chrome (adb + Chrome DevTools) | Emülatör |
 
-Üçü de `push` (uygulama klasörü ya da `qa/` değişince), `pull_request` ve `workflow_dispatch` ile tetiklenir.
+Web ve Android `push`/`pull_request`/`workflow_dispatch` ile; iOS (macOS kuyruğu kısıtlı) yalnız `workflow_dispatch` ile, yani `qa/telefon-test.sh` ya da elle tetiklenir.
+
+Ölçüm (27 Kasım 2026, commit 1b578bc, `qa/telefon-test.sh`): web 4 dk, Android 4 dk, iOS 12 dk (paralel, toplam 12 dk); 538 + 20 + 32 GEÇTİ, 0 KALDI. iOS: simülatör açılışı ~1 dk, WDA önbellekten (usePrebuiltWDA) ~3–4 dk, test turu ~5 dk.
 Her çalıştırma **job özetine** GEÇTİ/KALDI tablosu yazar; artifact olarak ekran görüntüleri, hata günlükleri, yeniden üretme adımları,
 öncelikli hata listesi ve mobil uyumluluk raporu (`mobil-uyumluluk-raporu.md`, `tum-sonuclar.json`) yüklenir (14 gün saklanır).
 Ürün hatası bulunursa (KALDI) çalıştırma kırmızı olur; altyapı hatası (emülatör açılmadı vb.) ayrıca belirgin bir adım hatasıdır.
