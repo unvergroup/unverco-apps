@@ -85,7 +85,7 @@ export default {
   "setup.step3.title": "Commit and push",
   "setup.step3.text": "Commit the new files and push them to GitHub. GitHub Desktop or the upload button on the GitHub website both work.",
   "setup.step4.title": "Run the workflow",
-  "setup.step4.text": "On GitHub open Actions, choose App Tester, then press Run workflow. A full run usually takes 12 to 18 minutes.",
+  "setup.step4.text": "On GitHub open Actions, choose App Tester, then press Run workflow. A full run usually takes about 10 to 13 minutes. For a quick check in about 2 minutes, run App Tester - Web on its own.",
   "setup.step5.title": "Download the result and import it",
   "setup.step5.text": "When the run is finished, open it, download the artifact and unzip it. Then import app-tester-results.json here.",
   "setup.goImport": "Import results",
