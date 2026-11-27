@@ -50,7 +50,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api: [28, 34]
+        api: [34]
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }

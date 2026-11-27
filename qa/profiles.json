@@ -92,20 +92,6 @@
       "dpr": 1,
       "mobile": false,
       "print": true
-    },
-    {
-      "id": "android-9-eski-chrome",
-      "name": "Android 9 eski Chrome taklidi 360x740",
-      "group": "legacy",
-      "w": 360,
-      "h": 740,
-      "dpr": 3,
-      "mobile": true,
-      "legacy": true,
-      "engines": [
-        "chromium"
-      ],
-      "_aciklama": "Chrome <98 taklidi: structuredClone, Object.hasOwn, Array.prototype.at, Array.prototype.findLast, Element.replaceChildren silinir (append/flat KORUNUR: Chrome 69 destekler) (Galaxy S8 Android 9 bulgusu)"
     }
   ]
 }

@@ -3,13 +3,13 @@
 ## Tek komut
 
 ```bash
-qa/telefon-test.sh              # web + Android (~5 dk), main'in guncel hali
-qa/telefon-test.sh --ios        # + iOS Simulatoru ve iOS WebKit isi (macOS kuyrugu 0-15+ dk, isteğe bağlı)
+qa/telefon-test.sh              # web + Android + iOS Simulatoru (Appium + Mobile Safari, macos-15), tek tablo
+qa/telefon-test.sh --hizli      # yalniz web + Android
 qa/telefon-test.sh 627f280      # uygulama klasorlerini bu commit/etiketten sina
 ```
 
 **iPhone kapsami:** varsayilan kosuda iPhone, web iste **WebKit iPhone profilleriyle** (iPhone 13/14/15/16, yatay; Masaustu taklidi) saglanir.
-Gercek iOS Simulatoru yalnizca `--ios` ile kosar; macOS kuyrugu 15 dk'yi asarsa cikis kodu 2 DEGIL, "iOS atlandi: macOS kuyrugu" bilgisi verilir.
+Gercek iOS Simulatoru varsayilan kosar (macos-15, arm64; macos-14 emekli, macos-latest/26 kuyrukta kaliyor); macOS kuyrugu 45 dk'yi asarsa cikis kodu 2 DEGIL, "iOS atlandi: macOS kuyrugu" bilgisi verilir.
 
 Komut web + Android (+ istenirse iOS) workflow'larini REST ile tetikler, run kimliklerini bulur, bitene kadar yoklar (en fazla 25 dk) ve
 **artifact'a ihtiyac duymadan** (yalniz `gh run view --log`) tek tablo basar: is bazinda sure, GEÇTİ/KALDI/UYARI/ATLANDI sayisi ve [KALDI] satirlari.
@@ -21,7 +21,7 @@ Gereken: `gh` (giris yapmis), `jq`, `python3`. Ortam degiskenleri: `QA_REF`, `QA
 | 1 | Urun hatasi (en az bir KALDI) |
 | 2 | Altyapi ya da zaman asimi (urun hatasi yok): runner kuyrugu, emulator acilmadi, log okunamadi |
 
-macOS kuyrugu 15 dk'yi (`QA_QUEUE_LIMIT`) asarsa o kosu iptal edilir ve "ALTYAPI: macOS kuyruğu" olarak ayri raporlanir; urun hatasi sayilmaz.
+macOS kuyrugu 45 dk'yi (`QA_QUEUE_LIMIT`) asarsa o kosu iptal edilir ve "ALTYAPI: macOS kuyruğu" olarak ayri raporlanir; urun hatasi sayilmaz.
 
 ### Sureler (olculen)
 
@@ -33,17 +33,14 @@ macOS kuyrugu 15 dk'yi (`QA_QUEUE_LIMIT`) asarsa o kosu iptal edilir ve "ALTYAPI
 | iOS Simulatoru + Mobile Safari | ~2,5 dk (acilis 41 sn) |
 | macOS kuyrugu | degisken: 0-10+ dk (ucretsiz havuz); toplam sure buna bagli |
 
-### Taban alti tarayici (Chrome 80 / iOS 14 tabani)
+### Eski Android/Chrome
 
-Urunlerin spec tabani Chrome/WebView 80 ve iOS 14'tur. Taban altindaki tarayicida (ornegin Android 9 emulatorundeki Chrome 69) beklenen sonuc
-uygulamanin acilmasi degil, 5 dilli `#boot-warning` uyarisinin (`role=alert`, dolu metin) en gec ~6 sn icinde gorunmesidir.
-Bu bir gevsetme degil spec'in kendisidir: Chrome surumu 80'in altindaysa `run_android.py` Ana yolculuk / Bos ekran / Konsol yerine tek denetim kosar:
-**"Eski tarayici uyarisi gorunur"** (P0). Uyari gorunmezse KALDI. Kanit: ekran goruntusu piksel istatistigi + DOM metni log'a yazilir.
+Kullanici karari: eski Android (API 28, Chrome 69) ve Android 9 eski Chrome profili **kaldirildi**; Android yalniz API 34 (Chrome 113+). `run_android.py` icindeki taban alti uyari denetimi kodda duruyor ama Chrome < 80 olmadigindan calismaz.
 
 ### Ortam turu etiketleri
 
 - **Masaustu taklidi**: Playwright (gercek Chromium/Firefox/WebKit motoru, taklit mobil boyut). Gercek telefon DEGIL.
-- **Emulator**: Android emulatoru (API 28 Chrome 69 ve API 34 Chrome 113) + gercek Chrome.
+- **Emulator**: Android emulatoru (API 34 Chrome) + gercek Chrome.
 - **Simulator**: iOS Simulatoru (iPhone, Xcode'un son iOS'u) + gercek Mobile Safari.
 
 > **Gercek cihaz OLMADIGI icin** iOS yazdirma penceresi, dokunma hissi, bildirimler ve yuklenebilir PWA davranisi hala elle gercek iPhone/Android'de dogrulanmalidir.
@@ -59,6 +56,10 @@ Bu bir gevsetme degil spec'in kendisidir: Chrome surumu 80'in altindaysa `run_an
 - iOS runner etiketi `macos_runner` girdisiyle (`QA_MACOS=macos-15|macos-14`) secilebilir.
 
 ### iOS simulatoru
+
+**Guncel yol:** `qa/ios/appium_run.py`: Appium 2 + XCUITest (WebDriverAgent runner'daki Xcode ile derlenir, `~/wda-derived` onbellegi), iPhone 16, Mobile Safari; acilis, yolculuk, ana eylem, yenileme sonrasi kalicilik, yatay ekran, tasma, konsol (safariConsole), cevrimdisi. Ortam etiketi: "Simülatör (gerçek iOS + Mobile Safari)" - gercek cihaz degil. Appium kurulamazsa yedek: asagidaki simctl yolu.
+
+Eski not:
 
 `qa/ios/run_sim.py`: `simctl boot` + `bootstatus`, `simctl openurl` ile Mobile Safari'de acar, `simctl io screenshot` ile ekran goruntusu alir,
 Safari'nin gercekten acildigini ana ekranla piksel farkindan dogrular ve bos ekrani goruntu analiziyle denetler. **Calisiyor.**
