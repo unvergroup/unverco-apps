@@ -713,3 +713,13 @@ body.bare .main { padding-top: max(16px, var(--sat)); padding-bottom: calc(40px 
 /* iOS 15.4 oncesi <dialog> bilinmeyen eleman: acik/kapali gorunum */
 dialog:not([open]) { display: none; }
 dialog[open] { display: block; }
+
+/* 1.0.5: alçak yatay ekran (ör. iPhone yatay 852x393): sabit yan menü ekrandan uzun; kaydırılabilir olmazsa "Add expense" erişilemezdi. */
+@media (min-width: 768px) and (max-height: 600px) {
+  .sidebar { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+  .sidebar .foot { margin-top: 12px; flex: none; }
+  .sidebar > * { flex-shrink: 0; }
+}
+
+/* 1.0.5: WebKit (iOS/Safari) select için min-height'i yok sayıp 23 px çiziyordu; açık yükseklik 44 px dokunma alanı verir. */
+.field select { height: var(--tap); box-sizing: border-box; }

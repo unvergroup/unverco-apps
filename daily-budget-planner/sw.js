@@ -1,7 +1,7 @@
 // Daily Budget Planner cevrimdisi onbellek. Surum config.js ile ayni olmali (tests/files.test.mjs denetler).
 // Strateji: once onbellek; yoksa ag; yalniz ayni kaynak GET istekleri. Uygulama hicbir yere veri gondermez.
 const PRODUCT = "unverco-daily-budget";
-const VERSION = "1.0.3";
+const VERSION = "1.0.5";
 const CACHE = PRODUCT + "-v" + VERSION;
 const PRECACHE = [
   "./",

@@ -105,5 +105,7 @@
     if (mods.length && !("noModule" in d.createElement("script"))) show();
   }
   if (d.readyState === "loading") d.addEventListener("DOMContentLoaded", onReadyDom); else onReadyDom();
-  w.setTimeout(function () { if (!done) show(); }, 15000);
+  // Eski Chrome (ornek 69) modulde istege bagli zincir ve bos birlestirme ayristirma hatasini window 'error' olayina HIC iletmeyebilir; bu durumda tek yol zaman asimidir.
+  // 4 sn: normal acilis bundan cok kisadir; gec acilirsa ready() uyariyi kaldirir.
+  w.setTimeout(function () { if (!done) show(); }, 4000);
 })(window, document);

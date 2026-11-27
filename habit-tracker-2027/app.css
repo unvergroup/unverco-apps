@@ -456,6 +456,11 @@ body[data-screen="welcome"] .shell { display: block; }
 .sum-row .fig { text-align: right; font-size: var(--fs-sm); color: var(--text-2); font-weight: 600; white-space: nowrap; }
 .sum-row .fig b { display: block; color: var(--text); font: 700 var(--fs-lg)/1.1 var(--font-display); }
 .month-grid { display: block; }
+/* 1.0.5: 360-389 px'te gun dugmeleri 41 px genisti (44 px dokunma hedefi alti); takvim kenarlara 6 px tasar, ic bosluk ve aralik daralir -> en az 44 px. */
+@media (min-width: 360px) and (max-width: 389px) {
+  .cal { margin: 0 -6px; padding: 8px 4px; }
+  .cal-head, .cal-grid { gap: 2px; }
+}
 @media (max-width: 359px) {
   .main { padding-left: 8px; padding-right: 8px; }
   .cal { margin: 0 -8px; padding: 6px 0; border-radius: var(--r-md); border-left: 0; border-right: 0; }

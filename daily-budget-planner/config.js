@@ -5,7 +5,7 @@ export default Object.freeze({
   mode: "full",
   storagePrefix: "unverco-daily-budget",
   fileSlug: "daily-budget-planner", // indirilen dosya adlarinda (CSV, yedek, PDF)
-  version: "1.0.3",
+  version: "1.0.5",
   schemaVersion: 1,
   preview: false,
 });
