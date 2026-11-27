@@ -213,16 +213,19 @@ class Runner:
         prn = []
         for pr in app.get("print", []):
             try:
-                pg.goto(f"{self.base}{app['dir']}/", wait_until="load")
-                pg.wait_for_selector(app["offline"]["ready"], state="attached", timeout=8000)
-                for s in pr["steps"]:
-                    self.step(pg, s, last)
-                printed = pg.evaluate("window.__printed")
-                pg.emulate_media(media="print")
-                counts = {}
+                counts, printed = {}, 1
+                # Her kagit boyutu icin yazdirma akisi bastan baslatilir: ilk PDF'ten sonra uygulama afterprint ile
+                # #print-root'u temizler (dogru davranis); ayni sayfada ikinci pdf() tum uygulamayi basar (yanlis 2 sayfa).
                 for name, kw in PAPERS:
-                    if name in pr.get("papers", [n for n, _ in PAPERS]):
-                        counts[name] = len(PdfReader(io.BytesIO(pg.pdf(**kw))).pages)
+                    if name not in pr.get("papers", [n for n, _ in PAPERS]): continue
+                    pg.goto(f"{self.base}{app['dir']}/", wait_until="load")
+                    pg.wait_for_selector(app["offline"]["ready"], state="attached", timeout=8000)
+                    pg.emulate_media(media="screen")
+                    for s in pr["steps"]:
+                        self.step(pg, s, last)
+                    printed = min(printed, pg.evaluate("window.__printed"))
+                    pg.emulate_media(media="print")
+                    counts[name] = len(PdfReader(io.BytesIO(pg.pdf(**kw))).pages)
                 pg.emulate_media(media="screen")
                 bad = {k: v for k, v in counts.items() if v != pr["pages"]}
                 prn.append((KALDI if bad or not printed else GECTI, f"{pr['label']}: beklenen {pr['pages']} sayfa; ölçülen {counts}" + ("" if printed else " (window.print çağrılmadı)")))
