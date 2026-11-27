@@ -1,0 +1,17 @@
+{
+  "name": "ÜNVERCO 2027 Habit Tracker",
+  "short_name": "2027 Habits",
+  "description": "Forgiving habit tracker with rest days, a year heat map and printable 2027 pages. Works offline; your data stays on your device.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#070A1F",
+  "theme_color": "#070A1F",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

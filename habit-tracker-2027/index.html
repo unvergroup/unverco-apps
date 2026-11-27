@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#070A1F">
+  <meta name="color-scheme" content="dark light">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="2027 Habits">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>2027 Habit Tracker · ÜNVERCO</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180.png">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="core/print.css" media="print">
+</head>
+<body>
+  <a class="skip-link" href="#panel">Skip to content</a>
+  <img id="brand-logo-src" class="src-img" src="unverco-logo-altin.png" alt="" hidden>
+  <img id="brand-logo-blue-src" class="src-img" src="unverco-logo-mavi.png" alt="" hidden>
+  <img id="app-icon-src" class="src-img" src="app-icon-320.webp" alt="" hidden>
+  <div class="shell no-print">
+    <nav id="side-nav" class="sidebar glass glass--strong" aria-label="Main"></nav>
+    <div class="main-wrap">
+      <div id="notice-bar"><p id="volatile-note" class="banner banner-warn" role="status" hidden></p></div>
+      <div id="pwa-bar"></div>
+      <main id="panel" class="main" tabindex="-1"></main>
+    </div>
+    <nav id="tabbar" class="tabbar glass glass--strong" aria-label="Main"></nav>
+  </div>
+  <div id="print-root" aria-hidden="true"></div>
+  <div id="toast-region" class="no-print" role="status" aria-live="polite"></div>
+  <noscript><p class="banner">This app needs JavaScript.</p></noscript>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

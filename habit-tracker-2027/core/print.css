@@ -1,0 +1,9 @@
+/* Yazdirma: yalniz #print-root'taki sayfa goruntuleri basilir; kagit her zaman beyaz (koyu tema sizmaz). */
+@page { margin: 0; }
+body[data-paper="letter"] { --pw: 8.5in; --ph: 11in; }
+body[data-paper="a4"] { --pw: 210mm; --ph: 297mm; }
+html, body { background: #fff !important; color: #000 !important; }
+body > *:not(#print-root) { display: none !important; }
+#print-root { display: block !important; position: static !important; }
+.print-page { display: block; width: var(--pw, 8.5in); height: var(--ph, 11in); page-break-after: always; break-after: page; }
+.print-page:last-child { page-break-after: auto; break-after: auto; }
