@@ -90,7 +90,7 @@ export default {
   "setup.step5.text": "Quand l’exécution est terminée, ouvrez-la, téléchargez l’artefact et décompressez-le. Importez ensuite app-tester-results.json ici.",
   "setup.goImport": "Importer les résultats",
   "setup.cost.title": "Coût",
-  "setup.cost.text": "Dans un dépôt GitHub public, les runners standard sont gratuits. Dans un dépôt privé, les minutes viennent de votre offre : GitHub Free inclut 2 000 minutes par mois, et le test iPhone tourne sous macOS, qui les consomme environ 10 fois plus vite (ensuite, environ 0,062 USD par minute macOS). Une exécution complète prend environ 10 à 12 minutes, la vérification web rapide environ 2 minutes. Vérifiez les tarifs actuels de GitHub avant de lancer.",
+  "setup.cost.text": "Dans un dépôt GitHub public, les runners standard sont gratuits. Dans un dépôt privé, les minutes viennent de votre offre : GitHub Free inclut 2 000 minutes par mois, et le test iPhone tourne sous macOS, qui les consomme environ 10 fois plus vite (ensuite, environ 0,062 USD par minute macOS). Une exécution complète prend environ 10 à 13 minutes, la vérification web rapide environ 2 minutes. Vérifiez les tarifs actuels de GitHub avant de lancer.",
   "setup.req.title": "Ce qu’il vous faut",
   "setup.req.1": "Un compte GitHub",
   "setup.req.2": "Un dépôt GitHub contenant votre application (public : gratuit)",

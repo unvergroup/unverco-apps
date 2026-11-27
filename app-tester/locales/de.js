@@ -90,7 +90,7 @@ export default {
   "setup.step5.text": "Öffnen Sie den fertigen Lauf, laden Sie das Artefakt herunter und entpacken Sie es. Importieren Sie dann app-tester-results.json hier.",
   "setup.goImport": "Ergebnisse importieren",
   "setup.cost.title": "Kosten",
-  "setup.cost.text": "In einem öffentlichen GitHub-Repository sind die Standard-Runner kostenlos. In einem privaten Repository stammen die Minuten aus Ihrem Tarif: GitHub Free enthält 2.000 Minuten pro Monat, und der iPhone-Test läuft auf macOS, das sie etwa 10-mal schneller verbraucht (danach etwa 0,062 USD pro macOS-Minute). Ein vollständiger Lauf dauert etwa 10 bis 12 Minuten, die schnelle Web-Prüfung etwa 2 Minuten. Prüfen Sie vor dem Start die aktuellen GitHub-Preise.",
+  "setup.cost.text": "In einem öffentlichen GitHub-Repository sind die Standard-Runner kostenlos. In einem privaten Repository stammen die Minuten aus Ihrem Tarif: GitHub Free enthält 2.000 Minuten pro Monat, und der iPhone-Test läuft auf macOS, das sie etwa 10-mal schneller verbraucht (danach etwa 0,062 USD pro macOS-Minute). Ein vollständiger Lauf dauert etwa 10 bis 13 Minuten, die schnelle Web-Prüfung etwa 2 Minuten. Prüfen Sie vor dem Start die aktuellen GitHub-Preise.",
   "setup.req.title": "Was Sie brauchen",
   "setup.req.1": "Ein GitHub-Konto",
   "setup.req.2": "Ein GitHub-Repository mit Ihrer App (öffentlich ist kostenlos)",
