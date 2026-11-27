@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Broken example (on purpose)</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; }
+  .wide { width: 900px; height: 48px; background: #c33; color: #fff; }   /* deliberate: wider than a phone screen */
+  .tiny { width: 30px; height: 30px; }                                     /* deliberate: smaller than 44 px */
+</style>
+</head>
+<body>
+<main id="app">
+  <h1>Broken example</h1>
+  <p>This page is broken on purpose, so you can see what a failing report looks like.</p>
+  <div class="wide">A box that is 900 px wide</div>
+  <button class="tiny" type="button">x</button>
+  <img src="missing-picture.png" alt="" width="1" height="1">
+</main>
+</body>
+</html>

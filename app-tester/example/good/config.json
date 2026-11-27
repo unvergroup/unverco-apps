@@ -1,0 +1,15 @@
+{
+  "app_name": "Tap Counter (good example)",
+  "path": "app-tester/example/good",
+  "journey": [
+    { "label": "Home screen", "wait": "#add", "check": true, "shot": "01-home" },
+    { "label": "Tap Add one", "click": "#add", "sleep": 300, "check": true, "shot": "02-added" }
+  ],
+  "persistence": {
+    "label": "Tap Add one, then reload the page",
+    "steps": [ { "click": "#add" }, { "sleep": 300 } ],
+    "probe": "#count",
+    "ready": "#count"
+  },
+  "offline": { "ready": "#add" }
+}

@@ -1,0 +1,90 @@
+name: App Tester - Android
+# Android check: Android 14 (API 34) emulator with KVM + Chrome. Environment type: "Android emulator". Real devices are not used.
+# Standard ubuntu runner (free for public repositories); no larger runner is used.
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      skip_report:
+        description: 'Set to yes when a parent workflow builds the combined report'
+        type: string
+        default: 'no'
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    name: android-api${{ matrix.api }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [34]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12', cache: pip, cache-dependency-path: app-tester/requirements-android.txt }
+      - run: pip install -r app-tester/requirements-android.txt
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      # AVD/snapshot caching was tried and turned off: booting from a snapshot failed in 2 of 3 runs
+      # ("device offline" / exit 137) and saved only about 1 minute. Reliability over speed: cold boot.
+      - name: Android emulator + Chrome (API ${{ matrix.api }})
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          target: google_apis_playstore
+          arch: x86_64
+          profile: pixel_5
+          disable-animations: true
+          emulator-boot-timeout: 900
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          script: bash app-tester/android/emulator-script.sh ${{ matrix.api }}
+      - name: Report (job summary)
+        if: always()
+        run: python app-tester/report/make_report.py --in qa-out --out qa-report-job --title "Android check - API ${{ matrix.api }}" > /dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-tester-env-android-api${{ matrix.api }}
+          path: qa-out/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  report:
+    needs: android
+    if: ${{ always() && inputs.skip_report != 'yes' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: app-tester-env-android-*
+          path: qa-in
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Build the report
+        id: build
+        env:
+          APP_TESTER_RUN_STARTED: ${{ github.run_started_at }}
+        run: |
+          set +e
+          python app-tester/report/build_results.py --in qa-in --out app-tester-results --expect android-emulator --gate
+          echo "rc=$?" >> "$GITHUB_OUTPUT"
+          exit 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-tester-results
+          path: app-tester-results/
+          retention-days: 14
+      - name: Gate (red when a check failed)
+        if: ${{ steps.build.outputs.rc != '0' }}
+        run: |
+          echo "At least one check failed or no results were found. See the job summary and the app-tester-results artifact."
+          exit 1

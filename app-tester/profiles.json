@@ -1,0 +1,97 @@
+{
+  "_comment": "Device profiles: viewport size (CSS px), pixel density, touch. Profiles with print=true also measure Chromium PDF page counts (only when config.json has print entries).",
+  "profiles": [
+    {
+      "id": "iphone-13",
+      "name": "iPhone 13",
+      "group": "iphone",
+      "w": 390,
+      "h": 844,
+      "dpr": 3,
+      "mobile": true
+    },
+    {
+      "id": "iphone-14",
+      "name": "iPhone 14",
+      "group": "iphone",
+      "w": 390,
+      "h": 844,
+      "dpr": 3,
+      "mobile": true
+    },
+    {
+      "id": "iphone-15",
+      "name": "iPhone 15",
+      "group": "iphone",
+      "w": 393,
+      "h": 852,
+      "dpr": 3,
+      "mobile": true,
+      "print": true
+    },
+    {
+      "id": "iphone-16",
+      "name": "iPhone 16",
+      "group": "iphone",
+      "w": 402,
+      "h": 874,
+      "dpr": 3,
+      "mobile": true
+    },
+    {
+      "id": "iphone-15-landscape",
+      "name": "iPhone 15 landscape",
+      "group": "iphone",
+      "w": 852,
+      "h": 393,
+      "dpr": 3,
+      "mobile": true
+    },
+    {
+      "id": "android-small",
+      "name": "Android small 360x640",
+      "group": "android",
+      "w": 360,
+      "h": 640,
+      "dpr": 2,
+      "mobile": true
+    },
+    {
+      "id": "android-medium",
+      "name": "Android medium 393x851",
+      "group": "android",
+      "w": 393,
+      "h": 851,
+      "dpr": 2.75,
+      "mobile": true
+    },
+    {
+      "id": "android-large",
+      "name": "Android large 412x915",
+      "group": "android",
+      "w": 412,
+      "h": 915,
+      "dpr": 2.6,
+      "mobile": true
+    },
+    {
+      "id": "tablet",
+      "name": "Tablet 768x1024",
+      "group": "tablet",
+      "w": 768,
+      "h": 1024,
+      "dpr": 2,
+      "mobile": true
+    },
+    {
+      "id": "desktop",
+      "name": "Desktop 1280x800",
+      "group": "desktop",
+      "w": 1280,
+      "h": 800,
+      "dpr": 1,
+      "mobile": false,
+      "print": true
+    }
+  ]
+}

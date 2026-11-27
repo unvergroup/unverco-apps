@@ -1,0 +1,115 @@
+name: App Tester - iOS
+# iOS check: iOS Simulator + Mobile Safari (Appium + XCUITest) on a macOS runner. Environment type: "iOS Simulator".
+# Real devices are not used. Free for public repositories; private repositories are billed for macOS minutes.
+on:
+  workflow_dispatch:
+    inputs:
+      macos_runner:
+        description: 'macOS runner label (macos-15 is arm64 and fast)'
+        default: 'macos-15'
+  workflow_call:
+    inputs:
+      skip_report:
+        description: 'Set to yes when a parent workflow builds the combined report'
+        type: string
+        default: 'no'
+      macos_runner:
+        description: 'macOS runner label (macos-15 is arm64 and fast)'
+        type: string
+        default: 'macos-15'
+
+permissions:
+  contents: read
+
+jobs:
+  simulator:
+    runs-on: ${{ inputs.macos_runner || 'macos-15' }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: pip install Appium-Python-Client selenium pillow
+      - name: Environment info
+        id: ver
+        run: |
+          sw_vers; xcodebuild -version; xcrun simctl list runtimes
+          echo "k=$(xcodebuild -version | tr -d '\n ' )-appium2" >> "$GITHUB_OUTPUT"
+      - name: Appium + XCUITest driver
+        run: |
+          npm install -g appium
+          appium driver install xcuitest
+          appium driver list --installed
+      - name: WebDriverAgent cache (build output)
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/wda-derived
+          key: wda-${{ runner.os }}-${{ runner.arch }}-${{ steps.ver.outputs.k }}-none
+          restore-keys: wda-${{ runner.os }}-${{ runner.arch }}-${{ steps.ver.outputs.k }}-
+      - name: iOS Simulator + Mobile Safari (Appium)
+        id: appium
+        continue-on-error: true
+        timeout-minutes: 20
+        run: python app-tester/ios/appium_run.py --out qa-out/ios-sim
+      - name: Save the WebDriverAgent cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/wda-derived
+          key: wda-${{ runner.os }}-${{ runner.arch }}-${{ steps.ver.outputs.k }}-${{ github.run_id }}
+      - name: Mark an infrastructure problem
+        if: ${{ steps.appium.outcome == 'failure' }}
+        run: |
+          mkdir -p qa-out/ios-sim
+          echo "2" > qa-out/ios-sim/infra-exit.txt
+      - name: Fallback - simctl openurl + screenshot (only when Appium could not run)
+        if: ${{ steps.appium.outcome == 'failure' }}
+        timeout-minutes: 4
+        run: |
+          echo "[INFRA] The Appium path failed, running the fallback simctl check"
+          python app-tester/ios/run_sim.py --out qa-out/ios-sim-fallback
+      - name: Report (job summary)
+        if: always()
+        run: python app-tester/report/make_report.py --in qa-out --out qa-report-job --title "iOS Simulator check" > /dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-tester-env-ios
+          path: qa-out/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  report:
+    needs: simulator
+    if: ${{ always() && inputs.skip_report != 'yes' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: app-tester-env-ios*
+          path: qa-in
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Build the report
+        id: build
+        env:
+          APP_TESTER_RUN_STARTED: ${{ github.run_started_at }}
+        run: |
+          set +e
+          python app-tester/report/build_results.py --in qa-in --out app-tester-results --expect ios-simulator --gate
+          echo "rc=$?" >> "$GITHUB_OUTPUT"
+          exit 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-tester-results
+          path: app-tester-results/
+          retention-days: 14
+      - name: Gate (red when a check failed)
+        if: ${{ steps.build.outputs.rc != '0' }}
+        run: |
+          echo "At least one check failed or no results were found. See the job summary and the app-tester-results artifact."
+          exit 1

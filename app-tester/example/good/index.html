@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tap Counter (good example)</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; color: #1a1a1a; background: #f6f7f9; }
+  main { max-width: 480px; margin: 0 auto; }
+  h1 { font-size: 1.4rem; }
+  #count { font-size: 3rem; margin: 16px 0; }
+  button { min-width: 48px; min-height: 48px; padding: 8px 20px; font-size: 1rem; border-radius: 10px; border: 1px solid #1a1a1a; background: #fff; }
+</style>
+</head>
+<body>
+<main id="app">
+  <h1>Tap Counter</h1>
+  <p>A tiny example app that passes every check of the ÜNVERCO App Tester.</p>
+  <div id="count">0</div>
+  <button id="add" type="button">Add one</button>
+  <button id="reset" type="button">Reset</button>
+</main>
+<script>
+  var KEY = "tap-counter";
+  var el = document.getElementById("count");
+  var n = parseInt(localStorage.getItem(KEY) || "0", 10);
+  el.textContent = String(n);
+  document.getElementById("add").addEventListener("click", function () {
+    n += 1; localStorage.setItem(KEY, String(n)); el.textContent = String(n);
+  });
+  document.getElementById("reset").addEventListener("click", function () {
+    n = 0; localStorage.setItem(KEY, "0"); el.textContent = "0";
+  });
+  if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js"); }
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+name: App Tester
+# One button: runs the web, Android and iOS checks in parallel and merges them into one report
+# (job summary + the "app-tester-results" artifact with app-tester-results.json and screenshots).
+# Real devices are not used.
+on:
+  push:
+    branches: [app-tester-e2e]
+  workflow_dispatch:
+    inputs:
+      macos_runner:
+        description: 'macOS runner label for the iOS check (macos-15 is arm64 and fast)'
+        default: 'macos-15'
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    uses: ./.github/workflows/app-tester-web.yml
+    with:
+      skip_report: 'yes'
+  android:
+    uses: ./.github/workflows/app-tester-android.yml
+    with:
+      skip_report: 'yes'
+  ios:
+    uses: ./.github/workflows/app-tester-ios.yml
+    with:
+      skip_report: 'yes'
+      macos_runner: ${{ inputs.macos_runner || 'macos-15' }}
+
+  report:
+    needs: [web, android, ios]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: app-tester-env-*
+          path: qa-in
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Build the combined report
+        id: build
+        env:
+          APP_TESTER_RUN_STARTED: ${{ github.run_started_at }}
+        run: |
+          set +e
+          python app-tester/report/build_results.py --in qa-in --out app-tester-results --expect web-chromium,web-firefox,web-webkit,android-emulator,ios-simulator --gate
+          echo "rc=$?" >> "$GITHUB_OUTPUT"
+          exit 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: app-tester-results
+          path: app-tester-results/
+          retention-days: 14
+      - name: Gate (red when a check failed)
+        if: ${{ steps.build.outputs.rc != '0' }}
+        run: |
+          echo "At least one check failed or no results were found. See the job summary and the app-tester-results artifact."
+          exit 1
