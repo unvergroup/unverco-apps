@@ -356,6 +356,110 @@
           ]
         }
       ]
+    },
+    {
+      "id": "app-tester",
+      "name": "App Tester Panel",
+      "dir": "app-tester",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana sayfa",
+          "wait": "#sample-dontship",
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ornek DONT SHIP yukle",
+          "click": "#sample-dontship"
+        },
+        {
+          "label": "Karar ekrani",
+          "wait": "[data-verdict=DONT_SHIP]",
+          "sleep": 500,
+          "check": true,
+          "shot": "02-karar"
+        },
+        {
+          "label": "Sonuclar ekrani",
+          "goto": "#/results",
+          "wait": "[data-failure]",
+          "sleep": 500,
+          "check": true,
+          "shot": "03-sonuclar"
+        },
+        {
+          "label": "Kurulum sihirbazi",
+          "goto": "#/setup",
+          "wait": "#step-title",
+          "sleep": 400,
+          "check": true,
+          "shot": "04-kurulum"
+        },
+        {
+          "label": "Gecmis",
+          "goto": "#/history",
+          "wait": "#history-list",
+          "sleep": 400,
+          "check": true,
+          "shot": "05-gecmis"
+        },
+        {
+          "label": "Ayarlar",
+          "goto": "#/settings",
+          "wait": "#set-lang",
+          "sleep": 400,
+          "check": true,
+          "shot": "06-ayarlar"
+        },
+        {
+          "label": "Ana sayfaya don",
+          "goto": "#/home",
+          "wait": "[data-verdict]"
+        }
+      ],
+      "persistence": {
+        "label": "Ornek yukle, sayfayi yenile",
+        "steps": [
+          {
+            "goto": "#/home"
+          },
+          {
+            "sleep": 400
+          }
+        ],
+        "probe": "[data-verdict]",
+        "ready": "[data-verdict]"
+      },
+      "offline": {
+        "ready": "[data-verdict]"
+      },
+      "print": [
+        {
+          "label": "Sonuclari yazdir, Letter",
+          "steps": [
+            {
+              "goto": "#/results"
+            },
+            {
+              "wait": "#results-print"
+            },
+            {
+              "click": "#results-print"
+            },
+            {
+              "sleep": 1300
+            }
+          ],
+          "pages": 1,
+          "papers": [
+            "Letter",
+            "8.5x10.8in"
+          ]
+        }
+      ]
     }
   ]
 }
