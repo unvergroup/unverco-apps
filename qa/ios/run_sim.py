@@ -43,23 +43,46 @@ def blank_from_png(path):
     top = max(c for c, _ in cols) / total
     return (len(cols) < 6 or top > 0.97), len(cols), round(top, 2)
 
+def diff_ratio(a, b):
+    """Iki ekran goruntusu arasindaki degisen piksel orani (Safari gercekten acildi mi?)."""
+    from PIL import Image, ImageChops
+    x, y = Image.open(a).convert("L"), Image.open(b).convert("L")
+    if x.size != y.size: return 1.0
+    x.thumbnail((120, 260)); y.thumbnail((120, 260))
+    d = ImageChops.difference(x, y).point(lambda v: 255 if v > 24 else 0)
+    return sum(1 for v in d.getdata() if v) / (d.size[0] * d.size[1])
+
 def method_a(dev, apps, base, res, out, label):
     shots = out / "screenshots"; shots.mkdir(parents=True, exist_ok=True)
-    sh(f"xcrun simctl boot {dev['udid']}", check=False)
-    sh(f"xcrun simctl bootstatus {dev['udid']} -b", timeout=600)
+    u = dev["udid"]
+    t0 = time.time()
+    sh(f"xcrun simctl boot {u}", check=False)
+    sh(f"xcrun simctl bootstatus {u} -b", timeout=900)
+    print(f"ALTYAPI-SURE simulator acilis: {time.time()-t0:.0f} sn", flush=True)
     time.sleep(5)
+    home = shots / "ios-sim-ana-ekran.png"
+    sh(f"xcrun simctl io {u} screenshot '{home}'", check=False)
     for app in apps:
         p = shots / f"ios-sim-simctl-{app['id']}-acilis.png"
-        sh(f"xcrun simctl openurl {dev['udid']} '{base}{app['dir']}/'")
-        time.sleep(12)
-        sh(f"xcrun simctl io {dev['udid']} screenshot '{p}'")
         repro = f"Simülatörde Mobile Safari ile {base}{app['dir']}/ adresini aç (yerel sunucu)."
+        ok = False
+        for attempt in (1, 2):
+            sh(f"xcrun simctl openurl {u} '{base}{app['dir']}/'")
+            time.sleep(14 if attempt == 1 else 20)
+            sh(f"xcrun simctl io {u} screenshot '{p}'")
+            ratio = diff_ratio(home, p) if home.exists() else 1.0
+            print(f"    Safari acildi mi? ana ekrandan fark orani={ratio:.2f} (deneme {attempt})", flush=True)
+            if ratio > 0.15: ok = True; break
+        if not ok:
+            res.add("Mobile Safari (simctl)", label, app["name"], "Boş ekran (görüntü analizi)", ATLANDI,
+                    "Safari açılmadı (ekran ana ekranla aynı): altyapı sorunu, ürün hatası sayılmaz", p.relative_to(out).as_posix(), repro)
+            print("[ALTYAPI] Safari simctl openurl sonrasi acilmadi", flush=True)
+            continue
         try:
             blank, ncol, top = blank_from_png(p)
             res.add("Mobile Safari (simctl)", label, app["name"], "Boş ekran (görüntü analizi)", KALDI if blank else GECTI,
                     f"içerik alanında renk={ncol}, baskın oran={top}" if blank else "", p.relative_to(out).as_posix(), repro)
-            st = img_stats(p)
-            print("    EKRAN", p.name, st, flush=True)
+            print("    EKRAN", p.name, img_stats(p), flush=True)
         except Exception as e:
             res.add("Mobile Safari (simctl)", label, app["name"], "Boş ekran (görüntü analizi)", ATLANDI, f"görüntü çözümlenemedi: {e}", None, repro)
 
@@ -106,7 +129,7 @@ def main():
     a = ap.parse_args()
     out = pathlib.Path(a.out); out.mkdir(parents=True, exist_ok=True)
     apps = load_apps([x for x in a.apps.split(",") if x])
-    res = Results(ENV_SIM, "macos-latest", out / "results.json")
+    res = Results(ENV_SIM, "macos", out / "results.json")
     meta = {"engine": "ios-simulator", "yontem_A_simctl": "calismadi", "yontem_B_safaridriver": "calismadi"}
     ok_any = False
     with static_server(8000, obj=True) as server:
@@ -124,6 +147,7 @@ def main():
             traceback.print_exc(); meta["yontem_B_hata"] = traceback.format_exc()[-400:]
     (out / "meta.json").write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")
     print("META", json.dumps(meta, ensure_ascii=False))
+    if not ok_any: print("[ALTYAPI] iOS simulatoru: iki yontem de calismadi", flush=True)
     return 0 if ok_any else 2
 
 if __name__ == "__main__":

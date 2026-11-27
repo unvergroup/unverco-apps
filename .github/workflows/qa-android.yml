@@ -11,6 +11,7 @@ on:
       - 'qa/lib/**'
       - 'qa/report/**'
       - 'qa/android/**'
+      - 'qa/requirements-android.txt'
       - '.github/workflows/qa-android.yml'
   pull_request:
     paths:
@@ -21,18 +22,25 @@ on:
       - 'qa/lib/**'
       - 'qa/report/**'
       - 'qa/android/**'
+      - 'qa/requirements-android.txt'
   workflow_dispatch:
     inputs:
       app_ref:
         description: 'Uygulama klasorlerini bu commit/etiketten al (bos=bu commit). Android 9 hatasini yakalama kaniti: 19ff9a6 (1.0.2)'
         default: ''
+      istek:
+        description: 'qa/telefon-test.sh bu kimlikle kosuyu bulur (elle kosuda bos birakin)'
+        default: ''
+
+run-name: qa-android ${{ github.event.inputs.istek || github.event_name }}
 
 permissions:
   contents: read
 
+# Yalniz AYNI workflow'un ESKI push/PR kosusu iptal edilir; workflow_dispatch kosulari benzersiz grupta, iptal edilmez.
 concurrency:
-  group: qa-android-${{ github.ref }}
-  cancel-in-progress: true
+  group: qa-android-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
 
 jobs:
   android:
@@ -50,13 +58,44 @@ jobs:
         if: ${{ github.event.inputs.app_ref != '' }}
         run: git checkout "${{ github.event.inputs.app_ref }}" -- habit-tracker-2027 daily-budget-planner
       - uses: actions/setup-python@v5
-        with: { python-version: '3.12' }
-      - run: pip install websocket-client pillow
+        with: { python-version: '3.12', cache: pip, cache-dependency-path: qa/requirements-android.txt }
+      - run: pip install -r qa/requirements-android.txt
       - name: KVM etkinlestir
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
+      # AVD onbellegi (reactivecircus onerisi): ilk kosuda AVD + anlik goruntu (snapshot) uretilip actions/cache'e yazilir,
+      # sonraki kosularda soguk acilis (~2-3 dk) yerine snapshot'tan hizli acilis olur.
+      - name: AVD onbellegi (geri yukle)
+        id: avd-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-v1-api${{ matrix.api }}-playstore-x86_64-pixel5
+      - name: AVD ve snapshot olustur (yalniz onbellek yoksa)
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api }}
+          target: google_apis_playstore
+          arch: x86_64
+          profile: pixel_5
+          force-avd-creation: false
+          disable-animations: false
+          emulator-boot-timeout: 900
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: echo "AVD snapshot uretildi"
+      - name: AVD onbellegi (kaydet)
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-v1-api${{ matrix.api }}-playstore-x86_64-pixel5
       - name: Android emulatoru + Chrome (API ${{ matrix.api }})
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -64,10 +103,14 @@ jobs:
           target: google_apis_playstore
           arch: x86_64
           profile: pixel_5
+          force-avd-creation: false
           disable-animations: true
           emulator-boot-timeout: 900
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: bash qa/android/emulator-script.sh ${{ matrix.api }}
+      - name: Rapor (artifact'siz, log'a tam metin)
+        if: always()
+        run: python qa/report/make_report.py --in qa-out --out qa-rapor-job --title "android-api${{ matrix.api }}" > /dev/null ; cat qa-rapor-job/mobil-uyumluluk-raporu.md 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:

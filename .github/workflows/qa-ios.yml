@@ -13,6 +13,7 @@ on:
       - 'qa/lib/**'
       - 'qa/report/**'
       - 'qa/ios/**'
+      - 'qa/requirements-web.txt'
       - '.github/workflows/qa-ios.yml'
   pull_request:
     paths:
@@ -23,23 +24,34 @@ on:
       - 'qa/lib/**'
       - 'qa/report/**'
       - 'qa/ios/**'
+      - 'qa/requirements-web.txt'
   workflow_dispatch:
     inputs:
       app_ref:
         description: 'Uygulama klasorlerini bu commit/etiketten al (bos=bu commit)'
         default: ''
+      macos_runner:
+        description: 'macOS runner etiketi: macos-latest | macos-15 | macos-14 (kuyruk uzunsa digerini deneyin)'
+        default: 'macos-latest'
+      istek:
+        description: 'qa/telefon-test.sh bu kimlikle kosuyu bulur (elle kosuda bos birakin)'
+        default: ''
+
+run-name: qa-ios ${{ github.event.inputs.istek || github.event_name }}
 
 permissions:
   contents: read
 
+# Yalniz AYNI workflow'un ESKI push/PR kosusu iptal edilir; workflow_dispatch kosulari benzersiz grupta, iptal edilmez.
+# macOS kuyrugu kisitli oldugundan push kosusu yigilmasin diye eski push kosusunu iptal etmek ozellikle onemli.
 concurrency:
-  group: qa-ios-${{ github.ref }}
-  cancel-in-progress: true
+  group: qa-ios-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
 
 jobs:
   webkit-iphone:
-    runs-on: macos-latest
-    timeout-minutes: 40
+    runs-on: ${{ github.event.inputs.macos_runner || 'macos-latest' }}
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
@@ -47,19 +59,27 @@ jobs:
         if: ${{ github.event.inputs.app_ref != '' }}
         run: git checkout "${{ github.event.inputs.app_ref }}" -- habit-tracker-2027 daily-budget-planner
       - uses: actions/setup-python@v5
-        with: { python-version: '3.12' }
+        with: { python-version: '3.12', cache: pip, cache-dependency-path: qa/requirements-web.txt }
+      - name: Playwright tarayici onbellegi
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/ms-playwright
+          key: pw-1.63.0-${{ runner.os }}-webkit
       - run: |
-          pip install playwright==1.63.0 pypdf pillow
+          pip install -r qa/requirements-web.txt
           python -m playwright install webkit
       - run: python qa/selftest.py webkit
-      - run: python qa/web/run_web.py --engine webkit --profiles iphone --runner macos-latest --out qa-out/ios-webkit
+      - run: python qa/web/run_web.py --engine webkit --profiles iphone --runner "${{ runner.os }}-${{ runner.arch }}" --out qa-out/ios-webkit
+      - name: Rapor (artifact'siz, log'a tam metin)
+        if: always()
+        run: python qa/report/make_report.py --in qa-out --out qa-rapor-job --title "ios-webkit" > /dev/null; cat qa-rapor-job/mobil-uyumluluk-raporu.md 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with: { name: qa-ios-webkit, path: qa-out/, retention-days: 14 }
 
   simulator:
-    runs-on: macos-latest
-    timeout-minutes: 45
+    runs-on: ${{ github.event.inputs.macos_runner || 'macos-latest' }}
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
@@ -74,6 +94,9 @@ jobs:
           sw_vers; xcodebuild -version; xcrun simctl list runtimes
       - name: iOS Simulatoru + Mobile Safari
         run: python qa/ios/run_sim.py --out qa-out/ios-sim
+      - name: Rapor (artifact'siz, log'a tam metin)
+        if: always()
+        run: python qa/report/make_report.py --in qa-out --out qa-rapor-job --title "ios-simulator" > /dev/null; cat qa-rapor-job/mobil-uyumluluk-raporu.md 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with: { name: qa-ios-sim, path: qa-out/, retention-days: 14 }

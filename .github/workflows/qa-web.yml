@@ -12,6 +12,7 @@ on:
       - 'qa/lib/**'
       - 'qa/report/**'
       - 'qa/web/**'
+      - 'qa/requirements-web.txt'
       - 'qa/selftest.py'
       - 'qa/fixtures/**'
       - '.github/workflows/qa-web.yml'
@@ -24,6 +25,7 @@ on:
       - 'qa/lib/**'
       - 'qa/report/**'
       - 'qa/web/**'
+      - 'qa/requirements-web.txt'
       - 'qa/selftest.py'
       - 'qa/fixtures/**'
   workflow_dispatch:
@@ -34,13 +36,20 @@ on:
       app_ref:
         description: 'Uygulama klasorlerini bu commit/etiketten al (bos=bu commit). Ornek: 19ff9a6'
         default: ''
+      istek:
+        description: 'qa/telefon-test.sh bu kimlikle kosuyu bulur (elle kosuda bos birakin)'
+        default: ''
+
+run-name: qa-web ${{ github.event.inputs.istek || github.event_name }}
 
 permissions:
   contents: read
 
+# Yalniz AYNI workflow'un ESKI push/PR kosusu iptal edilir (eski commit'in sonucu degersiz).
+# Elle/telefon-test.sh ile tetiklenen kosular (workflow_dispatch) benzersiz grupta: hicbir push onu iptal etmez.
 concurrency:
-  group: qa-web-${{ github.ref }}
-  cancel-in-progress: true
+  group: qa-web-${{ github.event_name == 'workflow_dispatch' && github.run_id || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
 
 jobs:
   web:
@@ -61,14 +70,24 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: pip
+          cache-dependency-path: qa/requirements-web.txt
+      - name: Playwright tarayici onbellegi
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-1.63.0-${{ runner.os }}-${{ matrix.engine }}
       - name: Playwright kur
         run: |
-          pip install playwright==1.63.0 pypdf pillow
+          pip install -r qa/requirements-web.txt
           python -m playwright install --with-deps ${{ matrix.engine }}
       - name: Denetimlerin kendi testi
         run: python qa/selftest.py ${{ matrix.engine }}
       - name: Web QA
         run: python qa/web/run_web.py --engine ${{ matrix.engine }} --apps "${{ github.event.inputs.apps }}" --out qa-out/web-${{ matrix.engine }}
+      - name: Rapor (artifact'siz, log'a tam metin)
+        if: always()
+        run: python qa/report/make_report.py --in qa-out --out qa-rapor-job --title "web-${{ matrix.engine }}" > /dev/null ; cat qa-rapor-job/mobil-uyumluluk-raporu.md 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
