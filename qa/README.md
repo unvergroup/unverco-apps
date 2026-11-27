@@ -1,5 +1,59 @@
 # UNVERCO mobil QA sistemi
 
+## Tek komut
+
+```bash
+qa/telefon-test.sh            # main'in guncel hali
+qa/telefon-test.sh 627f280    # uygulama klasorlerini bu commit/etiketten sina
+```
+
+Komut web + Android + iOS workflow'larini REST ile tetikler, run kimliklerini bulur, bitene kadar yoklar (en fazla 25 dk) ve
+**artifact'a ihtiyac duymadan** (yalniz `gh run view --log`) tek tablo basar: is bazinda sure, GEÇTİ/KALDI/UYARI/ATLANDI sayisi ve [KALDI] satirlari.
+Gereken: `gh` (giris yapmis), `jq`, `python3`. Ortam degiskenleri: `QA_REF`, `QA_ONLY=web,android`, `QA_TIMEOUT`, `QA_QUEUE_LIMIT`, `QA_MACOS`.
+
+| Cikis kodu | Anlami |
+|---|---|
+| 0 | Hepsi gecti |
+| 1 | Urun hatasi (en az bir KALDI) |
+| 2 | Altyapi ya da zaman asimi (urun hatasi yok): runner kuyrugu, emulator acilmadi, log okunamadi |
+
+macOS kuyrugu 15 dk'yi (`QA_QUEUE_LIMIT`) asarsa o kosu iptal edilir ve "ALTYAPI: macOS kuyruğu" olarak ayri raporlanir; urun hatasi sayilmaz.
+
+### Sureler (olculen)
+
+| Is | Sure |
+|---|---|
+| web (3 motor paralel, 11 profil, 2 uygulama) | ~4-5 dk |
+| Android API 28 / API 34 (paralel) | ~3,5 / ~3,8 dk onbellek olusturma kosusunda; onbellekli kosu icin asagidaki olcum |
+| iOS Playwright WebKit (iPhone profilleri) | ~9 dk (macOS) |
+| iOS Simulatoru + Mobile Safari | ~2,5 dk (acilis 41 sn) |
+| macOS kuyrugu | degisken: 0-10+ dk (ucretsiz havuz); toplam sure buna bagli |
+
+### Ortam turu etiketleri
+
+- **Masaustu taklidi**: Playwright (gercek Chromium/Firefox/WebKit motoru, taklit mobil boyut). Gercek telefon DEGIL.
+- **Emulator**: Android emulatoru (API 28 Chrome 69 ve API 34 Chrome 113) + gercek Chrome.
+- **Simulator**: iOS Simulatoru (iPhone, Xcode'un son iOS'u) + gercek Mobile Safari.
+
+> **Gercek cihaz OLMADIGI icin** iOS yazdirma penceresi, dokunma hissi, bildirimler ve yuklenebilir PWA davranisi hala elle gercek iPhone/Android'de dogrulanmalidir.
+
+### Workflow tasarimi (neden boyle)
+
+- `concurrency`: yeni **push** yalnizca **ayni workflow'un eski push/PR kosusunu** iptal eder (eski commit'in sonucu degersiz, macOS kuyrugu yigilmaz).
+  `workflow_dispatch` kosulari (telefon-test.sh, elle) benzersiz grupta: hicbir push onu iptal etmez; farkli workflow'lar birbirini iptal etmez.
+- Tetikleyici yollar dar: yalniz uygulama klasorleri ve ilgili `qa/**` yollari.
+- Android: AVD + snapshot `actions/cache` ile saklanir (`avd-v1-api<N>-...`); ilk kosu onbellegi olusturur, sonrakiler snapshot'tan acilir. API 28/34 matris, paralel.
+- Playwright tarayicilari `actions/cache` ile saklanir; pip bagimliliklari `qa/requirements-*.txt` ile onbelleklenir.
+- Her is kendi logunda tam raporu basar; `telefon-test.sh` artifact indirmeden okur (artifact indirme bazi ortamlarda engelli).
+- iOS runner etiketi `macos_runner` girdisiyle (`QA_MACOS=macos-15|macos-14`) secilebilir.
+
+### iOS simulatoru
+
+`qa/ios/run_sim.py`: `simctl boot` + `bootstatus`, `simctl openurl` ile Mobile Safari'de acar, `simctl io screenshot` ile ekran goruntusu alir,
+Safari'nin gercekten acildigini ana ekranla piksel farkindan dogrular ve bos ekrani goruntu analiziyle denetler. **Calisiyor.**
+safaridriver + Selenium (`safari:useSimulator`) yolu denendi: "The 'macOS' platform is incompatible with requested capability: safari:useSimulator" hatasiyla reddediliyor (calisma 46037055325); varsayilan kapali (`QA_SAFARIDRIVER=1` ile denenebilir).
+Sonuc: simulatorde yalniz **acilis + bos ekran** denetlenir; yolculuk, kalicilik, yazdirma iOS'ta Playwright WebKit'ten gelir.
+
 Tek dosya / ES modül PWA uygulamaları için tamamen ücretsiz, yeniden kullanılabilir otomatik kalite denetimi.
 Pilot uygulamalar: Habit Tracker (`habit-tracker-2027/`) ve Daily Budget Planner (`daily-budget-planner/`).
 
@@ -76,7 +130,7 @@ python qa/report/make_report.py --in qa-out/yerel --out qa-out/rapor
 ## Elle tetikleme
 
 GitHub > Actions > ilgili workflow (`qa-web`, `qa-ios`, `qa-android`) > **Run workflow**.
-Komut satırı: `gh workflow run qa-web.yml` (`-f apps=habit` tek uygulama, `-f app_ref=19ff9a6` uygulama klasörlerini eski bir commit'ten alıp
+Komut satırı: `qa/telefon-test.sh` (önerilen) ya da `gh workflow run qa-web.yml` (`-f apps=habit` tek uygulama, `-f app_ref=19ff9a6` uygulama klasörlerini eski bir commit'ten alıp
 o sürümü sınamak için; ör. 1.0.2'nin Android 9 boş ekranını yeniden üretmek). Sonuç: `gh run watch`, `gh run view --log`.
 Artifact: Actions sayfasında çalıştırmanın altında ya da `gh run download <id>`.
 
@@ -90,6 +144,7 @@ Ayrıca depoda `qa/` klasörü GitHub Pages ile birlikte yayınlanır (zararsız
 ## Bilinen sınırlar
 
 - Playwright WebKit gerçek iOS değildir; yazdırma sayfa sayısı yalnız Chromium'da ölçülür (`page.pdf`). iOS yazdırma penceresi gerçek cihazda bakılmalıdır.
-- iOS Simülatöründe ağ kapatılamaz ve Safari WebDriver konsol günlüğü vermez; çevrimdışı ve konsol denetimleri o satırlarda "ATLANDI" görünür.
+- iOS Simülatöründe yalnız açılış ve boş ekran denetlenir (Safari WebDriver simülatörde çalışmıyor).
+- Yazdırma sayfa sayısı her kâğıt boyutu için akış baştan başlatılarak ölçülür (afterprint sonrası sahte 2 sayfa kusuru giderildi).
 - Android'de tıklamalar DevTools üzerinden JavaScript `click()` ile yapılır (gerçek dokunuş değildir).
 - Dokunma hedefi ve kırpılmış metin denetimleri sezgiseldir; "UYARI" olarak raporlanır, çalıştırmayı kırmızı yapmaz.

@@ -39,7 +39,7 @@ def parse_log(path):
 
 def main(d):
     d = pathlib.Path(d)
-    tablo, kaldi, notlar = [], [], []
+    tablo, kaldi, notlar, bilgi = [], [], [], []
     product_fail = infra = False
     for key, name in WF:
         runf = d / f"{key}.run.json"
@@ -67,8 +67,8 @@ def main(d):
                 if j["conclusion"] != "success":
                     infra = True; notlar.append(f"{name}/{j['name']}: sonuç satırı yok, iş {j['conclusion']} (altyapı hatası)")
             for a in alt.get(j["name"], []):
-                notlar.append(f"{name}/{j['name']}: {a}")
-                if a.startswith("[ALTYAPI]"): infra = True
+                if a.startswith("[ALTYAPI]"): infra = True; notlar.append(f"{name}/{j['name']}: {a}")
+                else: bilgi.append(f"{name}/{j['name']}: {a}")
             tablo.append((ortam(j["name"]), f"{name}/{j['name']}", f"{sure//60}dk{sure%60:02d}sn" if sure is not None else "-",
                           c["GEÇTİ"], c["KALDI"], c["UYARI"], c["ATLANDI"], sonuc, run.get("id")))
             g = collections.OrderedDict()
@@ -96,6 +96,7 @@ def main(d):
     if notlar:
         print("\nALTYAPI notları (ürün hatası sayılmaz):")
         for n in notlar: print(f"  - {n}")
+    for b in bilgi: print(f"Bilgi: {b}")
     code = 1 if product_fail else (2 if infra else 0)
     print(f"\nSONUÇ: {['HEPSİ GEÇTİ', 'ÜRÜN HATASI VAR (KALDI)', 'ALTYAPI SORUNU / ZAMAN AŞIMI (ürün hatası yok)'][code]}  (çıkış kodu {code})")
     return code

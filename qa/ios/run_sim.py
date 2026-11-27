@@ -3,7 +3,7 @@
   A) simctl openurl + simctl io screenshot: iki uygulamayi Mobile Safari'de acar, ekran goruntusu alir, bos ekran karari goruntuden verir.
   B) safaridriver (safari:useSimulator) + Selenium: yolculugu Mobile Safari'de surer, ayni yerlesim denetimlerini calistirir.
 Cikis kodu: 0 (en az bir yontem calisti), 2 (ikisi de calismadi = altyapi hatasi)."""
-import argparse, json, pathlib, re, subprocess, sys, time, traceback
+import argparse, os, json, pathlib, re, subprocess, sys, time, traceback
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / "lib"))
 from qa_common import *  # noqa
 from generic_driver import run_generic
@@ -141,10 +141,16 @@ def main():
             method_a(dev, apps, base, res, out, label); meta["yontem_A_simctl"] = "calisti"; ok_any = True
         except Exception:
             traceback.print_exc(); meta["yontem_A_hata"] = traceback.format_exc()[-300:]
-        try:
-            ua = method_b(dev, apps, base, res, out, label, server); meta["yontem_B_safaridriver"] = "calisti"; meta["safari_ua"] = ua; ok_any = True
-        except Exception:
-            traceback.print_exc(); meta["yontem_B_hata"] = traceback.format_exc()[-400:]
+        # Yontem B (safaridriver + safari:useSimulator) macOS 15/Xcode 26 runner'inda DESTEKLENMIYOR:
+        # "The 'macOS' platform is incompatible with requested capability: safari:useSimulator" (calisma 46037055325).
+        # Varsayilan kapali; denemek icin QA_SAFARIDRIVER=1.
+        if os.environ.get("QA_SAFARIDRIVER") == "1":
+            try:
+                ua = method_b(dev, apps, base, res, out, label, server); meta["yontem_B_safaridriver"] = "calisti"; meta["safari_ua"] = ua; ok_any = True
+            except Exception:
+                traceback.print_exc(); meta["yontem_B_hata"] = traceback.format_exc()[-400:]
+        else:
+            meta["yontem_B_safaridriver"] = "desteklenmiyor (safari:useSimulator macOS runner'da reddediliyor)"
     (out / "meta.json").write_text(json.dumps(meta, ensure_ascii=False), encoding="utf-8")
     print("META", json.dumps(meta, ensure_ascii=False))
     if not ok_any: print("[ALTYAPI] iOS simulatoru: iki yontem de calismadi", flush=True)
