@@ -70,6 +70,24 @@ def run_generic(drv, app, base, res, engine, profile, shots_dir, *, offline_note
         for k, (st, d) in summ.items():
             agg.setdefault(k, []).append((st, f"[{label}] {d}" if d else ""))
 
+    # Ilk acilis yavas olabilir (yeni origin, service worker kurulumu, dondurme sonrasi): ilk ekran 30 sn
+    # beklenir, gelmezse sayfa bir kez yeniden yuklenir. Hala gelmezse adres ve sayfa metni hata notuna eklenir.
+    first = app["journey"][0].get("wait") if app.get("journey") else None
+    if first:
+        try:
+            poll(drv, first, True, timeout=30.0)
+        except TimeoutError:
+            print(f"[ALTYAPI] {app['id']} ilk ekran 30 sn'de gelmedi; sayfa yeniden yukleniyor", flush=True)
+            drv.get(f"{base}{app['dir']}/")
+            try:
+                poll(drv, first, True, timeout=30.0)
+            except TimeoutError:
+                try:
+                    durum = drv.js("(function(){return location.href+' | '+(document.body?document.body.innerText:'').replace(/\\s+/g,' ').slice(0,160);})")
+                    print(f"[ALTYAPI] {app['id']} ilk ekran yok: {durum}", flush=True)
+                except Exception:
+                    pass
+
     for s in app["journey"]:
         try:
             do_step(drv, s, last)
