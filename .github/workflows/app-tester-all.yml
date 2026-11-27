@@ -3,8 +3,6 @@ name: App Tester
 # (job summary + the "app-tester-results" artifact with app-tester-results.json and screenshots).
 # Real devices are not used.
 on:
-  push:
-    branches: [app-tester-e2e]
   workflow_dispatch:
     inputs:
       macos_runner:
