@@ -7,7 +7,7 @@ CHECKS_JS = (QA / "lib" / "checks.js").read_text(encoding="utf-8")
 
 # Ortam turleri (rapor sutunu). Gercek cihaz testi bu sistemde YOK.
 ENV_MASAUSTU = "Masaüstü taklidi"
-ENV_SIM = "Gerçek motor/simülatör"
+ENV_SIM = "Simülatör (gerçek iOS + Mobile Safari)"
 ENV_EMU = "Emülatör"
 
 GECTI, KALDI, ATLANDI, UYARI = "GEÇTİ", "KALDI", "ATLANDI", "UYARI"

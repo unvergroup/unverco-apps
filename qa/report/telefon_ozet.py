@@ -7,7 +7,7 @@ import collections, json, pathlib, re, sys, datetime as dt
 WF = [("web", "qa-web"), ("android", "qa-android"), ("ios", "qa-ios")]
 ROW = re.compile(r"^\[(GEÇTİ|KALDI|UYARI|ATLANDI)\] (.*)$")
 TS = re.compile(r"^\d{4}-\d\d-\d\dT[\d:.]+Z ?")
-ORTAM = {"web": "Masaüstü taklidi", "android": "Emülatör", "webkit-iphone": "Masaüstü taklidi", "simulator": "Simülatör"}
+ORTAM = {"web": "Masaüstü taklidi", "android": "Emülatör", "webkit-iphone": "Masaüstü taklidi", "simulator": "Simülatör (iOS+Safari)"}
 
 
 def ortam(job):

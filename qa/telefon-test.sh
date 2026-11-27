@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 # Tek komut telefon QA: web (Playwright 3 motor, 11 profil) + Android emulatoru (API 28/34) + iOS (WebKit + simulator).
-# Kullanim:  qa/telefon-test.sh [--ios] [app_ref]
-#   --ios    iOS Simulatoru + iOS WebKit isini de kos (macOS kuyrugu 0-15+ dk surebilir; varsayilan KAPALI). Ayni: QA_ONLY=web,android,ios
-#   Varsayilan: web + Android (~5 dk). iPhone kapsami varsayilanda web iste WebKit iPhone profilleriyle saglanir (Masaustu taklidi).
+# Kullanim:  qa/telefon-test.sh [--hizli] [app_ref]
+#   Varsayilan: web + Android + iOS Simulatoru (Appium + Mobile Safari, macos-15). --hizli: yalniz web + Android.
 #   app_ref  (istege bagli) uygulama klasorlerini bu commit/etiketten al (bos = main'in guncel hali)
-# Ortam degiskenleri: QA_REF (dal, vars. main) QA_ONLY ("web,android,ios" alt kumesi) QA_TIMEOUT (sn, vars. 1500)
-#   QA_QUEUE_LIMIT (macOS/runner kuyruk siniri sn, vars. 900) QA_MACOS (macos-latest|macos-15|macos-14) QA_REPO
+# Ortam degiskenleri: QA_REF (dal, vars. main) QA_ONLY ("web,android,ios" alt kumesi) QA_TIMEOUT (sn, vars. 3300)
+#   QA_QUEUE_LIMIT (macOS/runner kuyruk siniri sn, vars. 2700) QA_MACOS (vars. macos-15) QA_REPO
 # Cikis kodu: 0 hepsi gecti | 1 urun hatasi (KALDI) | 2 altyapi ya da zaman asimi. Gerekli: gh (giris yapmis), jq, python3.
 set -u
-REPO="${QA_REPO:-unvergroup/unverco-apps}"; REF="${QA_REF:-main}"; APP_REF=""; WITH_IOS=0
-for a in "$@"; do case "$a" in --ios) WITH_IOS=1;; *) APP_REF="$a";; esac; done
-ONLY="${QA_ONLY:-web,android}"; [ "$WITH_IOS" = 1 ] && case ",$ONLY," in *,ios,*) ;; *) ONLY="$ONLY,ios";; esac; TIMEOUT="${QA_TIMEOUT:-1500}"; QLIMIT="${QA_QUEUE_LIMIT:-900}"; MACOS="${QA_MACOS:-macos-latest}"
+REPO="${QA_REPO:-unvergroup/unverco-apps}"; REF="${QA_REF:-main}"; APP_REF=""; WITH_IOS=1; HIZLI=0
+for a in "$@"; do case "$a" in --hizli) HIZLI=1;; --ios) ;; *) APP_REF="$a";; esac; done
+ONLY="${QA_ONLY:-web,android,ios}"; [ "$HIZLI" = 1 ] && ONLY="web,android"; case ",$ONLY," in *,ios,*) WITH_IOS=1;; *) WITH_IOS=0;; esac; TIMEOUT="${QA_TIMEOUT:-3300}"; QLIMIT="${QA_QUEUE_LIMIT:-2700}"; MACOS="${QA_MACOS:-macos-15}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ID="t$(date +%s)$$"; T0=$(date +%s); D="$(mktemp -d)"
 declare -A FILE=([web]=qa-web.yml [android]=qa-android.yml [ios]=qa-ios.yml)
