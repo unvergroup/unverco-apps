@@ -460,6 +460,767 @@
           ]
         }
       ]
+    },
+    {
+      "id": "autolog",
+      "name": "AutoLog",
+      "dir": "autolog",
+      "version_regex": "CACHE\\s*=\\s*\"[a-z]+-v([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana ekran",
+          "wait": "#panel",
+          "sleep": 800,
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ekran #nav-dashboard",
+          "click": "#nav-dashboard",
+          "sleep": 800,
+          "check": true,
+          "shot": "02-nav-dashboard"
+        },
+        {
+          "label": "Ekran #nav-vehicles",
+          "click": "#nav-vehicles",
+          "sleep": 800,
+          "check": true,
+          "shot": "03-nav-vehicles"
+        },
+        {
+          "label": "Ekran #nav-maintenance",
+          "click": "#nav-maintenance",
+          "sleep": 800,
+          "check": true,
+          "shot": "04-nav-maintenance"
+        },
+        {
+          "label": "Ekran #nav-expenses",
+          "click": "#nav-expenses",
+          "sleep": 800,
+          "check": true,
+          "shot": "05-nav-expenses"
+        },
+        {
+          "label": "Ekran #nav-reports",
+          "click": "#nav-reports",
+          "sleep": 800,
+          "check": true,
+          "shot": "06-nav-reports"
+        },
+        {
+          "label": "Ekran #nav-settings",
+          "click": "#nav-settings",
+          "sleep": 800,
+          "check": true,
+          "shot": "07-nav-settings"
+        },
+        {
+          "label": "Ana ekrana don",
+          "click": "#nav-dashboard",
+          "wait": "#panel"
+        }
+      ],
+      "persistence": {
+        "label": "Dili Ispanyolca yap, sayfayi yenile",
+        "steps": [
+          {
+            "wait": "#lang-select"
+          },
+          {
+            "select": [
+              "#lang-select",
+              "es"
+            ]
+          },
+          {
+            "sleep": 900
+          }
+        ],
+        "probe": "#main-nav",
+        "ready": "#panel"
+      },
+      "offline": {
+        "ready": "#panel"
+      },
+      "_profil": "duman testi: tum gezinme ekranlari + dil kaliciligi (28 Kas 2026)"
+    },
+    {
+      "id": "paylog",
+      "name": "PayLog",
+      "dir": "paylog",
+      "version_regex": "CACHE\\s*=\\s*\"[a-z]+-v([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana ekran",
+          "wait": "#panel",
+          "sleep": 800,
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ekran #nav-dashboard",
+          "click": "#nav-dashboard",
+          "sleep": 800,
+          "check": true,
+          "shot": "02-nav-dashboard"
+        },
+        {
+          "label": "Ekran #nav-bills",
+          "click": "#nav-bills",
+          "sleep": 800,
+          "check": true,
+          "shot": "03-nav-bills"
+        },
+        {
+          "label": "Ekran #nav-subscriptions",
+          "click": "#nav-subscriptions",
+          "sleep": 800,
+          "check": true,
+          "shot": "04-nav-subscriptions"
+        },
+        {
+          "label": "Ekran #nav-calendar",
+          "click": "#nav-calendar",
+          "sleep": 800,
+          "check": true,
+          "shot": "05-nav-calendar"
+        },
+        {
+          "label": "Ekran #nav-reports",
+          "click": "#nav-reports",
+          "sleep": 800,
+          "check": true,
+          "shot": "06-nav-reports"
+        },
+        {
+          "label": "Ekran #nav-settings",
+          "click": "#nav-settings",
+          "sleep": 800,
+          "check": true,
+          "shot": "07-nav-settings"
+        },
+        {
+          "label": "Ana ekrana don",
+          "click": "#nav-dashboard",
+          "wait": "#panel"
+        }
+      ],
+      "persistence": {
+        "label": "Dili Ispanyolca yap, sayfayi yenile",
+        "steps": [
+          {
+            "wait": "#lang-select"
+          },
+          {
+            "select": [
+              "#lang-select",
+              "es"
+            ]
+          },
+          {
+            "sleep": 900
+          }
+        ],
+        "probe": "#main-nav",
+        "ready": "#panel"
+      },
+      "offline": {
+        "ready": "#panel"
+      },
+      "_profil": "duman testi: tum gezinme ekranlari + dil kaliciligi (28 Kas 2026)"
+    },
+    {
+      "id": "pet",
+      "name": "Pet Business Tracker",
+      "dir": "pet-business-tracker",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana ekran",
+          "wait": "#panel",
+          "sleep": 800,
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ekran #nav-today",
+          "click": "#nav-today",
+          "sleep": 800,
+          "check": true,
+          "shot": "02-nav-today"
+        },
+        {
+          "label": "Ekran #nav-calendar",
+          "click": "#nav-calendar",
+          "sleep": 800,
+          "check": true,
+          "shot": "03-nav-calendar"
+        },
+        {
+          "label": "Ekran #nav-clients",
+          "click": "#nav-clients",
+          "sleep": 800,
+          "check": true,
+          "shot": "04-nav-clients"
+        },
+        {
+          "label": "Ekran #nav-reminders",
+          "click": "#nav-reminders",
+          "sleep": 800,
+          "check": true,
+          "shot": "05-nav-reminders"
+        },
+        {
+          "label": "Ekran #nav-income",
+          "click": "#nav-income",
+          "sleep": 800,
+          "check": true,
+          "shot": "06-nav-income"
+        },
+        {
+          "label": "Ekran #nav-settings",
+          "click": "#nav-settings",
+          "sleep": 800,
+          "check": true,
+          "shot": "07-nav-settings"
+        },
+        {
+          "label": "Ana ekrana don",
+          "click": "#nav-today",
+          "wait": "#panel"
+        }
+      ],
+      "persistence": {
+        "label": "Dili Ispanyolca yap, sayfayi yenile",
+        "steps": [
+          {
+            "wait": "#lang-select"
+          },
+          {
+            "select": [
+              "#lang-select",
+              "es"
+            ]
+          },
+          {
+            "sleep": 900
+          }
+        ],
+        "probe": "#main-nav",
+        "ready": "#panel"
+      },
+      "offline": {
+        "ready": "#panel"
+      },
+      "_profil": "duman testi: tum gezinme ekranlari + dil kaliciligi (28 Kas 2026)"
+    },
+    {
+      "id": "claimtag",
+      "name": "Claimtag Repair Tracker",
+      "dir": "claimtag",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana ekran",
+          "wait": "#panel",
+          "sleep": 800,
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ekran #nav-checkin",
+          "click": "#nav-checkin",
+          "sleep": 800,
+          "check": true,
+          "shot": "02-nav-checkin"
+        },
+        {
+          "label": "Ekran #nav-board",
+          "click": "#nav-board",
+          "sleep": 800,
+          "check": true,
+          "shot": "03-nav-board"
+        },
+        {
+          "label": "Ekran #nav-find",
+          "click": "#nav-find",
+          "sleep": 800,
+          "check": true,
+          "shot": "04-nav-find"
+        },
+        {
+          "label": "Ekran #nav-pickup",
+          "click": "#nav-pickup",
+          "sleep": 800,
+          "check": true,
+          "shot": "05-nav-pickup"
+        },
+        {
+          "label": "Ana ekrana don",
+          "click": "#nav-checkin",
+          "wait": "#panel"
+        }
+      ],
+      "persistence": {
+        "label": "Dili Ispanyolca yap, sayfayi yenile",
+        "steps": [
+          {
+            "wait": "#lang-select"
+          },
+          {
+            "select": [
+              "#lang-select",
+              "es"
+            ]
+          },
+          {
+            "sleep": 900
+          }
+        ],
+        "probe": "#main-nav",
+        "ready": "#panel"
+      },
+      "offline": {
+        "ready": "#panel"
+      },
+      "_profil": "duman testi: tum gezinme ekranlari + dil kaliciligi (28 Kas 2026)"
+    },
+    {
+      "id": "wedding",
+      "name": "Wedding Planner App",
+      "dir": "wedding-guest-list",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana ekran",
+          "wait": "#panel",
+          "sleep": 800,
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ekran #tab-guests",
+          "click": "#tab-guests",
+          "sleep": 800,
+          "check": true,
+          "shot": "02-tab-guests"
+        },
+        {
+          "label": "Ekran #tab-settings",
+          "click": "#tab-settings",
+          "sleep": 800,
+          "check": true,
+          "shot": "03-tab-settings"
+        },
+        {
+          "label": "Ana ekrana don",
+          "click": "#tab-guests",
+          "wait": "#panel"
+        }
+      ],
+      "persistence": {
+        "label": "Dili Ispanyolca yap, sayfayi yenile",
+        "steps": [
+          {
+            "click": "#tab-settings"
+          },
+          {
+            "wait": "#setting-locale"
+          },
+          {
+            "select": [
+              "#setting-locale",
+              "es-ES"
+            ]
+          },
+          {
+            "sleep": 900
+          }
+        ],
+        "probe": "#nav",
+        "ready": "#panel"
+      },
+      "offline": {
+        "ready": "#panel"
+      },
+      "_profil": "duman testi: tum gezinme ekranlari + dil kaliciligi (28 Kas 2026)"
+    },
+    {
+      "id": "workbench",
+      "name": "Workbench",
+      "dir": "workbench",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana ekran",
+          "wait": "#panel",
+          "sleep": 800,
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ekran #settings-btn",
+          "click": "#settings-btn",
+          "sleep": 800,
+          "check": true,
+          "shot": "02-settings-btn"
+        },
+        {
+          "label": "Ekran #home-btn",
+          "click": "#home-btn",
+          "sleep": 800,
+          "check": true,
+          "shot": "03-home-btn"
+        },
+        {
+          "label": "Ana ekrana don",
+          "click": "#settings-btn",
+          "wait": "#panel"
+        }
+      ],
+      "persistence": {
+        "label": "Dili Ispanyolca yap, sayfayi yenile",
+        "steps": [
+          {
+            "wait": "#lang-select"
+          },
+          {
+            "select": [
+              "#lang-select",
+              "es"
+            ]
+          },
+          {
+            "sleep": 900
+          }
+        ],
+        "probe": "#panel",
+        "ready": "#panel"
+      },
+      "offline": {
+        "ready": "#panel"
+      },
+      "_profil": "duman testi: tum gezinme ekranlari + dil kaliciligi (28 Kas 2026)"
+    },
+    {
+      "id": "quote",
+      "name": "Quote and Invoice",
+      "dir": "quote-and-invoice",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana ekran",
+          "wait": "#panel",
+          "sleep": 800,
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ekran #settings-btn",
+          "click": "#settings-btn",
+          "sleep": 800,
+          "check": true,
+          "shot": "02-settings-btn"
+        },
+        {
+          "label": "Ekran #home-btn",
+          "click": "#home-btn",
+          "sleep": 800,
+          "check": true,
+          "shot": "03-home-btn"
+        },
+        {
+          "label": "Ana ekrana don",
+          "click": "#settings-btn",
+          "wait": "#panel"
+        }
+      ],
+      "persistence": {
+        "label": "Dili Ispanyolca yap, sayfayi yenile",
+        "steps": [
+          {
+            "wait": "#lang-select"
+          },
+          {
+            "select": [
+              "#lang-select",
+              "es"
+            ]
+          },
+          {
+            "sleep": 900
+          }
+        ],
+        "probe": "#panel",
+        "ready": "#panel"
+      },
+      "offline": {
+        "ready": "#panel"
+      },
+      "_profil": "duman testi: tum gezinme ekranlari + dil kaliciligi (28 Kas 2026)"
+    },
+    {
+      "id": "homeschool",
+      "name": "Homeschool Planner",
+      "dir": "homeschool-planner",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana ekran",
+          "wait": "#panel",
+          "sleep": 800,
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ekran #nav-today",
+          "click": "#nav-today",
+          "sleep": 800,
+          "check": true,
+          "shot": "02-nav-today"
+        },
+        {
+          "label": "Ekran #nav-plan",
+          "click": "#nav-plan",
+          "sleep": 800,
+          "check": true,
+          "shot": "03-nav-plan"
+        },
+        {
+          "label": "Ekran #nav-records",
+          "click": "#nav-records",
+          "sleep": 800,
+          "check": true,
+          "shot": "04-nav-records"
+        },
+        {
+          "label": "Ekran #nav-library",
+          "click": "#nav-library",
+          "sleep": 800,
+          "check": true,
+          "shot": "05-nav-library"
+        },
+        {
+          "label": "Ekran #nav-kids",
+          "click": "#nav-kids",
+          "sleep": 800,
+          "check": true,
+          "shot": "06-nav-kids"
+        },
+        {
+          "label": "Ana ekrana don",
+          "click": "#nav-today",
+          "wait": "#panel"
+        }
+      ],
+      "persistence": {
+        "label": "Dili Ispanyolca yap, sayfayi yenile",
+        "steps": [
+          {
+            "wait": "#lang-select"
+          },
+          {
+            "select": [
+              "#lang-select",
+              "es"
+            ]
+          },
+          {
+            "sleep": 900
+          }
+        ],
+        "probe": "#main-nav",
+        "ready": "#panel"
+      },
+      "offline": {
+        "ready": "#panel"
+      },
+      "_profil": "duman testi: tum gezinme ekranlari + dil kaliciligi (28 Kas 2026)"
+    },
+    {
+      "id": "iet",
+      "name": "Income and Expense Tracker",
+      "dir": "income-expense-tracker",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana ekran",
+          "wait": "#panel",
+          "sleep": 800,
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ekran #nav-dashboard",
+          "click": "#nav-dashboard",
+          "sleep": 800,
+          "check": true,
+          "shot": "02-nav-dashboard"
+        },
+        {
+          "label": "Ekran #nav-entries",
+          "click": "#nav-entries",
+          "sleep": 800,
+          "check": true,
+          "shot": "03-nav-entries"
+        },
+        {
+          "label": "Ekran #nav-mileage",
+          "click": "#nav-mileage",
+          "sleep": 800,
+          "check": true,
+          "shot": "04-nav-mileage"
+        },
+        {
+          "label": "Ekran #nav-reports",
+          "click": "#nav-reports",
+          "sleep": 800,
+          "check": true,
+          "shot": "05-nav-reports"
+        },
+        {
+          "label": "Ekran #nav-settings",
+          "click": "#nav-settings",
+          "sleep": 800,
+          "check": true,
+          "shot": "06-nav-settings"
+        },
+        {
+          "label": "Ana ekrana don",
+          "click": "#nav-dashboard",
+          "wait": "#panel"
+        }
+      ],
+      "persistence": {
+        "label": "Dili Ispanyolca yap, sayfayi yenile",
+        "steps": [
+          {
+            "wait": "#lang-select"
+          },
+          {
+            "select": [
+              "#lang-select",
+              "es"
+            ]
+          },
+          {
+            "sleep": 900
+          }
+        ],
+        "probe": "#main-nav",
+        "ready": "#panel"
+      },
+      "offline": {
+        "ready": "#panel"
+      },
+      "_profil": "duman testi: tum gezinme ekranlari + dil kaliciligi (28 Kas 2026)"
+    },
+    {
+      "id": "bakery",
+      "name": "Bakery Pricing",
+      "dir": "bakery-pricing",
+      "version_regex": "VERSION\\s*=\\s*\"([^\"]+)\"",
+      "version_file": "sw.js",
+      "main": "#panel",
+      "journey": [
+        {
+          "label": "Ana ekran",
+          "wait": "#panel",
+          "sleep": 800,
+          "check": true,
+          "shot": "01-ana"
+        },
+        {
+          "label": "Ekran #nav-orders",
+          "click": "#nav-orders",
+          "sleep": 800,
+          "check": true,
+          "shot": "02-nav-orders"
+        },
+        {
+          "label": "Ekran #nav-recipes",
+          "click": "#nav-recipes",
+          "sleep": 800,
+          "check": true,
+          "shot": "03-nav-recipes"
+        },
+        {
+          "label": "Ekran #nav-ingredients",
+          "click": "#nav-ingredients",
+          "sleep": 800,
+          "check": true,
+          "shot": "04-nav-ingredients"
+        },
+        {
+          "label": "Ekran #nav-plan",
+          "click": "#nav-plan",
+          "sleep": 800,
+          "check": true,
+          "shot": "05-nav-plan"
+        },
+        {
+          "label": "Ekran #nav-sales",
+          "click": "#nav-sales",
+          "sleep": 800,
+          "check": true,
+          "shot": "06-nav-sales"
+        },
+        {
+          "label": "Ekran #nav-settings",
+          "click": "#nav-settings",
+          "sleep": 800,
+          "check": true,
+          "shot": "07-nav-settings"
+        },
+        {
+          "label": "Ana ekrana don",
+          "click": "#nav-orders",
+          "wait": "#panel"
+        }
+      ],
+      "persistence": {
+        "label": "Dili Ispanyolca yap, sayfayi yenile",
+        "steps": [
+          {
+            "wait": "#lang-select"
+          },
+          {
+            "select": [
+              "#lang-select",
+              "es"
+            ]
+          },
+          {
+            "sleep": 900
+          }
+        ],
+        "probe": "#main-nav",
+        "ready": "#panel"
+      },
+      "offline": {
+        "ready": "#panel"
+      },
+      "_profil": "duman testi: tum gezinme ekranlari + dil kaliciligi (28 Kas 2026)"
     }
   ]
 }
