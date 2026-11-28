@@ -11,6 +11,7 @@ BEKLENEN = {
     "blank.html": lambda r: r["blank"]["blank"],
     "overflow.html": lambda r: r["overflow"]["overflow"],
     "small.html": lambda r: len(r["small"]) == 1,
+    "check-label.html": lambda r: len(r["small"]) == 2 and not any("#a" in x for x in r["small"]),
     "clipped.html": lambda r: len(r["clipped"]) >= 1,
     "ok.html": lambda r: not r["blank"]["blank"] and not r["overflow"]["overflow"] and not r["small"] and not r["clipped"],
 }

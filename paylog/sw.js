@@ -1,7 +1,7 @@
 // PayLog barindirma servis calisani. Onbellek adi SURUMU icerir (paylog-v<surum>): surum degisince sw.js baytlari degisir, tarayici yeni surumu kurar,
 // eski surumlerin onbellegi (paylog-v2 dahil; adi 'paylog-' ile baslayan ve bu surumden farkli her onbellek) activate'te SILINIR. Ayni adreste (unvergroup.github.io) baska uygulamalarin onbellegine DOKUNULMAZ; boylece kurulu uygulamalar guncellemeyi alir.
 // Strateji: once onbellek; yoksa ag (yalniz ayni kaynak). Uygulama hicbir yere veri gondermez. Liste: sayfa tek dosyadir (index.html), manifest ve simgeler.
-const CACHE = "paylog-v1.0.1";
+const CACHE = "paylog-v1.0.2";
 const CORE = [
   "./", "./index.html", "./manifest.json",
   "./icon-192.png", "./icon-512.png",

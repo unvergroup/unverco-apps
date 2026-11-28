@@ -82,6 +82,14 @@
     if (r4.right <= 0 || r4.bottom <= 0 || r4.left >= vw && !inScroller(e4)) continue; // ekran disi (ornek: icerige atla baglantisi)
     var cs4 = getComputedStyle(e4);
     if (e4.tagName === 'A' && cs4.display === 'inline') continue; // metin ici baglanti (WCAG istisnasi)
+    // Onay kutusu/radyo: bagli <label> da dokunma hedefidir (etikete dokunmak kutuyu isaretler; WCAG 2.5.8).
+    // Hedef = kutu ile etiketlerinin kapsadigi en genis kutu. Etiketi olmayan kucuk kutu yine UYARI verir.
+    if (e4.tagName === 'INPUT' && /^(checkbox|radio)$/.test(e4.type) && e4.labels && e4.labels.length) {
+      for (var li = 0; li < e4.labels.length; li++) {
+        var lr = e4.labels[li].getBoundingClientRect();
+        if (lr.width > 0 && lr.height > 0 && lr.width >= 43.5 && lr.height >= 43.5) { r4 = { width: lr.width, height: lr.height }; break; }
+      }
+    }
     if (r4.width < 43.5 || r4.height < 43.5) {
       var key = label(e4);
       if (seen[key]) continue; seen[key] = 1;

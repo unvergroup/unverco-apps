@@ -5,7 +5,7 @@ export default Object.freeze({
   demoLimits: Object.freeze({}),
   storagePrefix: "unvercopbt",
   fileSlug: "pet-business-tracker", // indirilen dosya adlarinda kullanilir (CSV, yedek); appId ic kimliktir
-  version: "1.3.2",
+  version: "1.3.3",
   schemaVersion: 2,
   preview: false,
 });

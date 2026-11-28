@@ -7,7 +7,7 @@ const config = {
   appName: "Wedding Guest List to Print",
   mode: "full",                   // "demo" | "full"
   demoLimits: Object.freeze({ guests: 12, tables: 2 }), // demo'da koleksiyon basina kayit siniri
-  version: "1.0.3",
+  version: "1.0.4",
   schemaVersion: 1,               // veri semasi; degisince store.js'e goc ekle
 };
 // Demo and full copy may share one origin: each mode keeps its own store (IndexedDB name, keys, sync channel, seeded flag).

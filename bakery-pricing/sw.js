@@ -1,7 +1,7 @@
 // Bakery Pricing & Orders cevrimdisi onbellek (scripts/sw-uret.py uretir; surum config.js ile ayni).
 // Strateji: once onbellek; yoksa ag; yalniz ayni kaynak (origin) GET istekleri. Uygulama hicbir yere veri gondermez.
 const PRODUCT = "unvercobpo";
-const VERSION = "1.0.4";
+const VERSION = "1.0.5";
 const CACHE = PRODUCT + "-v" + VERSION;
 const PRECACHE = [
   "./",

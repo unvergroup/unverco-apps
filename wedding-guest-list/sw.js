@@ -2,7 +2,7 @@
 // Strateji: once onbellek; yoksa ag; yalniz ayni kaynak (origin) GET istekleri.
 // Same as config.js storagePrefix (a test checks): the demo and the full copy keep separate caches on one origin.
 const PRODUCT = "unverco-guests";
-const VERSION = "1.0.3";
+const VERSION = "1.0.4";
 const CACHE = PRODUCT + "-v" + VERSION;
 const PRECACHE = [
   "./",

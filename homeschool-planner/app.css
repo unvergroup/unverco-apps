@@ -517,3 +517,10 @@ a { color: var(--accent); }
   .muted { color: #444; font-size: .875rem; }
   .print-only { display: block; }
 }
+
+/* ---- Dokunma hedefi 44 px (28 Kas 2026, hata defteri 27): iOS tarih girişi 31 px, uyarı şeridi düğmesi 40 px ---- */
+input[type="date"], input[type="time"], input[type="month"], input[type="week"], input[type="datetime-local"] {
+  -webkit-appearance: none; appearance: none;
+  min-block-size: var(--tap, 44px);
+}
+.banner .btn { min-block-size: var(--tap); }

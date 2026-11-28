@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-7y9BRvXDjUKetxZEWFABD7DtpOQQc+g0eNwEJpEm9Oo='; style-src 'sha256-0retNlahfACyzD0TlTQWM+A0zYP6GCP7+FMPHXb/6fQ='; font-src data:; img-src 'self' data: blob:; connect-src 'none'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-1uJ2L7y8PJAQZDonNLXhXUbt18AAUiOgah7hVkpuybc='; style-src 'sha256-VizIuj+pIRWk9TV1h1ZHobVcURoYN1wRbK+27j0eo4I='; font-src data:; img-src 'self' data: blob:; connect-src 'none'; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1a5c3a">
   <meta name="color-scheme" content="light dark">
@@ -484,6 +484,20 @@ html { scroll-padding-bottom: var(--toast-space, 0px); }
   .bar-fill { background: #444 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .pie { filter: grayscale(1); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   a { color: #000; text-decoration: none; }
+}
+select:not(.lang-select) {
+  -webkit-appearance: none; appearance: none;
+  min-block-size: var(--tap, 44px);
+  padding-inline-end: 36px;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 19px) 52%, calc(100% - 14px) 52%;
+  background-size: 5px 5px; background-repeat: no-repeat;
+}
+[dir="rtl"] select:not(.lang-select) { background-position: 14px 52%, 19px 52%; }
+select:not(.lang-select)[multiple] { background-image: none; padding-inline-end: var(--space-2, 8px); }
+input[type="date"], input[type="time"], input[type="month"], input[type="week"], input[type="datetime-local"] {
+  -webkit-appearance: none; appearance: none;
+  min-block-size: var(--tap, 44px);
 }
 
 @media print {
@@ -2760,7 +2774,7 @@ const __default = Object.freeze({
   mode: "full",
   demoLimits: Object.freeze({}),
   storagePrefix: "autolog",
-  version: "1.0.2",
+  version: "1.0.3",
   schemaVersion: 1,
   preview: false,
 });

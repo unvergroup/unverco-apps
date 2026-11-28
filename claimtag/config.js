@@ -6,7 +6,7 @@ export default Object.freeze({
   mode: "full",                   // "demo" | "full"
   demoLimits: Object.freeze({}),  // demo'da koleksiyon basina kayit siniri (full'de kullanilmaz)
   storagePrefix: "claimtag",
-  version: "1.0.2",
+  version: "1.0.3",
   schemaVersion: 1,               // veri semasi; degisince store.js'e goc ekle
   preview: false,
 });

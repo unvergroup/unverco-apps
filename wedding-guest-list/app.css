@@ -175,3 +175,21 @@ body { padding-bottom: var(--toast-space, 0px); }
 .num, .tnum { font-variant-numeric: tabular-nums; }
 /* B8: ac / kapa ozetleri (ornegin "Preview: first 5 rows") dokunma hedefi 44 px */
 .stack-top > details > summary { cursor: pointer; min-height: var(--tap); padding-block: 10px; }
+
+/* ---- Dokunma hedefi 44 px (28 Kas 2026, hata defteri 20 ve 27) ----
+   iOS Safari, appearance:auto olan select ile tarih/saat girişinin yüksekliğini yok sayar (29–31 px çizer).
+   appearance:none ile yükseklik uygulanır; ok işareti dil seçicideki gibi iki degrade üçgenle çizilir. */
+select:not(.lang-select) {
+  -webkit-appearance: none; appearance: none;
+  min-block-size: var(--tap, 44px);
+  padding-inline-end: 36px;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 19px) 52%, calc(100% - 14px) 52%;
+  background-size: 5px 5px; background-repeat: no-repeat;
+}
+[dir="rtl"] select:not(.lang-select) { background-position: 14px 52%, 19px 52%; }
+select:not(.lang-select)[multiple] { background-image: none; padding-inline-end: var(--space-2, 8px); }
+input[type="date"], input[type="time"], input[type="month"], input[type="week"], input[type="datetime-local"] {
+  -webkit-appearance: none; appearance: none;
+  min-block-size: var(--tap, 44px);
+}
