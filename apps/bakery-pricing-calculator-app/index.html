@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bakery Pricing Calculator App: recipe cost, orders, deposits</title>
+<meta name="description" content="Bakery pricing calculator app for home bakers. Recipe cost per piece, suggested price, orders with deposits, weekly bake plan and shopping list. Works offline.">
+<link rel="canonical" href="https://unvergroup.github.io/unverco-apps/apps/bakery-pricing-calculator-app/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bakery Pricing Calculator App — recipe cost, orders and shopping list">
+<meta property="og:description" content="Bakery pricing calculator app for home bakers. Recipe cost per piece, suggested price, orders with deposits, weekly bake plan and shopping list. Works offline.">
+<meta property="og:url" content="https://unvergroup.github.io/unverco-apps/apps/bakery-pricing-calculator-app/">
+<meta property="og:site_name" content="UNVERCO">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "ÜNVERCO Bakery Pricing & Orders",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web browser (iPhone, Android, Windows, Mac)",
+      "description": "Bakery pricing calculator app for home bakers. Recipe cost per piece, suggested price, orders with deposits, weekly bake plan and shopping list. Works offline.",
+      "featureList": [
+        "Pantry: enter each ingredient with package size, unit and the price you paid; units include g, kg, oz, lb, ml, l, cup, tbsp, tsp and pieces.",
+        "Recipes with ingredient lines, packaging, your time and an optional overhead percentage; the cost box updates as you type.",
+        "Cost per batch and per piece, and a suggested price from your target profit margin or markup.",
+        "A label shows whether your price Loses money, is Below target or On target.",
+        "When an ingredient price changes, every recipe that uses it is recalculated.",
+        "Orders with customer, pickup or delivery date, items, delivery fee, discount and deposit, moving from Inquiry to Confirmed, In progress, Delivered and Paid.",
+        "Print an order confirmation, a quote or an invoice.",
+        "Weekly plan: what to bake and a shopping list with packages to buy.",
+        "Monthly sales view with estimated cost and profit; export orders as CSV."
+      ],
+      "inLanguage": [
+        "English",
+        "Spanish",
+        "French",
+        "German",
+        "Portuguese"
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "ÜNVERCO"
+      },
+      "url": "https://unverco.etsy.com/listing/4625689800"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this bakery pricing calculator a subscription?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. You buy it once on Etsy. There is no monthly fee and no account."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does it work out the cost of one piece?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It adds ingredients, packaging, your time at your hourly rate and overhead, then divides by the number of pieces in a batch."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What about cups and spoons?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For ingredients you buy by weight, you enter once what one cup of your own flour weighs. The app does not guess this number."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. After the first load it works without internet. Your recipes and orders stay on your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I track deposits and orders?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Each order shows the total, the suggested deposit, the deposit received and the balance."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root { --bg:#0a0f2a; --panel:#121a3d; --gold:#e9c46a; --text:#e8ebf5; --muted:#aab2cc; --line:#26305e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:16px 20px 64px; }
+  h1 { color:var(--gold); font-size:1.8rem; line-height:1.25; margin:8px 0 12px; overflow-wrap:anywhere; }
+  h2 { font-size:1.25rem; margin:36px 0 12px; }
+  h3 { font-size:1.05rem; margin:18px 0 4px; }
+  p, li { color:var(--muted); overflow-wrap:anywhere; }
+  p { margin:0 0 12px; }
+  ul { padding-left:22px; margin:0 0 12px; } li { margin-bottom:6px; }
+  a { color:var(--gold); }
+  a:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  .back { display:inline-flex; align-items:center; min-height:44px; padding:0 4px; }
+  .head { display:flex; gap:16px; align-items:center; }
+  .head img { width:72px; height:72px; border-radius:16px; flex:none; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 24px; background:var(--gold); color:var(--bg); font-weight:700; text-decoration:none; border-radius:12px; margin:8px 0 4px; }
+  .card { display:block; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:0 0 12px; text-decoration:none; color:var(--text); min-height:44px; }
+  .card strong { display:block; color:var(--gold); margin-bottom:4px; }
+  .card span { color:var(--muted); font-size:.95rem; }
+  .card:focus-visible, .btn:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  details { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin:0 0 10px; }
+  details summary { cursor:pointer; padding:12px 16px; min-height:44px; color:var(--text); font-weight:600; }
+  details summary:focus-visible { outline:3px solid var(--gold); }
+  details p { padding:0 16px; }
+  footer { margin-top:48px; font-size:.85rem; color:var(--muted); }
+  footer p { font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="../">&larr; All UNVERCO apps</a>
+  <div class="head">
+    <img src="../../bakery-pricing/icon-192.png" width="72" height="72" alt="Bakery Pricing &amp; Orders app icon">
+    <h1>Bakery Pricing Calculator App — recipe cost, orders and shopping list</h1>
+  </div>
+  <p>Bakery Pricing &amp; Orders helps a home baker answer three questions: what does each piece really cost, what should I charge, and which orders, deposits and ingredients do I need to deal with this week.</p>
+  <a class="btn" href="https://unverco.etsy.com/listing/4625689800">Get it on Etsy</a>
+  <p>One-time purchase. No subscription.</p>
+  <h2>What it does</h2>
+  <ul>
+    <li>Pantry: enter each ingredient with package size, unit and the price you paid; units include g, kg, oz, lb, ml, l, cup, tbsp, tsp and pieces.</li>
+    <li>Recipes with ingredient lines, packaging, your time and an optional overhead percentage; the cost box updates as you type.</li>
+    <li>Cost per batch and per piece, and a suggested price from your target profit margin or markup.</li>
+    <li>A label shows whether your price Loses money, is Below target or On target.</li>
+    <li>When an ingredient price changes, every recipe that uses it is recalculated.</li>
+    <li>Orders with customer, pickup or delivery date, items, delivery fee, discount and deposit, moving from Inquiry to Confirmed, In progress, Delivered and Paid.</li>
+    <li>Print an order confirmation, a quote or an invoice.</li>
+    <li>Weekly plan: what to bake and a shopping list with packages to buy.</li>
+    <li>Monthly sales view with estimated cost and profit; export orders as CSV.</li>
+  </ul>
+  <h2>How it works</h2>
+  <ul>
+    <li>You buy it once on Etsy and download the file in a web browser (the Etsy phone app cannot download digital files).</li>
+    <li>On a computer, you open the app file in your browser. On a phone, you open the app's web address in Safari (iPhone) or Chrome (Android) and choose Add to Home Screen (Android: Install app).</li>
+    <li>Your data stays on your device. There is no account and no subscription.</li>
+    <li>After the first load it works without internet.</li>
+    <li>Languages: English, Spanish, French, German and Portuguese.</li>
+  </ul>
+  <h2>What it does not do</h2>
+  <ul>
+    <li>No food safety, labeling, cottage food permit or tax advice.</li>
+    <li>It does not track stock on hand or expiry dates.</li>
+    <li>It does not take payments, send messages by itself or sync between devices.</li>
+    <li>Suggested prices use only your own costs and target; the app does not know local market prices.</li>
+  </ul>
+  <h2>Questions</h2>
+  <details><summary>Is this bakery pricing calculator a subscription?</summary><p>No. You buy it once on Etsy. There is no monthly fee and no account.</p></details>
+  <details><summary>How does it work out the cost of one piece?</summary><p>It adds ingredients, packaging, your time at your hourly rate and overhead, then divides by the number of pieces in a batch.</p></details>
+  <details><summary>What about cups and spoons?</summary><p>For ingredients you buy by weight, you enter once what one cup of your own flour weighs. The app does not guess this number.</p></details>
+  <details><summary>Does it work offline?</summary><p>Yes. After the first load it works without internet. Your recipes and orders stay on your device.</p></details>
+  <details><summary>Can I track deposits and orders?</summary><p>Yes. Each order shows the total, the suggested deposit, the deposit received and the balance.</p></details>
+  <a class="btn" href="https://unverco.etsy.com/listing/4625689800">Get it on Etsy</a>
+  <h2>More UNVERCO apps</h2>
+  <a class="card" href="../quote-invoice-maker-app/"><strong>Quote &amp; Invoice</strong><span>Make a quote, ask for a deposit, turn it into an invoice and track payments.</span></a>
+  <a class="card" href="../small-business-toolkit-app/"><strong>Workbench</strong><span>Four tools in one app: Fair Price, Quote &amp; Invoice, Creator Rate Card and Shift Board.</span></a>
+  <a class="card" href="../income-expense-tracker-app/"><strong>Income &amp; Expense Tracker</strong><span>Income, expenses, receipts, mileage and printable reports in one file.</span></a>
+  <a class="card" href="../"><strong>All apps</strong><span>See the full UNVERCO catalog.</span></a>
+
+  <footer>
+    <p>UNVERCO is a trademark of Murat Ünver. iPhone and Safari are trademarks of Apple Inc. Android and Chrome are trademarks of Google LLC. Etsy is a trademark of Etsy, Inc. UNVERCO is not affiliated with them.</p>
+    <p>Built with AI-assisted development and tested on iPhone and Android simulators.</p>
+  </footer>
+</main>
+</body>
+</html>

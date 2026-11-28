@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Income and Expense Tracker App for Small Business | Offline</title>
+<meta name="description" content="Income and expense tracker app for small business and freelancers. Categories, receipt photos, bank CSV import, mileage log, reports. Works offline.">
+<link rel="canonical" href="https://unvergroup.github.io/unverco-apps/apps/income-expense-tracker-app/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Income and Expense Tracker App for Small Business — offline, no subscription">
+<meta property="og:description" content="Income and expense tracker app for small business and freelancers. Categories, receipt photos, bank CSV import, mileage log, reports. Works offline.">
+<meta property="og:url" content="https://unvergroup.github.io/unverco-apps/apps/income-expense-tracker-app/">
+<meta property="og:site_name" content="UNVERCO">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "ÜNVERCO Income & Expense Tracker",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web browser (iPhone, Android, Windows, Mac)",
+      "description": "Income and expense tracker app for small business and freelancers. Categories, receipt photos, bank CSV import, mileage log, reports. Works offline.",
+      "featureList": [
+        "Dashboard with This month and Year cards for income, expenses and net; personal entries are kept out of your net.",
+        "Add income or expense entries with category, customer or vendor, payment method, business or personal, and a note.",
+        "Attach a receipt photo; it is made smaller on your device and kept with the entry.",
+        "Filter by period, type, category or search names and notes.",
+        "Import a bank statement CSV: choose the columns, check the preview, and rows already in the app are skipped.",
+        "Export entries as CSV for your accountant.",
+        "Mileage log with distance in miles or kilometers and an optional rate you choose.",
+        "Reports to print or save as PDF: monthly summary, profit and loss, by category, and mileage log.",
+        "Up to five businesses, with your own categories."
+      ],
+      "inLanguage": [
+        "English",
+        "Spanish",
+        "French",
+        "German",
+        "Portuguese"
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "ÜNVERCO"
+      },
+      "url": "https://unverco.etsy.com/listing/4625692752"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this income and expense tracker a subscription?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. You buy it once on Etsy. There is no monthly fee and no account."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I import my bank statement?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, as a CSV file that you download from your bank. Files up to 2 MB and 3,000 rows are accepted, and the file never leaves your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it give tax advice?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It records and summarizes. Ask a tax professional about how to use your records."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I track more than one business?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. You can set up to five businesses and switch between them."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. After the first load it works without internet and keeps your records on your device."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root { --bg:#0a0f2a; --panel:#121a3d; --gold:#e9c46a; --text:#e8ebf5; --muted:#aab2cc; --line:#26305e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:16px 20px 64px; }
+  h1 { color:var(--gold); font-size:1.8rem; line-height:1.25; margin:8px 0 12px; overflow-wrap:anywhere; }
+  h2 { font-size:1.25rem; margin:36px 0 12px; }
+  h3 { font-size:1.05rem; margin:18px 0 4px; }
+  p, li { color:var(--muted); overflow-wrap:anywhere; }
+  p { margin:0 0 12px; }
+  ul { padding-left:22px; margin:0 0 12px; } li { margin-bottom:6px; }
+  a { color:var(--gold); }
+  a:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  .back { display:inline-flex; align-items:center; min-height:44px; padding:0 4px; }
+  .head { display:flex; gap:16px; align-items:center; }
+  .head img { width:72px; height:72px; border-radius:16px; flex:none; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 24px; background:var(--gold); color:var(--bg); font-weight:700; text-decoration:none; border-radius:12px; margin:8px 0 4px; }
+  .card { display:block; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:0 0 12px; text-decoration:none; color:var(--text); min-height:44px; }
+  .card strong { display:block; color:var(--gold); margin-bottom:4px; }
+  .card span { color:var(--muted); font-size:.95rem; }
+  .card:focus-visible, .btn:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  details { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin:0 0 10px; }
+  details summary { cursor:pointer; padding:12px 16px; min-height:44px; color:var(--text); font-weight:600; }
+  details summary:focus-visible { outline:3px solid var(--gold); }
+  details p { padding:0 16px; }
+  footer { margin-top:48px; font-size:.85rem; color:var(--muted); }
+  footer p { font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="../">&larr; All UNVERCO apps</a>
+  <div class="head">
+    <img src="../../income-expense-tracker/icon-192.png" width="72" height="72" alt="Income &amp; Expense Tracker app icon">
+    <h1>Income and Expense Tracker App for Small Business — offline, no subscription</h1>
+  </div>
+  <p>This income and expense tracker is for freelancers, sole traders and small businesses that want a simple record of money in and money out. It records and summarizes; it is not tax software.</p>
+  <a class="btn" href="https://unverco.etsy.com/listing/4625692752">Get it on Etsy</a>
+  <p>One-time purchase. No subscription.</p>
+  <h2>What it does</h2>
+  <ul>
+    <li>Dashboard with This month and Year cards for income, expenses and net; personal entries are kept out of your net.</li>
+    <li>Add income or expense entries with category, customer or vendor, payment method, business or personal, and a note.</li>
+    <li>Attach a receipt photo; it is made smaller on your device and kept with the entry.</li>
+    <li>Filter by period, type, category or search names and notes.</li>
+    <li>Import a bank statement CSV: choose the columns, check the preview, and rows already in the app are skipped.</li>
+    <li>Export entries as CSV for your accountant.</li>
+    <li>Mileage log with distance in miles or kilometers and an optional rate you choose.</li>
+    <li>Reports to print or save as PDF: monthly summary, profit and loss, by category, and mileage log.</li>
+    <li>Up to five businesses, with your own categories.</li>
+  </ul>
+  <h2>How it works</h2>
+  <ul>
+    <li>You buy it once on Etsy and download the file in a web browser (the Etsy phone app cannot download digital files).</li>
+    <li>On a computer, you open the app file in your browser. On a phone, you open the app's web address in Safari (iPhone) or Chrome (Android) and choose Add to Home Screen (Android: Install app).</li>
+    <li>Your data stays on your device. There is no account and no subscription.</li>
+    <li>After the first load it works without internet.</li>
+    <li>Languages: English, Spanish, French, German and Portuguese.</li>
+  </ul>
+  <h2>What it does not do</h2>
+  <ul>
+    <li>It does not connect to your bank or payment apps; you import a CSV file yourself.</li>
+    <li>It does not calculate tax or fill in tax forms, and does not suggest a mileage rate.</li>
+    <li>It does not send invoices or take payments.</li>
+    <li>No cloud sync and no team login. Move data between devices with a backup file.</li>
+  </ul>
+  <h2>Questions</h2>
+  <details><summary>Is this income and expense tracker a subscription?</summary><p>No. You buy it once on Etsy. There is no monthly fee and no account.</p></details>
+  <details><summary>Can I import my bank statement?</summary><p>Yes, as a CSV file that you download from your bank. Files up to 2 MB and 3,000 rows are accepted, and the file never leaves your device.</p></details>
+  <details><summary>Does it give tax advice?</summary><p>No. It records and summarizes. Ask a tax professional about how to use your records.</p></details>
+  <details><summary>Can I track more than one business?</summary><p>Yes. You can set up to five businesses and switch between them.</p></details>
+  <details><summary>Does it work offline?</summary><p>Yes. After the first load it works without internet and keeps your records on your device.</p></details>
+  <a class="btn" href="https://unverco.etsy.com/listing/4625692752">Get it on Etsy</a>
+  <h2>More UNVERCO apps</h2>
+  <a class="card" href="../quote-invoice-maker-app/"><strong>Quote &amp; Invoice</strong><span>Make a quote, ask for a deposit, turn it into an invoice and track payments.</span></a>
+  <a class="card" href="../daily-budget-planner-app/"><strong>Daily Budget Planner</strong><span>See what you can spend today, based on your pay schedule and bills.</span></a>
+  <a class="card" href="../bill-subscription-tracker-app/"><strong>PayLog</strong><span>Bills, subscriptions, a payment calendar and free-trial alerts.</span></a>
+  <a class="card" href="../"><strong>All apps</strong><span>See the full UNVERCO catalog.</span></a>
+
+  <footer>
+    <p>UNVERCO is a trademark of Murat Ünver. iPhone and Safari are trademarks of Apple Inc. Android and Chrome are trademarks of Google LLC. Etsy is a trademark of Etsy, Inc. UNVERCO is not affiliated with them.</p>
+    <p>Built with AI-assisted development and tested on iPhone and Android simulators.</p>
+  </footer>
+</main>
+</body>
+</html>

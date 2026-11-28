@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bill Tracker &amp; Subscription Tracker App: offline, no subscription | PayLog</title>
+<meta name="description" content="Bill tracker and subscription tracker app. Due dates, payment calendar, free-trial alerts and unused-subscription check. One-time purchase, works offline.">
+<link rel="canonical" href="https://unvergroup.github.io/unverco-apps/apps/bill-subscription-tracker-app/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bill Tracker and Subscription Tracker App — no subscription, works offline">
+<meta property="og:description" content="Bill tracker and subscription tracker app. Due dates, payment calendar, free-trial alerts and unused-subscription check. One-time purchase, works offline.">
+<meta property="og:url" content="https://unvergroup.github.io/unverco-apps/apps/bill-subscription-tracker-app/">
+<meta property="og:site_name" content="UNVERCO">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "PayLog Bill & Subscription Tracker",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web browser (iPhone, Android, Windows, Mac)",
+      "description": "Bill tracker and subscription tracker app. Due dates, payment calendar, free-trial alerts and unused-subscription check. One-time purchase, works offline.",
+      "featureList": [
+        "Add bills with a due day (shorter months use the last day) and an amount; an estimate is fine for bills that change.",
+        "Add subscriptions and start from a popular service with its details filled in, then check the price and save.",
+        "Free-trial alerts show when a trial ends so you can cancel before you are charged.",
+        "Zombie Hunt lists subscriptions you have paid for a long time and probably do not use, based on a last-used date you set.",
+        "Payment calendar with Paid, Upcoming, Overdue and Trial ends states for each day.",
+        "Reports: monthly total, yearly projection, cost by category and a comparison with last month.",
+        "A \"What if I cancel?\" calculator shows how much you would save by cancelling the subscriptions you tick.",
+        "Cancel a subscription and keep it in your history, so it stops counting toward your monthly total.",
+        "Print a payment summary or a subscription list, or share a payment reminder or summary by WhatsApp or SMS."
+      ],
+      "inLanguage": [
+        "English",
+        "Spanish",
+        "French",
+        "German",
+        "Turkish"
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "ÜNVERCO"
+      },
+      "url": "https://unverco.etsy.com/listing/4624256584"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is PayLog a subscription?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It is a one-time purchase on Etsy. There is no monthly fee, no account and no renewal."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it connect to my bank?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. You type in your bills and subscriptions. Nothing is read from your bank, and your records stay on your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the free-trial alert work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mark a subscription as a free trial and enter the end date. The dashboard and calendar show when it ends. Nothing is sent by itself, so check the dashboard."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this bill tracker work offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. After the first load it works with no internet, on the phone and on the computer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use it on my phone and my computer?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. It is the same app on both. Each keeps its own data, and you can move it with backup and restore."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root { --bg:#0a0f2a; --panel:#121a3d; --gold:#e9c46a; --text:#e8ebf5; --muted:#aab2cc; --line:#26305e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:16px 20px 64px; }
+  h1 { color:var(--gold); font-size:1.8rem; line-height:1.25; margin:8px 0 12px; overflow-wrap:anywhere; }
+  h2 { font-size:1.25rem; margin:36px 0 12px; }
+  h3 { font-size:1.05rem; margin:18px 0 4px; }
+  p, li { color:var(--muted); overflow-wrap:anywhere; }
+  p { margin:0 0 12px; }
+  ul { padding-left:22px; margin:0 0 12px; } li { margin-bottom:6px; }
+  a { color:var(--gold); }
+  a:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  .back { display:inline-flex; align-items:center; min-height:44px; padding:0 4px; }
+  .head { display:flex; gap:16px; align-items:center; }
+  .head img { width:72px; height:72px; border-radius:16px; flex:none; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 24px; background:var(--gold); color:var(--bg); font-weight:700; text-decoration:none; border-radius:12px; margin:8px 0 4px; }
+  .card { display:block; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:0 0 12px; text-decoration:none; color:var(--text); min-height:44px; }
+  .card strong { display:block; color:var(--gold); margin-bottom:4px; }
+  .card span { color:var(--muted); font-size:.95rem; }
+  .card:focus-visible, .btn:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  details { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin:0 0 10px; }
+  details summary { cursor:pointer; padding:12px 16px; min-height:44px; color:var(--text); font-weight:600; }
+  details summary:focus-visible { outline:3px solid var(--gold); }
+  details p { padding:0 16px; }
+  footer { margin-top:48px; font-size:.85rem; color:var(--muted); }
+  footer p { font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="../">&larr; All UNVERCO apps</a>
+  <div class="head">
+    <img src="../../paylog/icon-192.png" width="72" height="72" alt="PayLog app icon">
+    <h1>Bill Tracker and Subscription Tracker App — no subscription, works offline</h1>
+  </div>
+  <p>PayLog is a bill tracker and subscription tracker for people who want to see what they pay each month and never miss a due date. Add rent, electricity, internet and every service that bills you again and again, and keep the whole picture on one screen.</p>
+  <a class="btn" href="https://unverco.etsy.com/listing/4624256584">Get it on Etsy</a>
+  <p>One-time purchase. No subscription.</p>
+  <h2>What it does</h2>
+  <ul>
+    <li>Add bills with a due day (shorter months use the last day) and an amount; an estimate is fine for bills that change.</li>
+    <li>Add subscriptions and start from a popular service with its details filled in, then check the price and save.</li>
+    <li>Free-trial alerts show when a trial ends so you can cancel before you are charged.</li>
+    <li>Zombie Hunt lists subscriptions you have paid for a long time and probably do not use, based on a last-used date you set.</li>
+    <li>Payment calendar with Paid, Upcoming, Overdue and Trial ends states for each day.</li>
+    <li>Reports: monthly total, yearly projection, cost by category and a comparison with last month.</li>
+    <li>A &quot;What if I cancel?&quot; calculator shows how much you would save by cancelling the subscriptions you tick.</li>
+    <li>Cancel a subscription and keep it in your history, so it stops counting toward your monthly total.</li>
+    <li>Print a payment summary or a subscription list, or share a payment reminder or summary by WhatsApp or SMS.</li>
+  </ul>
+  <h2>How it works</h2>
+  <ul>
+    <li>You buy it once on Etsy and download the file in a web browser (the Etsy phone app cannot download digital files).</li>
+    <li>On a computer, you open the app file in your browser. On a phone, you open the app's web address in Safari (iPhone) or Chrome (Android) and choose Add to Home Screen (Android: Install app).</li>
+    <li>Your data stays on your device. There is no account and no subscription.</li>
+    <li>After the first load it works without internet.</li>
+    <li>Languages: English, Spanish, French, German and Turkish.</li>
+  </ul>
+  <h2>What it does not do</h2>
+  <ul>
+    <li>No bank connection: you enter bills and payments yourself.</li>
+    <li>No cloud sync between devices. Each device keeps its own data; move it with the backup file.</li>
+    <li>No automatic payments and no automatic messages; it does not pay or cancel anything for you.</li>
+    <li>No team or shared accounts.</li>
+  </ul>
+  <h2>Questions</h2>
+  <details><summary>Is PayLog a subscription?</summary><p>No. It is a one-time purchase on Etsy. There is no monthly fee, no account and no renewal.</p></details>
+  <details><summary>Does it connect to my bank?</summary><p>No. You type in your bills and subscriptions. Nothing is read from your bank, and your records stay on your device.</p></details>
+  <details><summary>How does the free-trial alert work?</summary><p>Mark a subscription as a free trial and enter the end date. The dashboard and calendar show when it ends. Nothing is sent by itself, so check the dashboard.</p></details>
+  <details><summary>Does this bill tracker work offline?</summary><p>Yes. After the first load it works with no internet, on the phone and on the computer.</p></details>
+  <details><summary>Can I use it on my phone and my computer?</summary><p>Yes. It is the same app on both. Each keeps its own data, and you can move it with backup and restore.</p></details>
+  <a class="btn" href="https://unverco.etsy.com/listing/4624256584">Get it on Etsy</a>
+  <h2>More UNVERCO apps</h2>
+  <a class="card" href="../daily-budget-planner-app/"><strong>Daily Budget Planner</strong><span>See what you can spend today, based on your pay schedule and bills.</span></a>
+  <a class="card" href="../income-expense-tracker-app/"><strong>Income &amp; Expense Tracker</strong><span>Income, expenses, receipts, mileage and printable reports in one file.</span></a>
+  <a class="card" href="../car-maintenance-tracker-app/"><strong>AutoLog</strong><span>Service schedule, costs and printable service history for your vehicles.</span></a>
+  <a class="card" href="../"><strong>All apps</strong><span>See the full UNVERCO catalog.</span></a>
+
+  <footer>
+    <p>UNVERCO is a trademark of Murat Ünver. iPhone and Safari are trademarks of Apple Inc. Android and Chrome are trademarks of Google LLC. Etsy is a trademark of Etsy, Inc. UNVERCO is not affiliated with them.</p>
+    <p>Built with AI-assisted development and tested on iPhone and Android simulators.</p>
+  </footer>
+</main>
+</body>
+</html>

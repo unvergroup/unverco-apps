@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Budget Planner App: your spendable amount today | Offline</title>
+<meta name="description" content="Daily budget planner app that works out what you can spend today from your pay schedule and bills. Envelopes, savings funds, bank CSV import. Works offline.">
+<link rel="canonical" href="https://unvergroup.github.io/unverco-apps/apps/daily-budget-planner-app/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Daily Budget Planner App — know what you can spend today">
+<meta property="og:description" content="Daily budget planner app that works out what you can spend today from your pay schedule and bills. Envelopes, savings funds, bank CSV import. Works offline.">
+<meta property="og:url" content="https://unvergroup.github.io/unverco-apps/apps/daily-budget-planner-app/">
+<meta property="og:site_name" content="UNVERCO">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "ÜNVERCO Daily Budget Planner",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web browser (iPhone, Android, Windows, Mac)",
+      "description": "Daily budget planner app that works out what you can spend today from your pay schedule and bills. Envelopes, savings funds, bank CSV import. Works offline.",
+      "featureList": [
+        "Pay schedule: weekly, every two weeks, twice a month, monthly, or irregular, with a different next payday when needed.",
+        "Today screen with spendable today, what is left today, days to payday and a How we got this number breakdown.",
+        "Bills (rent, phone, loans or cards): money is set aside before they are due.",
+        "Quick expense entry: type an amount and tap a category.",
+        "Budget envelopes with optional limits.",
+        "Funds for non-monthly costs such as car insurance, school fees or a trip, with a goal and a date.",
+        "Activity list of purchases; import a bank CSV file or export your activity as CSV.",
+        "A Did your pay arrive? prompt starts a new pay period.",
+        "Print your plan; light and dark theme."
+      ],
+      "inLanguage": [
+        "English",
+        "Spanish",
+        "French",
+        "German",
+        "Portuguese"
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "ÜNVERCO"
+      },
+      "url": "https://unverco.etsy.com/listing/4626783911"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this daily budget planner a subscription?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. You buy it once on Etsy. There is no monthly fee and no account."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is my spendable amount worked out?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "From the money you have and your pay period, after setting aside upcoming bills. The Today screen shows how the number was reached."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use it with an irregular income?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Choose irregular and enter each payday as it comes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. After the first load it works without internet and keeps your data on your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I import transactions from my bank?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, as a CSV file that you download from your bank. The app does not connect to your bank directly."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root { --bg:#0a0f2a; --panel:#121a3d; --gold:#e9c46a; --text:#e8ebf5; --muted:#aab2cc; --line:#26305e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:16px 20px 64px; }
+  h1 { color:var(--gold); font-size:1.8rem; line-height:1.25; margin:8px 0 12px; overflow-wrap:anywhere; }
+  h2 { font-size:1.25rem; margin:36px 0 12px; }
+  h3 { font-size:1.05rem; margin:18px 0 4px; }
+  p, li { color:var(--muted); overflow-wrap:anywhere; }
+  p { margin:0 0 12px; }
+  ul { padding-left:22px; margin:0 0 12px; } li { margin-bottom:6px; }
+  a { color:var(--gold); }
+  a:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  .back { display:inline-flex; align-items:center; min-height:44px; padding:0 4px; }
+  .head { display:flex; gap:16px; align-items:center; }
+  .head img { width:72px; height:72px; border-radius:16px; flex:none; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 24px; background:var(--gold); color:var(--bg); font-weight:700; text-decoration:none; border-radius:12px; margin:8px 0 4px; }
+  .card { display:block; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:0 0 12px; text-decoration:none; color:var(--text); min-height:44px; }
+  .card strong { display:block; color:var(--gold); margin-bottom:4px; }
+  .card span { color:var(--muted); font-size:.95rem; }
+  .card:focus-visible, .btn:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  details { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin:0 0 10px; }
+  details summary { cursor:pointer; padding:12px 16px; min-height:44px; color:var(--text); font-weight:600; }
+  details summary:focus-visible { outline:3px solid var(--gold); }
+  details p { padding:0 16px; }
+  footer { margin-top:48px; font-size:.85rem; color:var(--muted); }
+  footer p { font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="../">&larr; All UNVERCO apps</a>
+  <div class="head">
+    <img src="../../daily-budget-planner/icon-192.png" width="72" height="72" alt="Daily Budget Planner app icon">
+    <h1>Daily Budget Planner App — know what you can spend today</h1>
+  </div>
+  <p>This daily budget planner starts from your pay schedule. Tell it when you are paid and what bills are coming, and it shows a spendable amount for today, so you can spend with a clear number instead of a guess.</p>
+  <a class="btn" href="https://unverco.etsy.com/listing/4626783911">Get it on Etsy</a>
+  <p>One-time purchase. No subscription.</p>
+  <h2>What it does</h2>
+  <ul>
+    <li>Pay schedule: weekly, every two weeks, twice a month, monthly, or irregular, with a different next payday when needed.</li>
+    <li>Today screen with spendable today, what is left today, days to payday and a How we got this number breakdown.</li>
+    <li>Bills (rent, phone, loans or cards): money is set aside before they are due.</li>
+    <li>Quick expense entry: type an amount and tap a category.</li>
+    <li>Budget envelopes with optional limits.</li>
+    <li>Funds for non-monthly costs such as car insurance, school fees or a trip, with a goal and a date.</li>
+    <li>Activity list of purchases; import a bank CSV file or export your activity as CSV.</li>
+    <li>A Did your pay arrive? prompt starts a new pay period.</li>
+    <li>Print your plan; light and dark theme.</li>
+  </ul>
+  <h2>How it works</h2>
+  <ul>
+    <li>You buy it once on Etsy and download the file in a web browser (the Etsy phone app cannot download digital files).</li>
+    <li>On a computer, you open the app file in your browser. On a phone, you open the app's web address in Safari (iPhone) or Chrome (Android) and choose Add to Home Screen (Android: Install app).</li>
+    <li>Your data stays on your device. There is no account and no subscription.</li>
+    <li>After the first load it works without internet.</li>
+    <li>Languages: English, Spanish, French, German and Portuguese.</li>
+  </ul>
+  <h2>What it does not do</h2>
+  <ul>
+    <li>It does not connect to your bank; you import a CSV file yourself.</li>
+    <li>It does not suggest bill amounts or give financial advice.</li>
+    <li>No cloud sync and no account. Each device keeps its own data; move it with a backup file.</li>
+  </ul>
+  <h2>Questions</h2>
+  <details><summary>Is this daily budget planner a subscription?</summary><p>No. You buy it once on Etsy. There is no monthly fee and no account.</p></details>
+  <details><summary>How is my spendable amount worked out?</summary><p>From the money you have and your pay period, after setting aside upcoming bills. The Today screen shows how the number was reached.</p></details>
+  <details><summary>Can I use it with an irregular income?</summary><p>Yes. Choose irregular and enter each payday as it comes.</p></details>
+  <details><summary>Does it work offline?</summary><p>Yes. After the first load it works without internet and keeps your data on your device.</p></details>
+  <details><summary>Can I import transactions from my bank?</summary><p>Yes, as a CSV file that you download from your bank. The app does not connect to your bank directly.</p></details>
+  <a class="btn" href="https://unverco.etsy.com/listing/4626783911">Get it on Etsy</a>
+  <h2>More UNVERCO apps</h2>
+  <a class="card" href="../bill-subscription-tracker-app/"><strong>PayLog</strong><span>Bills, subscriptions, a payment calendar and free-trial alerts.</span></a>
+  <a class="card" href="../income-expense-tracker-app/"><strong>Income &amp; Expense Tracker</strong><span>Income, expenses, receipts, mileage and printable reports in one file.</span></a>
+  <a class="card" href="../habit-tracker-app/"><strong>2027 Habit Tracker</strong><span>Daily check-ins, streaks, rest days, a month calendar and a year heat map.</span></a>
+  <a class="card" href="../"><strong>All apps</strong><span>See the full UNVERCO catalog.</span></a>
+
+  <footer>
+    <p>UNVERCO is a trademark of Murat Ünver. iPhone and Safari are trademarks of Apple Inc. Android and Chrome are trademarks of Google LLC. Etsy is a trademark of Etsy, Inc. UNVERCO is not affiliated with them.</p>
+    <p>Built with AI-assisted development and tested on iPhone and Android simulators.</p>
+  </footer>
+</main>
+</body>
+</html>

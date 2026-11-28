@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wedding Planner App: guest list, tables, place cards to print</title>
+<meta name="description" content="Wedding planner app that turns your guest list into a seating sign, place cards and a caterer sheet. One-time purchase, works offline on phone and computer.">
+<link rel="canonical" href="https://unvergroup.github.io/unverco-apps/apps/wedding-planner-guest-list-app/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Wedding Planner App: guest list, tables and place cards you can print">
+<meta property="og:description" content="Wedding planner app that turns your guest list into a seating sign, place cards and a caterer sheet. One-time purchase, works offline on phone and computer.">
+<meta property="og:url" content="https://unvergroup.github.io/unverco-apps/apps/wedding-planner-guest-list-app/">
+<meta property="og:site_name" content="UNVERCO">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Wedding Planner App (Guest List to Print)",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web browser (iPhone, Android, Windows, Mac)",
+      "description": "Wedding planner app that turns your guest list into a seating sign, place cards and a caterer sheet. One-time purchase, works offline on phone and computer.",
+      "featureList": [
+        "Paste a list or import a CSV file; the app guesses which column is which and you correct it. It reads up to 2,000 rows and does not add the same guests twice.",
+        "Mark guests as attending, pending or declined, and set meal options (rename them as you like).",
+        "Add tables with a number of seats each, and seat people with Move. Tick Move whole party to keep a family together.",
+        "Check before you print looks at eight things, such as guests without a table or tables that are over full. It never blocks printing.",
+        "Seating sign: choose a board size and a title and save as PDF. Declined guests are left off.",
+        "Place cards with a test sheet to line up your own card pack, with nudge settings in millimeters.",
+        "Caterer sheet in Letter or A4 with meal counts by table and by meal.",
+        "Mark as printed, then see Changes since printed to know which cards to reprint.",
+        "Try it first with 40 sample guests, then remove them with one button."
+      ],
+      "inLanguage": [
+        "English",
+        "Spanish",
+        "French",
+        "German",
+        "Turkish"
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "ÜNVERCO"
+      },
+      "url": "https://unverco.etsy.com/listing/4625533896"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this wedding planner app a subscription?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. You buy it once on Etsy. There is no monthly fee and no account."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I import my guest list from a spreadsheet?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Paste the cells or save the file as CSV and import it. Files ending in .xlsx cannot be opened directly, so save as CSV first."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work without internet?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. After the first load it works offline, and your list stays on your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I print place cards on my own card pack?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Print the test sheet on plain paper, line it up against a blank card sheet, and adjust with the nudge settings before printing your cards."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it send invitations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It is a guest list, seating and printing tool. It has no RSVP forms and sends nothing."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root { --bg:#0a0f2a; --panel:#121a3d; --gold:#e9c46a; --text:#e8ebf5; --muted:#aab2cc; --line:#26305e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:16px 20px 64px; }
+  h1 { color:var(--gold); font-size:1.8rem; line-height:1.25; margin:8px 0 12px; overflow-wrap:anywhere; }
+  h2 { font-size:1.25rem; margin:36px 0 12px; }
+  h3 { font-size:1.05rem; margin:18px 0 4px; }
+  p, li { color:var(--muted); overflow-wrap:anywhere; }
+  p { margin:0 0 12px; }
+  ul { padding-left:22px; margin:0 0 12px; } li { margin-bottom:6px; }
+  a { color:var(--gold); }
+  a:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  .back { display:inline-flex; align-items:center; min-height:44px; padding:0 4px; }
+  .head { display:flex; gap:16px; align-items:center; }
+  .head img { width:72px; height:72px; border-radius:16px; flex:none; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 24px; background:var(--gold); color:var(--bg); font-weight:700; text-decoration:none; border-radius:12px; margin:8px 0 4px; }
+  .card { display:block; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:0 0 12px; text-decoration:none; color:var(--text); min-height:44px; }
+  .card strong { display:block; color:var(--gold); margin-bottom:4px; }
+  .card span { color:var(--muted); font-size:.95rem; }
+  .card:focus-visible, .btn:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  details { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin:0 0 10px; }
+  details summary { cursor:pointer; padding:12px 16px; min-height:44px; color:var(--text); font-weight:600; }
+  details summary:focus-visible { outline:3px solid var(--gold); }
+  details p { padding:0 16px; }
+  footer { margin-top:48px; font-size:.85rem; color:var(--muted); }
+  footer p { font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="../">&larr; All UNVERCO apps</a>
+  <div class="head">
+    <img src="../../wedding-guest-list/icons/icon-192.png" width="72" height="72" alt="Wedding Guest List to Print app icon">
+    <h1>Wedding Planner App: guest list, tables and place cards you can print</h1>
+  </div>
+  <p>This wedding planner app is built for one job: getting your guest list from a spreadsheet to printed paper. Paste or import your list, seat your guests at tables, check for mistakes, and print a seating sign, place cards and a caterer sheet.</p>
+  <a class="btn" href="https://unverco.etsy.com/listing/4625533896">Get it on Etsy</a>
+  <p>One-time purchase. No subscription.</p>
+  <h2>What it does</h2>
+  <ul>
+    <li>Paste a list or import a CSV file; the app guesses which column is which and you correct it. It reads up to 2,000 rows and does not add the same guests twice.</li>
+    <li>Mark guests as attending, pending or declined, and set meal options (rename them as you like).</li>
+    <li>Add tables with a number of seats each, and seat people with Move. Tick Move whole party to keep a family together.</li>
+    <li>Check before you print looks at eight things, such as guests without a table or tables that are over full. It never blocks printing.</li>
+    <li>Seating sign: choose a board size and a title and save as PDF. Declined guests are left off.</li>
+    <li>Place cards with a test sheet to line up your own card pack, with nudge settings in millimeters.</li>
+    <li>Caterer sheet in Letter or A4 with meal counts by table and by meal.</li>
+    <li>Mark as printed, then see Changes since printed to know which cards to reprint.</li>
+    <li>Try it first with 40 sample guests, then remove them with one button.</li>
+  </ul>
+  <h2>How it works</h2>
+  <ul>
+    <li>You buy it once on Etsy and download the file in a web browser (the Etsy phone app cannot download digital files).</li>
+    <li>On a computer, you open the app file in your browser. On a phone, you open the app's web address in Safari (iPhone) or Chrome (Android) and choose Add to Home Screen (Android: Install app).</li>
+    <li>Your data stays on your device. There is no account and no subscription.</li>
+    <li>After the first load it works without internet.</li>
+    <li>Languages: English, Spanish, French, German and Turkish.</li>
+  </ul>
+  <h2>What it does not do</h2>
+  <ul>
+    <li>No account, no cloud sync and no sharing between people or devices.</li>
+    <li>No invitations or RSVP forms, and no automatic messages.</li>
+    <li>It does not print for you: you print on your own printer or take the PDF to a print shop.</li>
+    <li>The caterer sheet does not list dietary or allergy notes; confirm those with each guest and your caterer.</li>
+    <li>Card layouts are calculated from measurements and not every card pack or printer has been tested, which is why the test sheet is there.</li>
+  </ul>
+  <h2>Questions</h2>
+  <details><summary>Is this wedding planner app a subscription?</summary><p>No. You buy it once on Etsy. There is no monthly fee and no account.</p></details>
+  <details><summary>Can I import my guest list from a spreadsheet?</summary><p>Yes. Paste the cells or save the file as CSV and import it. Files ending in .xlsx cannot be opened directly, so save as CSV first.</p></details>
+  <details><summary>Does it work without internet?</summary><p>Yes. After the first load it works offline, and your list stays on your device.</p></details>
+  <details><summary>Can I print place cards on my own card pack?</summary><p>Yes. Print the test sheet on plain paper, line it up against a blank card sheet, and adjust with the nudge settings before printing your cards.</p></details>
+  <details><summary>Does it send invitations?</summary><p>No. It is a guest list, seating and printing tool. It has no RSVP forms and sends nothing.</p></details>
+  <a class="btn" href="https://unverco.etsy.com/listing/4625533896">Get it on Etsy</a>
+  <h2>More UNVERCO apps</h2>
+  <a class="card" href="../homeschool-planner-app/"><strong>Homeschool Planner</strong><span>Daily lessons, attendance, hours and grades for each child, with printable records.</span></a>
+  <a class="card" href="../daily-budget-planner-app/"><strong>Daily Budget Planner</strong><span>See what you can spend today, based on your pay schedule and bills.</span></a>
+  <a class="card" href="../habit-tracker-app/"><strong>2027 Habit Tracker</strong><span>Daily check-ins, streaks, rest days, a month calendar and a year heat map.</span></a>
+  <a class="card" href="../"><strong>All apps</strong><span>See the full UNVERCO catalog.</span></a>
+
+  <footer>
+    <p>UNVERCO is a trademark of Murat Ünver. iPhone and Safari are trademarks of Apple Inc. Android and Chrome are trademarks of Google LLC. Etsy is a trademark of Etsy, Inc. UNVERCO is not affiliated with them.</p>
+    <p>Built with AI-assisted development and tested on iPhone and Android simulators.</p>
+  </footer>
+</main>
+</body>
+</html>

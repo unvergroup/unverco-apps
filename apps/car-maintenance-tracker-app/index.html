@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Car Maintenance Tracker App: no subscription, works offline | AutoLog</title>
+<meta name="description" content="Car maintenance tracker app for your phone and computer. Service schedule, costs, expiry dates and printable history. One-time purchase, offline, no account.">
+<link rel="canonical" href="https://unvergroup.github.io/unverco-apps/apps/car-maintenance-tracker-app/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Car Maintenance Tracker App — no subscription, works offline">
+<meta property="og:description" content="Car maintenance tracker app for your phone and computer. Service schedule, costs, expiry dates and printable history. One-time purchase, offline, no account.">
+<meta property="og:url" content="https://unvergroup.github.io/unverco-apps/apps/car-maintenance-tracker-app/">
+<meta property="og:site_name" content="UNVERCO">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "AutoLog Vehicle Maintenance Tracker",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web browser (iPhone, Android, Windows, Mac)",
+      "description": "Car maintenance tracker app for your phone and computer. Service schedule, costs, expiry dates and printable history. One-time purchase, offline, no account.",
+      "featureList": [
+        "Keep a list of vehicles with fuel type (gasoline, diesel, electric, hybrid, LPG) and mileage in miles or kilometers.",
+        "Create a default maintenance schedule (oil, filters, brakes, tires and more), then adjust it to your car.",
+        "Set each item by distance, by months, or both. Whichever comes first makes it due.",
+        "Mark a service as done to log a record and update the schedule and the vehicle's mileage.",
+        "Track insurance, registration and inspection expiry dates with Valid, Expires soon and Expired labels.",
+        "Dashboard with a vehicle health score: the share of active schedule items that are up to date.",
+        "Log expenses for every service and see monthly costs, cost by category, a yearly total and cost per mile or kilometer.",
+        "Print a service history or a vehicle card (Letter, A4 or 80 mm receipt roll), with an optional business name on top.",
+        "Share a reminder or a service summary by WhatsApp or SMS: the app opens the message and you send it yourself."
+      ],
+      "inLanguage": [
+        "English",
+        "Spanish",
+        "French",
+        "German",
+        "Turkish"
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "ÜNVERCO"
+      },
+      "url": "https://unverco.etsy.com/listing/4623960018"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is AutoLog a subscription?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. You buy it once on Etsy and keep it. There is no monthly fee, no account and no renewal."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this car maintenance tracker work offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. After the first load it needs no internet. Your vehicles, services and costs are stored on your own device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I track more than one vehicle?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Each vehicle has its own schedule, expiry dates, service records and reports."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it remind me when a service is due?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It shows what is due or coming up on the dashboard and in each schedule, and lets you send a reminder by WhatsApp or SMS. It does not push notifications by itself."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I move my data to a new phone?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Download a backup file in Settings and restore it on the other device."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root { --bg:#0a0f2a; --panel:#121a3d; --gold:#e9c46a; --text:#e8ebf5; --muted:#aab2cc; --line:#26305e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:16px 20px 64px; }
+  h1 { color:var(--gold); font-size:1.8rem; line-height:1.25; margin:8px 0 12px; overflow-wrap:anywhere; }
+  h2 { font-size:1.25rem; margin:36px 0 12px; }
+  h3 { font-size:1.05rem; margin:18px 0 4px; }
+  p, li { color:var(--muted); overflow-wrap:anywhere; }
+  p { margin:0 0 12px; }
+  ul { padding-left:22px; margin:0 0 12px; } li { margin-bottom:6px; }
+  a { color:var(--gold); }
+  a:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  .back { display:inline-flex; align-items:center; min-height:44px; padding:0 4px; }
+  .head { display:flex; gap:16px; align-items:center; }
+  .head img { width:72px; height:72px; border-radius:16px; flex:none; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 24px; background:var(--gold); color:var(--bg); font-weight:700; text-decoration:none; border-radius:12px; margin:8px 0 4px; }
+  .card { display:block; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:0 0 12px; text-decoration:none; color:var(--text); min-height:44px; }
+  .card strong { display:block; color:var(--gold); margin-bottom:4px; }
+  .card span { color:var(--muted); font-size:.95rem; }
+  .card:focus-visible, .btn:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  details { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin:0 0 10px; }
+  details summary { cursor:pointer; padding:12px 16px; min-height:44px; color:var(--text); font-weight:600; }
+  details summary:focus-visible { outline:3px solid var(--gold); }
+  details p { padding:0 16px; }
+  footer { margin-top:48px; font-size:.85rem; color:var(--muted); }
+  footer p { font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="../">&larr; All UNVERCO apps</a>
+  <div class="head">
+    <img src="../../autolog/icon-192.png" width="72" height="72" alt="AutoLog app icon">
+    <h1>Car Maintenance Tracker App — no subscription, works offline</h1>
+  </div>
+  <p>AutoLog is a car maintenance tracker for people who want to keep service records for their own vehicles in one place. It answers three questions: what is due next, what has it cost so far, and when do my insurance, registration and inspection run out.</p>
+  <a class="btn" href="https://unverco.etsy.com/listing/4623960018">Get it on Etsy</a>
+  <p>One-time purchase. No subscription.</p>
+  <h2>What it does</h2>
+  <ul>
+    <li>Keep a list of vehicles with fuel type (gasoline, diesel, electric, hybrid, LPG) and mileage in miles or kilometers.</li>
+    <li>Create a default maintenance schedule (oil, filters, brakes, tires and more), then adjust it to your car.</li>
+    <li>Set each item by distance, by months, or both. Whichever comes first makes it due.</li>
+    <li>Mark a service as done to log a record and update the schedule and the vehicle&#x27;s mileage.</li>
+    <li>Track insurance, registration and inspection expiry dates with Valid, Expires soon and Expired labels.</li>
+    <li>Dashboard with a vehicle health score: the share of active schedule items that are up to date.</li>
+    <li>Log expenses for every service and see monthly costs, cost by category, a yearly total and cost per mile or kilometer.</li>
+    <li>Print a service history or a vehicle card (Letter, A4 or 80 mm receipt roll), with an optional business name on top.</li>
+    <li>Share a reminder or a service summary by WhatsApp or SMS: the app opens the message and you send it yourself.</li>
+  </ul>
+  <h2>How it works</h2>
+  <ul>
+    <li>You buy it once on Etsy and download the file in a web browser (the Etsy phone app cannot download digital files).</li>
+    <li>On a computer, you open the app file in your browser. On a phone, you open the app's web address in Safari (iPhone) or Chrome (Android) and choose Add to Home Screen (Android: Install app).</li>
+    <li>Your data stays on your device. There is no account and no subscription.</li>
+    <li>After the first load it works without internet.</li>
+    <li>Languages: English, Spanish, French, German and Turkish.</li>
+  </ul>
+  <h2>What it does not do</h2>
+  <ul>
+    <li>No cloud sync between devices: your phone and your computer each keep their own data. Move it with the backup file.</li>
+    <li>No team or shared accounts.</li>
+    <li>No automatic messages: WhatsApp and SMS reminders open ready-made text that you send yourself.</li>
+    <li>It does not read data from your car or connect to any vehicle service.</li>
+  </ul>
+  <h2>Questions</h2>
+  <details><summary>Is AutoLog a subscription?</summary><p>No. You buy it once on Etsy and keep it. There is no monthly fee, no account and no renewal.</p></details>
+  <details><summary>Does this car maintenance tracker work offline?</summary><p>Yes. After the first load it needs no internet. Your vehicles, services and costs are stored on your own device.</p></details>
+  <details><summary>Can I track more than one vehicle?</summary><p>Yes. Each vehicle has its own schedule, expiry dates, service records and reports.</p></details>
+  <details><summary>Does it remind me when a service is due?</summary><p>It shows what is due or coming up on the dashboard and in each schedule, and lets you send a reminder by WhatsApp or SMS. It does not push notifications by itself.</p></details>
+  <details><summary>Can I move my data to a new phone?</summary><p>Yes. Download a backup file in Settings and restore it on the other device.</p></details>
+  <a class="btn" href="https://unverco.etsy.com/listing/4623960018">Get it on Etsy</a>
+  <h2>More UNVERCO apps</h2>
+  <a class="card" href="../bill-subscription-tracker-app/"><strong>PayLog</strong><span>Bills, subscriptions, a payment calendar and free-trial alerts.</span></a>
+  <a class="card" href="../income-expense-tracker-app/"><strong>Income &amp; Expense Tracker</strong><span>Income, expenses, receipts, mileage and printable reports in one file.</span></a>
+  <a class="card" href="../daily-budget-planner-app/"><strong>Daily Budget Planner</strong><span>See what you can spend today, based on your pay schedule and bills.</span></a>
+  <a class="card" href="../"><strong>All apps</strong><span>See the full UNVERCO catalog.</span></a>
+
+  <footer>
+    <p>UNVERCO is a trademark of Murat Ünver. iPhone and Safari are trademarks of Apple Inc. Android and Chrome are trademarks of Google LLC. Etsy is a trademark of Etsy, Inc. UNVERCO is not affiliated with them.</p>
+    <p>Built with AI-assisted development and tested on iPhone and Android simulators.</p>
+  </footer>
+</main>
+</body>
+</html>

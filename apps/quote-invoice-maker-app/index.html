@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quote and Invoice Maker App: deposits and payments, offline</title>
+<meta name="description" content="Quote and invoice maker app for freelancers and tradespeople. Make a quote, ask for a deposit, turn it into an invoice, track payments. Offline.">
+<link rel="canonical" href="https://unvergroup.github.io/unverco-apps/apps/quote-invoice-maker-app/">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Quote and Invoice Maker App — deposits, payments, no subscription">
+<meta property="og:description" content="Quote and invoice maker app for freelancers and tradespeople. Make a quote, ask for a deposit, turn it into an invoice, track payments. Offline.">
+<meta property="og:url" content="https://unvergroup.github.io/unverco-apps/apps/quote-invoice-maker-app/">
+<meta property="og:site_name" content="UNVERCO">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Quote & Invoice",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web browser (iPhone, Android, Windows, Mac)",
+      "description": "Quote and invoice maker app for freelancers and tradespeople. Make a quote, ask for a deposit, turn it into an invoice, track payments. Offline.",
+      "featureList": [
+        "Create a quote with a client and line items, then save it.",
+        "Ask for a deposit as a percentage; totals show the remaining amount after the deposit.",
+        "Apply a discount, and set a tax rate on each line.",
+        "Convert an accepted quote to an invoice in one step.",
+        "Add payments to an invoice and see the remaining balance.",
+        "Statuses for quotes (Draft, Sent, Accepted, Declined, Expired) and invoices (Unpaid, Deposit paid, Paid, Overdue).",
+        "Filter by status and export your documents as CSV.",
+        "Print or save as PDF on Letter or A4, with your business details at the top.",
+        "Load sample data to try it, then delete it with one button."
+      ],
+      "inLanguage": [
+        "English",
+        "Spanish",
+        "Chinese",
+        "Hindi",
+        "Arabic",
+        "Portuguese",
+        "French",
+        "German",
+        "Japanese",
+        "Turkish"
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "ÜNVERCO"
+      },
+      "url": "https://unverco.etsy.com/listing/4625538862"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this quote and invoice maker a subscription?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. You buy it once on Etsy. There is no monthly fee and no account."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I turn a quote into an invoice?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Open the quote and choose Convert to invoice, then add payments as they arrive."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work offline?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. After the first load it needs no internet, and your clients and documents stay on your device."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are the documents official tax invoices?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. They are not official tax invoices. Check your local invoicing rules and ask your accountant."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I send a quote to a client?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Print it or save it as a PDF and send it yourself. The app does not send documents."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root { --bg:#0a0f2a; --panel:#121a3d; --gold:#e9c46a; --text:#e8ebf5; --muted:#aab2cc; --line:#26305e; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:16px 20px 64px; }
+  h1 { color:var(--gold); font-size:1.8rem; line-height:1.25; margin:8px 0 12px; overflow-wrap:anywhere; }
+  h2 { font-size:1.25rem; margin:36px 0 12px; }
+  h3 { font-size:1.05rem; margin:18px 0 4px; }
+  p, li { color:var(--muted); overflow-wrap:anywhere; }
+  p { margin:0 0 12px; }
+  ul { padding-left:22px; margin:0 0 12px; } li { margin-bottom:6px; }
+  a { color:var(--gold); }
+  a:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  .back { display:inline-flex; align-items:center; min-height:44px; padding:0 4px; }
+  .head { display:flex; gap:16px; align-items:center; }
+  .head img { width:72px; height:72px; border-radius:16px; flex:none; }
+  .btn { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 24px; background:var(--gold); color:var(--bg); font-weight:700; text-decoration:none; border-radius:12px; margin:8px 0 4px; }
+  .card { display:block; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin:0 0 12px; text-decoration:none; color:var(--text); min-height:44px; }
+  .card strong { display:block; color:var(--gold); margin-bottom:4px; }
+  .card span { color:var(--muted); font-size:.95rem; }
+  .card:focus-visible, .btn:focus-visible { outline:3px solid var(--text); outline-offset:2px; }
+  details { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin:0 0 10px; }
+  details summary { cursor:pointer; padding:12px 16px; min-height:44px; color:var(--text); font-weight:600; }
+  details summary:focus-visible { outline:3px solid var(--gold); }
+  details p { padding:0 16px; }
+  footer { margin-top:48px; font-size:.85rem; color:var(--muted); }
+  footer p { font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="../">&larr; All UNVERCO apps</a>
+  <div class="head">
+    <img src="../../quote-and-invoice/icons/icon-192.png" width="72" height="72" alt="Quote &amp; Invoice app icon">
+    <h1>Quote and Invoice Maker App — deposits, payments, no subscription</h1>
+  </div>
+  <p>Quote &amp; Invoice is for freelancers, tradespeople and small businesses that want to send a clear quote, ask for a deposit, and then turn the accepted quote into an invoice. It tracks what has been paid and what is still due.</p>
+  <a class="btn" href="https://unverco.etsy.com/listing/4625538862">Get it on Etsy</a>
+  <p>One-time purchase. No subscription.</p>
+  <h2>What it does</h2>
+  <ul>
+    <li>Create a quote with a client and line items, then save it.</li>
+    <li>Ask for a deposit as a percentage; totals show the remaining amount after the deposit.</li>
+    <li>Apply a discount, and set a tax rate on each line.</li>
+    <li>Convert an accepted quote to an invoice in one step.</li>
+    <li>Add payments to an invoice and see the remaining balance.</li>
+    <li>Statuses for quotes (Draft, Sent, Accepted, Declined, Expired) and invoices (Unpaid, Deposit paid, Paid, Overdue).</li>
+    <li>Filter by status and export your documents as CSV.</li>
+    <li>Print or save as PDF on Letter or A4, with your business details at the top.</li>
+    <li>Load sample data to try it, then delete it with one button.</li>
+  </ul>
+  <h2>How it works</h2>
+  <ul>
+    <li>You buy it once on Etsy and download the file in a web browser (the Etsy phone app cannot download digital files).</li>
+    <li>On a computer, you open the app file in your browser. On a phone, you open the app's web address in Safari (iPhone) or Chrome (Android) and choose Add to Home Screen (Android: Install app).</li>
+    <li>Your data stays on your device. There is no account and no subscription.</li>
+    <li>After the first load it works without internet.</li>
+    <li>Languages: English, Spanish, Chinese, Hindi, Arabic, Portuguese, French, German, Japanese and Turkish.</li>
+  </ul>
+  <h2>What it does not do</h2>
+  <ul>
+    <li>No cloud sync and no team accounts. Move data between devices with a backup file.</li>
+    <li>It does not send documents or emails for you; you send the printed or saved PDF yourself.</li>
+    <li>Documents are not official tax invoices. Check your local invoicing rules.</li>
+    <li>It is not a contract and does not check licensing, deposit limits or other rules for your trade.</li>
+    <li>No password: anyone using the same browser on the same device can see your data.</li>
+  </ul>
+  <h2>Questions</h2>
+  <details><summary>Is this quote and invoice maker a subscription?</summary><p>No. You buy it once on Etsy. There is no monthly fee and no account.</p></details>
+  <details><summary>Can I turn a quote into an invoice?</summary><p>Yes. Open the quote and choose Convert to invoice, then add payments as they arrive.</p></details>
+  <details><summary>Does it work offline?</summary><p>Yes. After the first load it needs no internet, and your clients and documents stay on your device.</p></details>
+  <details><summary>Are the documents official tax invoices?</summary><p>No. They are not official tax invoices. Check your local invoicing rules and ask your accountant.</p></details>
+  <details><summary>How do I send a quote to a client?</summary><p>Print it or save it as a PDF and send it yourself. The app does not send documents.</p></details>
+  <a class="btn" href="https://unverco.etsy.com/listing/4625538862">Get it on Etsy</a>
+  <h2>More UNVERCO apps</h2>
+  <a class="card" href="../small-business-toolkit-app/"><strong>Workbench</strong><span>Four tools in one app: Fair Price, Quote &amp; Invoice, Creator Rate Card and Shift Board.</span></a>
+  <a class="card" href="../income-expense-tracker-app/"><strong>Income &amp; Expense Tracker</strong><span>Income, expenses, receipts, mileage and printable reports in one file.</span></a>
+  <a class="card" href="../repair-shop-ticket-tracker-app/"><strong>Claimtag</strong><span>Check-in forms, a job board, customer messages and pickup for repair shops.</span></a>
+  <a class="card" href="../"><strong>All apps</strong><span>See the full UNVERCO catalog.</span></a>
+
+  <footer>
+    <p>UNVERCO is a trademark of Murat Ünver. iPhone and Safari are trademarks of Apple Inc. Android and Chrome are trademarks of Google LLC. Etsy is a trademark of Etsy, Inc. UNVERCO is not affiliated with them.</p>
+    <p>Built with AI-assisted development and tested on iPhone and Android simulators.</p>
+  </footer>
+</main>
+</body>
+</html>
