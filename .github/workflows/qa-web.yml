@@ -5,8 +5,19 @@ name: qa-web
 on:
   push:
     paths:
-      - 'habit-tracker-2027/**'
+      - 'app-tester/**'
+      - 'autolog/**'
+      - 'bakery-pricing/**'
+      - 'claimtag/**'
       - 'daily-budget-planner/**'
+      - 'habit-tracker-2027/**'
+      - 'homeschool-planner/**'
+      - 'income-expense-tracker/**'
+      - 'paylog/**'
+      - 'pet-business-tracker/**'
+      - 'quote-and-invoice/**'
+      - 'wedding-guest-list/**'
+      - 'workbench/**'
       - 'qa/apps.json'
       - 'qa/profiles.json'
       - 'qa/lib/**'
@@ -14,12 +25,24 @@ on:
       - 'qa/web/**'
       - 'qa/requirements-web.txt'
       - 'qa/selftest.py'
+      - 'qa/kapsam-kontrol.py'
       - 'qa/fixtures/**'
       - '.github/workflows/qa-web.yml'
   pull_request:
     paths:
-      - 'habit-tracker-2027/**'
+      - 'app-tester/**'
+      - 'autolog/**'
+      - 'bakery-pricing/**'
+      - 'claimtag/**'
       - 'daily-budget-planner/**'
+      - 'habit-tracker-2027/**'
+      - 'homeschool-planner/**'
+      - 'income-expense-tracker/**'
+      - 'paylog/**'
+      - 'pet-business-tracker/**'
+      - 'quote-and-invoice/**'
+      - 'wedding-guest-list/**'
+      - 'workbench/**'
       - 'qa/apps.json'
       - 'qa/profiles.json'
       - 'qa/lib/**'
@@ -27,7 +50,10 @@ on:
       - 'qa/web/**'
       - 'qa/requirements-web.txt'
       - 'qa/selftest.py'
+      - 'qa/kapsam-kontrol.py'
       - 'qa/fixtures/**'
+  schedule:
+    - cron: '17 2 * * 1'   # haftalik tam kosu (13 urun), Pzt 05:17 TR
   workflow_dispatch:
     inputs:
       apps:
@@ -55,7 +81,7 @@ jobs:
   web:
     name: web-${{ matrix.engine }}
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 55
     strategy:
       fail-fast: false
       matrix:
@@ -66,7 +92,7 @@ jobs:
           fetch-depth: 0
       - name: Uygulama surumunu sec (isteğe bağlı)
         if: ${{ github.event.inputs.app_ref != '' }}
-        run: git checkout "${{ github.event.inputs.app_ref }}" -- habit-tracker-2027 daily-budget-planner
+        run: git checkout "${{ github.event.inputs.app_ref }}" -- app-tester autolog bakery-pricing claimtag daily-budget-planner habit-tracker-2027 homeschool-planner income-expense-tracker paylog pet-business-tracker quote-and-invoice wedding-guest-list workbench
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -81,6 +107,8 @@ jobs:
         run: |
           pip install -r qa/requirements-web.txt
           python -m playwright install --with-deps ${{ matrix.engine }}
+      - name: Kapsam kontrolu (her uygulama testte mi)
+        run: python qa/kapsam-kontrol.py --test && python qa/kapsam-kontrol.py
       - name: Denetimlerin kendi testi
         run: python qa/selftest.py ${{ matrix.engine }}
       - name: Web QA
